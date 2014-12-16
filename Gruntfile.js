@@ -22,6 +22,7 @@ module.exports = function(grunt) {
         src: [
               'src/intro.js',
               'src/helpers.js',
+              'src/exception.js',
               'src/constructor.js',
               'src/privatemethods.js',
               'src/privilegedmethods.js',
@@ -30,6 +31,19 @@ module.exports = function(grunt) {
              ],
         dest: 'dist/<%= pkg.name %>.js'
       },
+      dev:{
+        src: [
+              'src/intro.js',
+              'src/helpers.js',
+              'src/exception.js',
+              'src/constructor.js',
+              'src/privatemethods.js',
+              'src/privilegedmethods.js',
+              'src/publicmethods.js',
+              'src/testoutro.js'  
+             ],
+        dest: 'test/<%= pkg.name %>.js'
+      }
     },
     uglify: {
       options: {

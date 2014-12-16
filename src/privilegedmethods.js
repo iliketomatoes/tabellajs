@@ -1,14 +1,17 @@
 
-		this.init = function(){
-			var self = this;
+		try{
+			if(this.options.periods !== null && this.options.rows !== null){
+				this.rows = _setUpRows(this.options.periods, this.options.rows[0]);
+			}else{
+				throw new TabellaException('Periods or rows are null');
+			}
 
-			self.rows = _setUpRows(self.options.periods, self.options.rows[0]);
+		}catch(e){
+			console.error(e.toString());
+			return e;
+		}
 
-			console.log(self.rows);
-
-		};
-
-		this.init();
+		//this.init();
 
 	//Close Tabella constructor
 	}

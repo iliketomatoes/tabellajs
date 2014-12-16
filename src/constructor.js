@@ -10,4 +10,20 @@
 
 		this.el = el;
 
-		this.options = extend(this.defaults, options);
+		try{
+			if(typeof el !== 'undefined'){
+				if(typeof options !== 'undefined'){
+					this.options = extend(this.defaults, options);
+				}else{
+					throw new TabellaException('You did not pass any options to the constructor');
+				}
+			}else{
+				throw new TabellaException('You did not pass a valid target element to the constructor');
+			}		
+
+		}catch(e){
+			console.error(e.toString());
+			return e;
+		}
+
+		
