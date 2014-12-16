@@ -1,7 +1,13 @@
-function Tabella(el, options){
 
-	
+	function Tabella(el, options){
 
+		this.defaults = {
+			periods : null,
+			rows : null
+		};
 
-	this.test = 'ciao';
-}
+		this.rows = null;
+
+		this.el = el;
+
+		this.options = extend(this.defaults, options);

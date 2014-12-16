@@ -23,6 +23,9 @@ module.exports = function(grunt) {
               'src/intro.js',
               'src/helpers.js',
               'src/constructor.js',
+              'src/privatemethods.js',
+              'src/privilegedmethods.js',
+              'src/publicmethods.js',
               'src/outro.js'  
              ],
         dest: 'dist/<%= pkg.name %>.js'

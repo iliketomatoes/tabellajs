@@ -1,13 +1,13 @@
-;(function(Tabella) {
+;(function(tabella) {
 
 	'use strict';
 	
 	if (typeof define === 'function' && define.amd) {
         	// Register Tabella as an AMD module
-        	define(Tabella);
+        	define(tabella);
 	} else {
-        	// Register elba on window
-        	window.Tabella = Tabella;
+        	// Register Tabella on window
+        	window.Tabella = tabella();
 	}
 
 })(function () {
