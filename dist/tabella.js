@@ -53,6 +53,7 @@
 			rows : null
 		};
 
+		this.periods = null;
 		this.rows = null;
 
 		this.el = el;
@@ -74,6 +75,28 @@
 		}
 
 		
+		function _setUpPeriods(periods, container){
+			
+			if(periods instanceof Array && periods.length){
+
+				var returnedPeriods = [];
+
+				var periodRow = document.createElement('div');
+				periodRow.className = 'period-row';
+				container.appendChild(periodRow);
+
+				for(var i = 0; i < periods.length; i++){
+
+					console.log(periods[i]);
+				}
+
+				return true;
+
+			}else{
+				return false;
+			}
+		}	
+
 		function _setUpRows(periods, rows){
 
 			var returnedRows = [];
@@ -84,7 +107,17 @@
 
 			if(numberOfRows > 0){
 
-				
+					for(var i = 0; i < numberOfRows; i++){
+						for(var prop in rows[i]){
+
+						}
+					}
+
+				return true;	
+
+			}else{
+
+				return false;
 
 			}
 
@@ -92,11 +125,24 @@
 
 		try{
 			if(this.options.periods !== null && this.options.rows !== null){
-				this.rows = _setUpRows(this.options.periods, this.options.rows[0]);
+
+				this.periods = _setUpPeriods(this.options.periods, this.el);
+
+				if(this.periods){
+					this.rows = _setUpRows(this.options.periods, this.options.rows);
+
+					if(!!this.rows){
+
+					}else{
+						throw new TabellaException('There is a mismatch between periods and prices cells');
+					}
+				}else{
+					throw new TabellaException('Periods is not an Array');
+				}
+				
 			}else{
 				throw new TabellaException('Periods or rows are null');
 			}
-
 		}catch(e){
 			console.error(e.toString());
 			return e;

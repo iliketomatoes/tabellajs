@@ -6,6 +6,7 @@
 			rows : null
 		};
 
+		this.periods = null;
 		this.rows = null;
 
 		this.el = el;
