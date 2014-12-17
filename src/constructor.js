@@ -15,7 +15,9 @@
 				medium : [540,3],
 				large : [720,4],
 				xlarge : [1080,5]
-			}
+			},
+			from : 'from',
+			to : 'to'
 		};
 
 		this.periods = null;

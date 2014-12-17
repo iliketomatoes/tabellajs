@@ -62,7 +62,9 @@
 				medium : [540,3],
 				large : [720,4],
 				xlarge : [1080,5]
-			}
+			},
+			from : 'from',
+			to : 'to'
 		};
 
 		this.periods = null;
@@ -91,32 +93,51 @@
 		}
 
 		
-		function _setUpPeriods(periods, container){
+		function _setUpPeriods(options, container, cellWidth){
 			
+			var periods = options.periods;
+
 			if(periods instanceof Array && periods.length){
 
-				var returnedPeriods = [],
-					numberOfPeriods = periods.length;
+				var numberOfPeriods = periods.length;
 
 				var periodRow = document.createElement('div');
 				periodRow.className = 'period-row';
+				periodRow.style.width = (cellWidth * periods.length) + 'px';
 				container.appendChild(periodRow);
 
 				for(var i = 0; i < numberOfPeriods; i++){
 
+					var periodCell = document.createElement('div');
+					periodCell.className = 'period-cell';
+					periodCell.style.width = cellWidth + 'px';
+
 					var periodEl = document.createElement('div');
-					periodEl.className = 'period-element';
+						periodEl.className = 'period-element';
 
-					var periodDesc = typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
-					
+					//From - to Div	
+					var periodHTML = '<div class="period-fromto">';
+						periodHTML += options.from;
+					if(typeof periods[i][1] !== 'undefined'){	
+						periodHTML += '<br>';
+						periodHTML += options.to;
+					}	
+						periodHTML += '</div>'; 	
+
+					//Period actual dates
+					periodHTML += '<div class="period-date">';
+					periodHTML += typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
 					if(typeof periods[i][1] !== 'undefined'){
-						periodDesc += '<br>';
-						periodDesc += periods[i][1];
+						periodHTML += '<br>';
+						periodHTML += periods[i][1];
 					}
+					periodHTML += '</div>'; 
 
-					periodEl.innerHTML = periodDesc;
+					periodEl.innerHTML = periodHTML;
 
-					periodRow.appendChild(periodEl);
+					periodCell.appendChild(periodEl);
+
+					periodRow.appendChild(periodCell);
 
 				}
 
@@ -127,7 +148,9 @@
 			}
 		}	
 
-		function _setUpRows(periods, rows){
+		function _setUpRows(options, rows, cellWidth){
+
+			var periods = options.periods;
 
 			var returnedRows = [],
 				numberOfPeriods = periods.length,
@@ -163,7 +186,7 @@
 
 				var bpWidth = breakpoints[bp][0];
 
-				if(typeof bpWidth === 'number' && bpWidth <= containerWidth){
+				if(typeof bpWidth === 'number' &&  bpWidth > 0 && bpWidth <= containerWidth){
 
 					if(Math.abs(containerWidth - bpWidth) < Math.abs(containerWidth - minWidth)){
 						minWidth = bpWidth;
@@ -178,25 +201,34 @@
 
 		};
 
-		this.setSize = function(){
+		this.getCellWidth = function(){
 			var self = this,
 				numberOfPeriods = self.options.periods.length,
-				breakpoint;
+				breakpoint,
+				cellWidth;
 
 			breakpoint = self.getBreakpoint();
 
+			if(breakpoint[1] > numberOfPeriods){
+				cellWidth = self.el.clientWidth / numberOfPeriods;
+			}else{
+				cellWidth = self.el.clientWidth / breakpoint[1];
+			}
+
+			console.log(cellWidth);	
+			return Math.round(cellWidth);
 		};
 
 		try{
 			if(this.options.periods !== null && this.options.rows !== null){
 
-				this.setSize();	
+				this.cellWidth = this.getCellWidth();	
 
-				this.periods = _setUpPeriods(this.options.periods, this.el);
+				this.periods = _setUpPeriods(this.options, this.el, this.cellWidth);
 
 				if(this.periods){
 
-					this.rows = _setUpRows(this.options.periods, this.options.rows);
+					this.rows = _setUpRows(this.options, this.options.rows, this.cellWidth);
 
 					if(!!this.rows){
 

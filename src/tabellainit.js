@@ -2,13 +2,13 @@
 		try{
 			if(this.options.periods !== null && this.options.rows !== null){
 
-				this.setSize();	
+				this.cellWidth = this.getCellWidth();	
 
-				this.periods = _setUpPeriods(this.options.periods, this.el);
+				this.periods = _setUpPeriods(this.options, this.el, this.cellWidth);
 
 				if(this.periods){
 
-					this.rows = _setUpRows(this.options.periods, this.options.rows);
+					this.rows = _setUpRows(this.options, this.options.rows, this.cellWidth);
 
 					if(!!this.rows){
 

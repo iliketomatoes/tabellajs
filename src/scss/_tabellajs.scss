@@ -4,21 +4,54 @@
 	box-sizing: border-box;
 }
 
-.tabella-container{
+.tabella-ctr{
     display: block;
     position: relative;
     width: 100%;
     overflow: hidden;
+    @include single-transition();
 }
 
 .period-row{
 	position: relative;
-	width: 100%;
+	font-size: 1em;
 }
 
-.period-element{
+.period-cell{
 	float: left;
 	position: relative;
 	text-align: center;
+	padding: 0.3em 0.1em;
+	color: hsla(200,0%,0%,.7);
+
+	&:nth-child(odd){
+		background-color: $odd-background-color;
+	}
+
+	&:nth-child(even){
+		background-color: $even-background-color;
+	}
+}
+
+.period-element{
+	display: inline-block;
+	margin: 0 auto;
+	overflow: hidden;
+	line-height: 1.4;
+	vertical-align: middle;
+}
+
+.period-date{
+	float: left;
+	display: inline-block;
+	text-align: left;
+}
+
+.period-fromto{
+	float: left;
+	display: inline-block;
+	margin-right: 0.4em;
+	text-align: left;
+	color: hsla(200,0%,0%,.4);
 }
 

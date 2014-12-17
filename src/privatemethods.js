@@ -1,29 +1,48 @@
-		function _setUpPeriods(periods, container){
+		function _setUpPeriods(options, container, cellWidth){
 			
+			var periods = options.periods;
+
 			if(periods instanceof Array && periods.length){
 
-				var returnedPeriods = [],
-					numberOfPeriods = periods.length;
+				var numberOfPeriods = periods.length;
 
 				var periodRow = document.createElement('div');
 				periodRow.className = 'period-row';
+				periodRow.style.width = (cellWidth * periods.length) + 'px';
 				container.appendChild(periodRow);
 
 				for(var i = 0; i < numberOfPeriods; i++){
 
+					var periodCell = document.createElement('div');
+					periodCell.className = 'period-cell';
+					periodCell.style.width = cellWidth + 'px';
+
 					var periodEl = document.createElement('div');
-					periodEl.className = 'period-element';
+						periodEl.className = 'period-element';
 
-					var periodDesc = typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
-					
+					//From - to Div	
+					var periodHTML = '<div class="period-fromto">';
+						periodHTML += options.from;
+					if(typeof periods[i][1] !== 'undefined'){	
+						periodHTML += '<br>';
+						periodHTML += options.to;
+					}	
+						periodHTML += '</div>'; 	
+
+					//Period actual dates
+					periodHTML += '<div class="period-date">';
+					periodHTML += typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
 					if(typeof periods[i][1] !== 'undefined'){
-						periodDesc += '<br>';
-						periodDesc += periods[i][1];
+						periodHTML += '<br>';
+						periodHTML += periods[i][1];
 					}
+					periodHTML += '</div>'; 
 
-					periodEl.innerHTML = periodDesc;
+					periodEl.innerHTML = periodHTML;
 
-					periodRow.appendChild(periodEl);
+					periodCell.appendChild(periodEl);
+
+					periodRow.appendChild(periodCell);
 
 				}
 
@@ -34,7 +53,9 @@
 			}
 		}	
 
-		function _setUpRows(periods, rows){
+		function _setUpRows(options, rows, cellWidth){
+
+			var periods = options.periods;
 
 			var returnedRows = [],
 				numberOfPeriods = periods.length,

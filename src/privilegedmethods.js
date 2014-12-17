@@ -11,7 +11,7 @@
 
 				var bpWidth = breakpoints[bp][0];
 
-				if(typeof bpWidth === 'number' && bpWidth <= containerWidth){
+				if(typeof bpWidth === 'number' &&  bpWidth > 0 && bpWidth <= containerWidth){
 
 					if(Math.abs(containerWidth - bpWidth) < Math.abs(containerWidth - minWidth)){
 						minWidth = bpWidth;
@@ -26,11 +26,20 @@
 
 		};
 
-		this.setSize = function(){
+		this.getCellWidth = function(){
 			var self = this,
 				numberOfPeriods = self.options.periods.length,
-				breakpoint;
+				breakpoint,
+				cellWidth;
 
 			breakpoint = self.getBreakpoint();
 
+			if(breakpoint[1] > numberOfPeriods){
+				cellWidth = self.el.clientWidth / numberOfPeriods;
+			}else{
+				cellWidth = self.el.clientWidth / breakpoint[1];
+			}
+
+			console.log(cellWidth);	
+			return Math.round(cellWidth);
 		};
