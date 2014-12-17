@@ -26,6 +26,7 @@ module.exports = function(grunt) {
               'src/constructor.js',
               'src/privatemethods.js',
               'src/privilegedmethods.js',
+              'src/tabellainit.js',
               'src/publicmethods.js',
               'src/outro.js'  
              ],
@@ -39,6 +40,7 @@ module.exports = function(grunt) {
               'src/constructor.js',
               'src/privatemethods.js',
               'src/privilegedmethods.js',
+              'src/tabellainit.js',
               'src/publicmethods.js',
               'src/testoutro.js'  
              ],

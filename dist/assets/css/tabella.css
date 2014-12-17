@@ -1,1 +1,1 @@
-*,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;}.tabella-container{display:block;position:relative;width:100%;overflow:hidden;}.period-row{position:relative;}
+*,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;}.tabella-container{display:block;position:relative;width:100%;overflow:hidden;}.period-row{position:relative;width:100%;}.period-element{float:left;position:relative;text-align:center;}

@@ -1,30 +1,36 @@
 
-		try{
-			if(this.options.periods !== null && this.options.rows !== null){
+		this.getBreakpoint = function(){
 
-				this.periods = _setUpPeriods(this.options.periods, this.el);
+			var self = this,
+				minWidth = 0,
+				containerWidth = self.el.clientWidth,
+				breakpoints = self.options.breakpoints;
+			 
 
-				if(this.periods){
-					this.rows = _setUpRows(this.options.periods, this.options.rows);
+			for(var bp in breakpoints){
 
-					if(!!this.rows){
+				var bpWidth = breakpoints[bp][0];
 
-					}else{
-						throw new TabellaException('There is a mismatch between periods and prices cells');
+				if(typeof bpWidth === 'number' && bpWidth <= containerWidth){
+
+					if(Math.abs(containerWidth - bpWidth) < Math.abs(containerWidth - minWidth)){
+						minWidth = bpWidth;
+						self.currentBreakpoint = breakpoints[bp];
 					}
-				}else{
-					throw new TabellaException('Periods is not an Array');
+
 				}
-				
-			}else{
-				throw new TabellaException('Periods or rows are null');
+
 			}
-		}catch(e){
-			console.error(e.toString());
-			return e;
-		}
 
-		//this.init();
+			return self.currentBreakpoint;
 
-	//Close Tabella constructor
-	}
+		};
+
+		this.setSize = function(){
+			var self = this,
+				numberOfPeriods = self.options.periods.length,
+				breakpoint;
+
+			breakpoint = self.getBreakpoint();
+
+		};
