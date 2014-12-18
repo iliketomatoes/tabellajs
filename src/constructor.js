@@ -11,14 +11,15 @@
 			* Default breakpoint is from [0,1], just one element is shown
 			*/
 			breakpoints : {
-				small : [300,2],
-				medium : [540,3],
-				large : [720,4],
+				small : [360,2],
+				medium : [640,3],
+				large : [820,4],
 				xlarge : [1080,5]
 			},
 			from : 'from',
 			to : 'to',
-			borderWidth : 1
+			borderWidth : 1,
+			currency : '&euro;'
 		};
 
 		this.periodRow = null;

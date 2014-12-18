@@ -58,14 +58,15 @@
 			* Default breakpoint is from [0,1], just one element is shown
 			*/
 			breakpoints : {
-				small : [300,2],
-				medium : [540,3],
-				large : [720,4],
+				small : [360,2],
+				medium : [640,3],
+				large : [820,4],
 				xlarge : [1080,5]
 			},
 			from : 'from',
 			to : 'to',
-			borderWidth : 1
+			borderWidth : 1,
+			currency : '&euro;'
 		};
 
 		this.periodRow = null;
@@ -198,7 +199,33 @@
 										itemCell.className = itemClass;
 										itemCell.style.width = cellWidth + 'px';
 
-										itemCell.innerHTML = rows[i].prices[j][k];
+										var itemEl = document.createElement('div');
+										itemEl.className = 'item-element';
+
+										var itemHTML = '';
+
+										//Cell description
+										if(!!rows[i].pricesDesc[j]){
+											itemHTML += '<div class="item-cell-desc">';
+											if(!!rows[i].pricesDesc[j][k]){
+												itemHTML += rows[i].pricesDesc[j][k];
+											}else{
+												if(!!rows[i].pricesDesc[j][0])
+													itemHTML += rows[i].pricesDesc[j][0];
+											}
+											
+											itemHTML += '</div>';
+										}	
+
+										//Item current price
+										itemHTML += '<div class="item-value">';
+										itemHTML += typeof  rows[i].prices[j][k] !== 'undefined' ?  rows[i].prices[j][k] : 'not set';
+										itemHTML += ' ' + options.currency;
+										itemHTML+= '</div>'; 
+
+										itemEl.innerHTML = itemHTML;
+
+										itemCell.appendChild(itemEl);
 
 										itemRow.appendChild(itemCell);
 									
@@ -222,7 +249,11 @@
 		}
 
 		function _setUpArrows(options, container, periodRow){
+			//TODO
+		}
 
+		function _attachEvents(){
+			//TODO
 		}
 
 		this.getBreakpoint = function(){
@@ -259,48 +290,65 @@
 
 			breakpoint = self.getBreakpoint();
 
+			console.log(self.el.parentNode.clientWidth);
+
 			if(breakpoint[1] > numberOfPeriods){
-				cellWidth = this.el.clientWidth / numberOfPeriods;
+				cellWidth = self.el.clientWidth / numberOfPeriods;
 			}else{
-				cellWidth = this.el.clientWidth / breakpoint[1];
+				cellWidth = self.el.clientWidth / breakpoint[1];
 			}
 			
+			console.log(cellWidth);
+			console.log(self.el.clientWidth);
+
 			return Math.round(cellWidth);
 		};
 
 
 
-		
-		if(this.options.periods !== null && this.options.rows !== null){
 
-			this.cellWidth = this.getCellWidth();	
+	
 
-			this.periodRow = _setUpPeriods(this.options, this.el, this.cellWidth, this.el.clientWidth);
+	if(this.options.periods !== null && this.options.rows !== null){
 
-			if(this.periodRow){
-		
-				if(_setUpRows(this.options, this.el, this.cellWidth, this.el.clientWidth)){
+		this.cellWidth = this.getCellWidth();	
 
-					_setUpArrows(this.options, this.el, this.periodRow);
-					//this.attachEvents();
+		this.periodRow = _setUpPeriods(this.options, this.el, this.cellWidth, this.el.clientWidth);
 
-				}else{
-					throw new TabellaException('There is a mismatch between periods and prices cells');
-				}
+		if(this.periodRow){
+	
+			if(_setUpRows(this.options, this.el, this.cellWidth, this.el.clientWidth)){
+
+				_setUpArrows(this.options, this.el, this.periodRow);
+
+				var self = this;
+
+				window.onload = function(){
+					self.refreshSize();
+					};
+
 			}else{
-				throw new TabellaException('Periods is not an Array');
+				throw new TabellaException('There is a mismatch between periods and prices cells');
 			}
-			
 		}else{
-			throw new TabellaException('Periods or rows are null');
+			throw new TabellaException('Periods is not an Array');
 		}
 		
+	}else{
+		throw new TabellaException('Periods or rows are null');
+	}
+	
 
 		//this.init();
 
 	//Close Tabella constructor
 	}
+Tabella.prototype.refreshSize = function(){
+	var self = this;
+	console.log(self);
+	console.log(self.periodRow);
 
+};
 
 	return Tabella;
 });

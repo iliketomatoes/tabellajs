@@ -27,10 +27,10 @@
         <script type="text/javascript">
             !(function(){
 
-                var tabella = document.getElementById('tabella');
+                var tabellaCtr = document.getElementById('tabella');
 
                 var test = new Tabella(
-                    tabella,
+                    tabellaCtr,
                     {   
                         periods: [
                             ['2014-12-14', '2014-12-20']
@@ -41,16 +41,19 @@
 
                         rows : [
                             {
-                                desc: 'Single bed room',
-                                prices: [[190 , 210, 210, 204],[190 , 210, 210, 204]]
+                                desc: '<h2 class="table-h">Single bed room</h2>',
+                                prices: [[190 , 210, 210, 204],[190 , 210, 210, 204]],
+                                pricesDesc : [['1 persona'], ['2 persone']]
                             },
                             {
-                                desc: 'Double bed room',
-                                prices: [[190 , 210, 210, 204]]
+                                desc: '<h2 class="table-h">Double bed room</h2>',
+                                prices: [[190 , 210, 210, 204]],
+                                pricesDesc : [['1 persona']]
                             },
                             {
-                                desc: 'Suite',
-                                prices: [[190 , 210, 210, 204]]
+                                desc: '<h2 class="table-h">Suite</h2>',
+                                prices: [[190 , 210, 210, 204]],
+                                pricesDesc : [['1 persona']]
                             } 
                                 
                         ]

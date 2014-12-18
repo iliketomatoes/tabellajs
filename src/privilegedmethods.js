@@ -33,13 +33,19 @@
 
 			breakpoint = self.getBreakpoint();
 
+			console.log(self.el.parentNode.clientWidth);
+
 			if(breakpoint[1] > numberOfPeriods){
-				cellWidth = this.el.clientWidth / numberOfPeriods;
+				cellWidth = self.el.clientWidth / numberOfPeriods;
 			}else{
-				cellWidth = this.el.clientWidth / breakpoint[1];
+				cellWidth = self.el.clientWidth / breakpoint[1];
 			}
 			
+			console.log(cellWidth);
+			console.log(self.el.clientWidth);
+
 			return Math.round(cellWidth);
 		};
+
 
 

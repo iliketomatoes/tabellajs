@@ -106,7 +106,33 @@
 										itemCell.className = itemClass;
 										itemCell.style.width = cellWidth + 'px';
 
-										itemCell.innerHTML = rows[i].prices[j][k];
+										var itemEl = document.createElement('div');
+										itemEl.className = 'item-element';
+
+										var itemHTML = '';
+
+										//Cell description
+										if(!!rows[i].pricesDesc[j]){
+											itemHTML += '<div class="item-cell-desc">';
+											if(!!rows[i].pricesDesc[j][k]){
+												itemHTML += rows[i].pricesDesc[j][k];
+											}else{
+												if(!!rows[i].pricesDesc[j][0])
+													itemHTML += rows[i].pricesDesc[j][0];
+											}
+											
+											itemHTML += '</div>';
+										}	
+
+										//Item current price
+										itemHTML += '<div class="item-value">';
+										itemHTML += typeof  rows[i].prices[j][k] !== 'undefined' ?  rows[i].prices[j][k] : 'not set';
+										itemHTML += ' ' + options.currency;
+										itemHTML+= '</div>'; 
+
+										itemEl.innerHTML = itemHTML;
+
+										itemCell.appendChild(itemEl);
 
 										itemRow.appendChild(itemCell);
 									
@@ -130,5 +156,9 @@
 		}
 
 		function _setUpArrows(options, container, periodRow){
+			//TODO
+		}
 
+		function _attachEvents(){
+			//TODO
 		}
