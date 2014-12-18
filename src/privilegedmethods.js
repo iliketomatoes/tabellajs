@@ -37,10 +37,8 @@
 				cellWidth = this.el.clientWidth / numberOfPeriods;
 			}else{
 				cellWidth = this.el.clientWidth / breakpoint[1];
-				console.log(this.el.clientWidth);
 			}
 			
-			console.log(cellWidth);
 			return Math.round(cellWidth);
 		};
 

@@ -67,43 +67,53 @@
 
 			if(numberOfRows > 0){
 
-					
-
 					var matchingPeriodCells = true;
 
 					for(var i = 0; i < numberOfRows; i++){
 
+						if(!matchingPeriodCells) break;
+
 						var itemWrapper = document.createElement('div');
 						itemWrapper.className = 'item-wrapper';
 						container.appendChild(itemWrapper);
+	
+						if(!!rows[i].desc){
+							var itemDesc = document.createElement('section');
+							itemDesc.className = 'item-desc';
+							itemDesc.innerHTML = rows[i].desc;
+							itemWrapper.appendChild(itemDesc);
+						}
 
-						var itemRow = document.createElement('div');
-						itemRow.className = 'item-row';
-						itemRow.style.width = cellWidth * numberOfPeriods + 'px';
-						itemWrapper.appendChild(itemRow);
+						if(!!rows[i].prices){
 
-						for(var prop in rows[i]){
-							if(typeof rows[i][prop] === 'string'){
-								var itemDesc = document.createElement('section');
-								itemDesc.className = 'item-desc';
-								itemDesc.innerHTML = rows[i][prop];
-								itemRow.appendChild(itemDesc);
-							}else{
-								if(typeof rows[i][prop] === 'object' && rows[i][prop].length === numberOfPeriods){
+							for(var j = 0; j < rows[i].prices.length; j++){
 
-								for(var j = 0; j < rows[i][prop].length; j++){
-									var itemCell = document.createElement('div');
-									itemCell.className = 'item-cell';
-									itemCell.style.width = cellWidth + 'px';
+								if(!matchingPeriodCells) break;
 
-									itemCell.innerHTML = rows[i][prop][j];
+								var itemRow = document.createElement('div');
+								itemRow.className = 'item-row';
+								itemRow.style.width = cellWidth * numberOfPeriods + 'px';
+								itemWrapper.appendChild(itemRow);
 
-									itemRow.appendChild(itemCell);
-								}
+								for(var k = 0; k < rows[i].prices[j].length; k++){
+
+									if(rows[i].prices[j].length === numberOfPeriods){
+										var itemCell = document.createElement('div');
+
+										var itemClass = 'item-cell';
+										if(j >= 1) itemClass += ' cell-border-top';
+
+										itemCell.className = itemClass;
+										itemCell.style.width = cellWidth + 'px';
+
+										itemCell.innerHTML = rows[i].prices[j][k];
+
+										itemRow.appendChild(itemCell);
 									
-								}else{
-									matchingPeriodCells = false;
-									break;
+									}else{
+										matchingPeriodCells = false;
+										break;
+									}
 								}
 							}
 						}
