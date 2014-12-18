@@ -1,7 +1,15 @@
 
+$primary-color: #795548;
+$primary-1-tint : #EFEBE9;
+$primary-2-tint : #D7CCC8;
+//$primary-fallback : #EFEBE9;
 
-$odd-background-color : #D3D5B0;
-$even-background-color : #B5CEA4;
+$border-color: rgba(0,0,0,.12);
+
+$accent-color: #FF3D00;
+
+$odd-background-color :  $primary-1-tint;
+$even-background-color : $primary-2-tint;
 
 
 $header-font-family: 'Rufina', serif;

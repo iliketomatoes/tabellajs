@@ -1,4 +1,4 @@
-/*! tabella - v0.0.1 - 2014-12-17
+/*! tabella - v0.0.1 - 2014-12-18
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2014 ; Licensed  */
 ;(function(tabella) {
@@ -64,11 +64,11 @@
 				xlarge : [1080,5]
 			},
 			from : 'from',
-			to : 'to'
+			to : 'to',
+			borderWidth : 1
 		};
 
-		this.periods = null;
-		this.rows = null;
+		this.periodRow = null;
 
 		//Initialize the current breakpoint to the minimum breakpoint
 		this.currentBreakpoint = [0,1];
@@ -76,24 +76,21 @@
 
 		this.el = el;
 
-		try{
-			if(typeof el !== 'undefined'){
-				if(typeof options !== 'undefined'){
-					this.options = extend(this.defaults, options);
+		
+		if(typeof el !== 'undefined'){
+			if(typeof options !== 'undefined'){
+				this.options = extend(this.defaults, options);
 				}else{
-					throw new TabellaException('You did not pass any options to the constructor');
-				}
-			}else{
+				throw new TabellaException('You did not pass any options to the constructor');
+			}
+		}else{
 				throw new TabellaException('You did not pass a valid target element to the constructor');
 			}		
 
-		}catch(e){
-			console.error(e.toString());
-			return e;
-		}
+		
 
 		
-		function _setUpPeriods(options, container, cellWidth){
+		function _setUpPeriods(options, container, cellWidth, elAdjustedWidth){
 			
 			var periods = options.periods;
 
@@ -103,7 +100,7 @@
 
 				var periodRow = document.createElement('div');
 				periodRow.className = 'period-row';
-				periodRow.style.width = (cellWidth * periods.length) + 'px';
+				periodRow.style.width = elAdjustedWidth + 'px';
 				container.appendChild(periodRow);
 
 				for(var i = 0; i < numberOfPeriods; i++){
@@ -141,30 +138,59 @@
 
 				}
 
-				return true;
+				return periodRow;
 
 			}else{
 				return false;
 			}
 		}	
 
-		function _setUpRows(options, rows, cellWidth){
+		function _setUpRows(options, container, cellWidth, elAdjustedWidth){
 
-			var periods = options.periods;
-
-			var returnedRows = [],
+			var periods = options.periods,
+				rows = options.rows,
 				numberOfPeriods = periods.length,
 				numberOfRows = rows.length;
 
 			if(numberOfRows > 0){
 
-					for(var i = 0; i < numberOfRows; i++){
-						for(var prop in rows[i]){
+					var matchingPeriodCells = true;
 
+					for(var i = 0; i < numberOfRows; i++){
+
+						var itemRow = document.createElement('div');
+						itemRow.className = 'item-row';
+						itemRow.style.width = elAdjustedWidth + 'px';
+						container.appendChild(itemRow);
+
+						for(var prop in rows[i]){
+							if(typeof rows[i][prop] === 'string'){
+								var itemDesc = document.createElement('section');
+								itemDesc.className = 'item-desc';
+								itemDesc.innerHTML = rows[i][prop];
+								itemRow.appendChild(itemDesc);
+							}else{
+								if(typeof rows[i][prop] === 'object' && rows[i][prop].length === numberOfPeriods){
+
+								for(var j = 0; j < rows[i][prop].length; j++){
+									var itemCell = document.createElement('div');
+									itemCell.className = 'item-cell';
+									itemCell.style.width = cellWidth + 'px';
+
+									itemCell.innerHTML = rows[i][prop][j];
+
+									itemRow.appendChild(itemCell);
+								}
+									
+								}else{
+									matchingPeriodCells = false;
+									break;
+								}
+							}
 						}
 					}
 
-				return true;	
+				return matchingPeriodCells;	
 
 			}else{
 
@@ -198,7 +224,6 @@
 			}
 
 			return self.currentBreakpoint;
-
 		};
 
 		this.getCellWidth = function(){
@@ -210,42 +235,43 @@
 			breakpoint = self.getBreakpoint();
 
 			if(breakpoint[1] > numberOfPeriods){
-				cellWidth = self.el.clientWidth / numberOfPeriods;
+				cellWidth = self.getElAdjustedWidth() / numberOfPeriods;
 			}else{
-				cellWidth = self.el.clientWidth / breakpoint[1];
+				cellWidth = self.getElAdjustedWidth() / breakpoint[1];
 			}
-
-			console.log(cellWidth);	
-			return Math.round(cellWidth);
+	
+			return Math.floor(cellWidth);
 		};
 
-		try{
-			if(this.options.periods !== null && this.options.rows !== null){
+		this.getElAdjustedWidth = function(){
+			return this.el.clientWidth - ( this.options.borderWidth * 2 );
+		};
 
-				this.cellWidth = this.getCellWidth();	
 
-				this.periods = _setUpPeriods(this.options, this.el, this.cellWidth);
+		
+		if(this.options.periods !== null && this.options.rows !== null){
 
-				if(this.periods){
+			this.cellWidth = this.getCellWidth();	
 
-					this.rows = _setUpRows(this.options, this.options.rows, this.cellWidth);
+			this.periodRow = _setUpPeriods(this.options, this.el, this.cellWidth, this.getElAdjustedWidth());
 
-					if(!!this.rows){
+			if(this.periodRow){
+		
+				if(_setUpRows(this.options, this.el, this.cellWidth, this.getElAdjustedWidth())){
 
-					}else{
-						throw new TabellaException('There is a mismatch between periods and prices cells');
-					}
+					this.attachEvents();
+
 				}else{
-					throw new TabellaException('Periods is not an Array');
+					throw new TabellaException('There is a mismatch between periods and prices cells');
 				}
-				
 			}else{
-				throw new TabellaException('Periods or rows are null');
+				throw new TabellaException('Periods is not an Array');
 			}
-		}catch(e){
-			console.error(e.toString());
-			return e;
+			
+		}else{
+			throw new TabellaException('Periods or rows are null');
 		}
+		
 
 		//this.init();
 

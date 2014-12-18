@@ -1,4 +1,4 @@
-		function _setUpPeriods(options, container, cellWidth){
+		function _setUpPeriods(options, container, cellWidth, elAdjustedWidth){
 			
 			var periods = options.periods;
 
@@ -8,7 +8,7 @@
 
 				var periodRow = document.createElement('div');
 				periodRow.className = 'period-row';
-				periodRow.style.width = (cellWidth * periods.length) + 'px';
+				periodRow.style.width = elAdjustedWidth + 'px';
 				container.appendChild(periodRow);
 
 				for(var i = 0; i < numberOfPeriods; i++){
@@ -46,30 +46,59 @@
 
 				}
 
-				return true;
+				return periodRow;
 
 			}else{
 				return false;
 			}
 		}	
 
-		function _setUpRows(options, rows, cellWidth){
+		function _setUpRows(options, container, cellWidth, elAdjustedWidth){
 
-			var periods = options.periods;
-
-			var returnedRows = [],
+			var periods = options.periods,
+				rows = options.rows,
 				numberOfPeriods = periods.length,
 				numberOfRows = rows.length;
 
 			if(numberOfRows > 0){
 
-					for(var i = 0; i < numberOfRows; i++){
-						for(var prop in rows[i]){
+					var matchingPeriodCells = true;
 
+					for(var i = 0; i < numberOfRows; i++){
+
+						var itemRow = document.createElement('div');
+						itemRow.className = 'item-row';
+						itemRow.style.width = elAdjustedWidth + 'px';
+						container.appendChild(itemRow);
+
+						for(var prop in rows[i]){
+							if(typeof rows[i][prop] === 'string'){
+								var itemDesc = document.createElement('section');
+								itemDesc.className = 'item-desc';
+								itemDesc.innerHTML = rows[i][prop];
+								itemRow.appendChild(itemDesc);
+							}else{
+								if(typeof rows[i][prop] === 'object' && rows[i][prop].length === numberOfPeriods){
+
+								for(var j = 0; j < rows[i][prop].length; j++){
+									var itemCell = document.createElement('div');
+									itemCell.className = 'item-cell';
+									itemCell.style.width = cellWidth + 'px';
+
+									itemCell.innerHTML = rows[i][prop][j];
+
+									itemRow.appendChild(itemCell);
+								}
+									
+								}else{
+									matchingPeriodCells = false;
+									break;
+								}
+							}
 						}
 					}
 
-				return true;	
+				return matchingPeriodCells;	
 
 			}else{
 

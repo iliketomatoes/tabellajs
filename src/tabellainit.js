@@ -1,31 +1,27 @@
+		
+		if(this.options.periods !== null && this.options.rows !== null){
 
-		try{
-			if(this.options.periods !== null && this.options.rows !== null){
+			this.cellWidth = this.getCellWidth();	
 
-				this.cellWidth = this.getCellWidth();	
+			this.periodRow = _setUpPeriods(this.options, this.el, this.cellWidth, this.getElAdjustedWidth());
 
-				this.periods = _setUpPeriods(this.options, this.el, this.cellWidth);
+			if(this.periodRow){
+		
+				if(_setUpRows(this.options, this.el, this.cellWidth, this.getElAdjustedWidth())){
 
-				if(this.periods){
+					this.attachEvents();
 
-					this.rows = _setUpRows(this.options, this.options.rows, this.cellWidth);
-
-					if(!!this.rows){
-
-					}else{
-						throw new TabellaException('There is a mismatch between periods and prices cells');
-					}
 				}else{
-					throw new TabellaException('Periods is not an Array');
+					throw new TabellaException('There is a mismatch between periods and prices cells');
 				}
-				
 			}else{
-				throw new TabellaException('Periods or rows are null');
+				throw new TabellaException('Periods is not an Array');
 			}
-		}catch(e){
-			console.error(e.toString());
-			return e;
+			
+		}else{
+			throw new TabellaException('Periods or rows are null');
 		}
+		
 
 		//this.init();
 

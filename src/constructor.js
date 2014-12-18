@@ -17,11 +17,11 @@
 				xlarge : [1080,5]
 			},
 			from : 'from',
-			to : 'to'
+			to : 'to',
+			borderWidth : 1
 		};
 
-		this.periods = null;
-		this.rows = null;
+		this.periodRow = null;
 
 		//Initialize the current breakpoint to the minimum breakpoint
 		this.currentBreakpoint = [0,1];
@@ -29,20 +29,17 @@
 
 		this.el = el;
 
-		try{
-			if(typeof el !== 'undefined'){
-				if(typeof options !== 'undefined'){
-					this.options = extend(this.defaults, options);
+		
+		if(typeof el !== 'undefined'){
+			if(typeof options !== 'undefined'){
+				this.options = extend(this.defaults, options);
 				}else{
-					throw new TabellaException('You did not pass any options to the constructor');
-				}
-			}else{
+				throw new TabellaException('You did not pass any options to the constructor');
+			}
+		}else{
 				throw new TabellaException('You did not pass a valid target element to the constructor');
 			}		
 
-		}catch(e){
-			console.error(e.toString());
-			return e;
-		}
+		
 
 		

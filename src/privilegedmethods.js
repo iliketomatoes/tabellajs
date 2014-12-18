@@ -23,7 +23,6 @@
 			}
 
 			return self.currentBreakpoint;
-
 		};
 
 		this.getCellWidth = function(){
@@ -35,11 +34,15 @@
 			breakpoint = self.getBreakpoint();
 
 			if(breakpoint[1] > numberOfPeriods){
-				cellWidth = self.el.clientWidth / numberOfPeriods;
+				cellWidth = self.getElAdjustedWidth() / numberOfPeriods;
 			}else{
-				cellWidth = self.el.clientWidth / breakpoint[1];
+				cellWidth = self.getElAdjustedWidth() / breakpoint[1];
 			}
-
-			console.log(cellWidth);	
-			return Math.round(cellWidth);
+	
+			return Math.floor(cellWidth);
 		};
+
+		this.getElAdjustedWidth = function(){
+			return this.el.clientWidth - ( this.options.borderWidth * 2 );
+		};
+

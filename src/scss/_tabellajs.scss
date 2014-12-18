@@ -4,6 +4,7 @@
 	box-sizing: border-box;
 }
 
+
 .tabella-ctr{
     display: block;
     position: relative;
@@ -12,25 +13,47 @@
     @include single-transition();
 }
 
-.period-row{
+
+/*
+===========================
+Common rules
+===========================*/
+.row{
 	position: relative;
 	font-size: 1em;
+	border: 1px solid $border-color;
+	overflow: auto;
 }
 
-.period-cell{
+.cell{
 	float: left;
 	position: relative;
 	text-align: center;
-	padding: 0.3em 0.1em;
+	padding: 0.4em 0.1em;
 	color: hsla(200,0%,0%,.7);
 
-	&:nth-child(odd){
+	&:nth-of-type(odd){
+		//color: #000;
 		background-color: $odd-background-color;
 	}
 
-	&:nth-child(even){
+	&:nth-of-type(even){
+	
+		//color: #fff;
 		background-color: $even-background-color;
 	}
+}
+
+/*
+===========================
+Period
+===========================*/
+.period-row{
+	@extend .row;
+}
+
+.period-cell{
+	@extend .cell;
 }
 
 .period-element{
@@ -52,6 +75,29 @@
 	display: inline-block;
 	margin-right: 0.4em;
 	text-align: left;
-	color: hsla(200,0%,0%,.4);
+	color: hsla(200,0%,0%,.3);
 }
 
+/*
+===========================
+Item
+===========================*/
+.item-row{
+	margin-top: 1em;
+	@extend .row;
+}
+
+
+.item-cell{
+	@extend .cell;
+}
+
+.item-desc{
+	display: block;
+	position: relative;
+	width: 100%;
+	padding: 0.3em 0.5em;
+	float: none;
+	overflow: auto;
+	color: $primary-color;
+}
