@@ -90,7 +90,8 @@
 		
 
 		
-		function _setUpPeriods(options, container, cellWidth, elAdjustedWidth){
+		
+		function _setUpPeriods(options, container, cellWidth){
 			
 			var periods = options.periods;
 
@@ -98,10 +99,14 @@
 
 				var numberOfPeriods = periods.length;
 
+				var periodWrapper = document.createElement('div');
+				periodWrapper.className = 'period-wrapper';
+				container.appendChild(periodWrapper);
+
 				var periodRow = document.createElement('div');
 				periodRow.className = 'period-row';
-				periodRow.style.width = elAdjustedWidth + 'px';
-				container.appendChild(periodRow);
+				periodRow.style.width = cellWidth * numberOfPeriods + 'px';
+				periodWrapper.appendChild(periodRow);
 
 				for(var i = 0; i < numberOfPeriods; i++){
 
@@ -145,7 +150,7 @@
 			}
 		}	
 
-		function _setUpRows(options, container, cellWidth, elAdjustedWidth){
+		function _setUpRows(options, container, cellWidth){
 
 			var periods = options.periods,
 				rows = options.rows,
@@ -154,14 +159,20 @@
 
 			if(numberOfRows > 0){
 
+					
+
 					var matchingPeriodCells = true;
 
 					for(var i = 0; i < numberOfRows; i++){
 
+						var itemWrapper = document.createElement('div');
+						itemWrapper.className = 'item-wrapper';
+						container.appendChild(itemWrapper);
+
 						var itemRow = document.createElement('div');
 						itemRow.className = 'item-row';
-						itemRow.style.width = elAdjustedWidth + 'px';
-						container.appendChild(itemRow);
+						itemRow.style.width = cellWidth * numberOfPeriods + 'px';
+						itemWrapper.appendChild(itemRow);
 
 						for(var prop in rows[i]){
 							if(typeof rows[i][prop] === 'string'){
@@ -200,6 +211,10 @@
 
 		}
 
+		function _setUpArrows(options, container, periodRow){
+
+		}
+
 		this.getBreakpoint = function(){
 
 			var self = this,
@@ -235,17 +250,16 @@
 			breakpoint = self.getBreakpoint();
 
 			if(breakpoint[1] > numberOfPeriods){
-				cellWidth = self.getElAdjustedWidth() / numberOfPeriods;
+				cellWidth = this.el.clientWidth / numberOfPeriods;
 			}else{
-				cellWidth = self.getElAdjustedWidth() / breakpoint[1];
+				cellWidth = this.el.clientWidth / breakpoint[1];
+				console.log(this.el.clientWidth);
 			}
-	
-			return Math.floor(cellWidth);
+			
+			console.log(cellWidth);
+			return Math.round(cellWidth);
 		};
 
-		this.getElAdjustedWidth = function(){
-			return this.el.clientWidth - ( this.options.borderWidth * 2 );
-		};
 
 
 		
@@ -253,13 +267,14 @@
 
 			this.cellWidth = this.getCellWidth();	
 
-			this.periodRow = _setUpPeriods(this.options, this.el, this.cellWidth, this.getElAdjustedWidth());
+			this.periodRow = _setUpPeriods(this.options, this.el, this.cellWidth, this.el.clientWidth);
 
 			if(this.periodRow){
 		
-				if(_setUpRows(this.options, this.el, this.cellWidth, this.getElAdjustedWidth())){
+				if(_setUpRows(this.options, this.el, this.cellWidth, this.el.clientWidth)){
 
-					this.attachEvents();
+					_setUpArrows(this.options, this.el, this.periodRow);
+					//this.attachEvents();
 
 				}else{
 					throw new TabellaException('There is a mismatch between periods and prices cells');

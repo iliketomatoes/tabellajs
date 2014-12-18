@@ -3,13 +3,14 @@
 
 			this.cellWidth = this.getCellWidth();	
 
-			this.periodRow = _setUpPeriods(this.options, this.el, this.cellWidth, this.getElAdjustedWidth());
+			this.periodRow = _setUpPeriods(this.options, this.el, this.cellWidth, this.el.clientWidth);
 
 			if(this.periodRow){
 		
-				if(_setUpRows(this.options, this.el, this.cellWidth, this.getElAdjustedWidth())){
+				if(_setUpRows(this.options, this.el, this.cellWidth, this.el.clientWidth)){
 
-					this.attachEvents();
+					_setUpArrows(this.options, this.el, this.periodRow);
+					//this.attachEvents();
 
 				}else{
 					throw new TabellaException('There is a mismatch between periods and prices cells');

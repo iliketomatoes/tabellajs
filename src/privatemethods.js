@@ -1,4 +1,5 @@
-		function _setUpPeriods(options, container, cellWidth, elAdjustedWidth){
+		
+		function _setUpPeriods(options, container, cellWidth){
 			
 			var periods = options.periods;
 
@@ -6,10 +7,14 @@
 
 				var numberOfPeriods = periods.length;
 
+				var periodWrapper = document.createElement('div');
+				periodWrapper.className = 'period-wrapper';
+				container.appendChild(periodWrapper);
+
 				var periodRow = document.createElement('div');
 				periodRow.className = 'period-row';
-				periodRow.style.width = elAdjustedWidth + 'px';
-				container.appendChild(periodRow);
+				periodRow.style.width = cellWidth * numberOfPeriods + 'px';
+				periodWrapper.appendChild(periodRow);
 
 				for(var i = 0; i < numberOfPeriods; i++){
 
@@ -53,7 +58,7 @@
 			}
 		}	
 
-		function _setUpRows(options, container, cellWidth, elAdjustedWidth){
+		function _setUpRows(options, container, cellWidth){
 
 			var periods = options.periods,
 				rows = options.rows,
@@ -62,14 +67,20 @@
 
 			if(numberOfRows > 0){
 
+					
+
 					var matchingPeriodCells = true;
 
 					for(var i = 0; i < numberOfRows; i++){
 
+						var itemWrapper = document.createElement('div');
+						itemWrapper.className = 'item-wrapper';
+						container.appendChild(itemWrapper);
+
 						var itemRow = document.createElement('div');
 						itemRow.className = 'item-row';
-						itemRow.style.width = elAdjustedWidth + 'px';
-						container.appendChild(itemRow);
+						itemRow.style.width = cellWidth * numberOfPeriods + 'px';
+						itemWrapper.appendChild(itemRow);
 
 						for(var prop in rows[i]){
 							if(typeof rows[i][prop] === 'string'){
@@ -105,5 +116,9 @@
 				return false;
 
 			}
+
+		}
+
+		function _setUpArrows(options, container, periodRow){
 
 		}

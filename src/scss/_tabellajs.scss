@@ -18,11 +18,18 @@
 ===========================
 Common rules
 ===========================*/
+.wrapper{
+	position: relative;
+	display: block;
+	width: 100%;
+	border: 1px solid $border-color;
+	overflow: hidden;
+}
+
 .row{
 	position: relative;
 	font-size: 1em;
-	border: 1px solid $border-color;
-	overflow: auto;
+	overflow: hidden;
 }
 
 .cell{
@@ -48,6 +55,11 @@ Common rules
 ===========================
 Period
 ===========================*/
+
+.period-wrapper{
+	@extend .wrapper;
+}
+
 .period-row{
 	@extend .row;
 }
@@ -82,8 +94,13 @@ Period
 ===========================
 Item
 ===========================*/
-.item-row{
+.item-wrapper{
 	margin-top: 1em;
+	@extend .wrapper;
+}
+
+
+.item-row{
 	@extend .row;
 }
 

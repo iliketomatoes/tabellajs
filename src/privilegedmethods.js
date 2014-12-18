@@ -34,15 +34,14 @@
 			breakpoint = self.getBreakpoint();
 
 			if(breakpoint[1] > numberOfPeriods){
-				cellWidth = self.getElAdjustedWidth() / numberOfPeriods;
+				cellWidth = this.el.clientWidth / numberOfPeriods;
 			}else{
-				cellWidth = self.getElAdjustedWidth() / breakpoint[1];
+				cellWidth = this.el.clientWidth / breakpoint[1];
+				console.log(this.el.clientWidth);
 			}
-	
-			return Math.floor(cellWidth);
+			
+			console.log(cellWidth);
+			return Math.round(cellWidth);
 		};
 
-		this.getElAdjustedWidth = function(){
-			return this.el.clientWidth - ( this.options.borderWidth * 2 );
-		};
 
