@@ -3,27 +3,39 @@
 			
 			var periods = options.periods;
 
+			var docfrag = document.createDocumentFragment();
+
 			if(periods instanceof Array && periods.length){
 
 				var numberOfPeriods = periods.length;
 
-				var periodWrapper = document.createElement('div');
-				periodWrapper.className = 'period-wrapper';
-				container.appendChild(periodWrapper);
+				var periodWrapper = createHTMLEl('div', 'period-wrapper', docfrag);
 
-				var periodRow = document.createElement('div');
-				periodRow.className = 'period-row';
+				var rowWrapper = createHTMLEl('div', 'row-wrapper', periodWrapper);
+
+				rowWrapper.style.width = cellWidth * (numberOfPeriods + 1) + 'px';
+				
+				var periodDescHTML = '<div class="period-element">';
+					periodDescHTML +='<div class="period-large-fromto">';
+					periodDescHTML += options.from;
+					periodDescHTML += '<br>';
+					periodDescHTML += options.to;
+					periodDescHTML += '</div>';
+					periodDescHTML += '</div>';  
+
+				var periodDescription = createHTMLEl('div', 'period-description', rowWrapper, periodDescHTML);
+
+				periodDescription.style.width = cellWidth + 'px';
+
+				var periodRow = createHTMLEl('div', 'period-row', rowWrapper);
+
 				periodRow.style.width = cellWidth * numberOfPeriods + 'px';
-				periodWrapper.appendChild(periodRow);
 
 				for(var i = 0; i < numberOfPeriods; i++){
 
 					var periodCell = document.createElement('div');
 					periodCell.className = 'period-cell';
 					periodCell.style.width = cellWidth + 'px';
-
-					var periodEl = document.createElement('div');
-						periodEl.className = 'period-element';
 
 					//From - to Div	
 					var periodHTML = '<div class="period-fromto">';
@@ -43,13 +55,13 @@
 					}
 					periodHTML += '</div>'; 
 
-					periodEl.innerHTML = periodHTML;
-
-					periodCell.appendChild(periodEl);
+					var periodEl = createHTMLEl( 'div', 'period-element', periodCell, periodHTML);
 
 					periodRow.appendChild(periodCell);
 
 				}
+
+				container.appendChild(docfrag);
 
 				return periodRow;
 
@@ -65,6 +77,8 @@
 				numberOfPeriods = periods.length,
 				numberOfRows = rows.length;
 
+			var docfrag = document.createDocumentFragment();
+
 			if(numberOfRows > 0){
 
 					var matchingPeriodCells = true;
@@ -73,15 +87,10 @@
 
 						if(!matchingPeriodCells) break;
 
-						var itemWrapper = document.createElement('div');
-						itemWrapper.className = 'item-wrapper';
-						container.appendChild(itemWrapper);
-	
+						var itemWrapper = createHTMLEl('div', 'item-wrapper', docfrag);
+					
 						if(!!rows[i].desc){
-							var itemDesc = document.createElement('section');
-							itemDesc.className = 'item-desc';
-							itemDesc.innerHTML = rows[i].desc;
-							itemWrapper.appendChild(itemDesc);
+							var itemDesc = createHTMLEl('section','item-desc', itemWrapper, rows[i].desc);
 						}
 
 						if(!!rows[i].prices){
@@ -90,11 +99,10 @@
 
 								if(!matchingPeriodCells) break;
 
-								var itemRow = document.createElement('div');
-								itemRow.className = 'item-row';
+						
+								var itemRow = createHTMLEl('div', 'item-row', itemWrapper);
 								itemRow.style.width = cellWidth * numberOfPeriods + 'px';
-								itemWrapper.appendChild(itemRow);
-
+							
 								for(var k = 0; k < rows[i].prices[j].length; k++){
 
 									if(rows[i].prices[j].length === numberOfPeriods){
@@ -105,9 +113,6 @@
 
 										itemCell.className = itemClass;
 										itemCell.style.width = cellWidth + 'px';
-
-										var itemEl = document.createElement('div');
-										itemEl.className = 'item-element';
 
 										var itemHTML = '';
 
@@ -130,9 +135,8 @@
 										itemHTML += ' ' + options.currency;
 										itemHTML+= '</div>'; 
 
-										itemEl.innerHTML = itemHTML;
 
-										itemCell.appendChild(itemEl);
+										var itemEl = createHTMLEl('div', 'item-element', itemCell, itemHTML);
 
 										itemRow.appendChild(itemCell);
 									
@@ -144,6 +148,8 @@
 							}
 						}
 					}
+
+				container.appendChild(docfrag);	
 
 				return matchingPeriodCells;	
 

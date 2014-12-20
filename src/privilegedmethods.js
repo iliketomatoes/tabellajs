@@ -27,7 +27,8 @@
 
 		this.getCellWidth = function(){
 			var self = this,
-				numberOfPeriods = self.options.periods.length,
+				//Number of cells = number of periods + 1 cell for descriptions
+				numberOfCells = self.options.periods.length + 1,
 				breakpoint,
 				cellWidth;
 
@@ -35,7 +36,7 @@
 
 			console.log(self.el.parentNode.clientWidth);
 
-			if(breakpoint[1] > numberOfPeriods){
+			if(breakpoint[1] > numberOfCells ){
 				cellWidth = self.el.clientWidth / numberOfPeriods;
 			}else{
 				cellWidth = self.el.clientWidth / breakpoint[1];

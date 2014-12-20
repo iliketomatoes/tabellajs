@@ -27,10 +27,26 @@ Common rules
 	overflow: hidden;
 }
 
+.row-wrapper{
+	position: relative;
+	display: block;
+	height: 100%;
+	overflow: hidden;
+}
+
 .row{
+	float: left;
 	position: relative;
 	font-size: 1em;
 	overflow: hidden;
+}
+
+.row-description{
+	float: left;
+	overflow: hidden;
+	padding: 0.4em 0.1em;
+	font-size: 1em;
+	text-align: center;
 }
 
 .cell{
@@ -84,6 +100,17 @@ Common rules
 	color: hsla(200,0%,0%,.3);
 }
 
+.large-row-desc{
+	display: inline-block;
+	position: relative;
+	//width: 100%;
+	height: 100%;
+	margin: 0 auto;
+	text-align: left;
+	//vertical-align: middle;
+	color: $primary-color;
+}
+
 /*
 ===========================
 Period
@@ -97,6 +124,10 @@ Period
 	@extend .row;
 }
 
+.period-description{
+	@extend .row-description;
+}
+
 .period-cell{
 	@extend .cell;
 }
@@ -107,6 +138,10 @@ Period
 
 .period-date{
 	@extend .cell-value;
+}
+
+.period-large-fromto{
+	@extend .large-row-desc;
 }
 
 .period-fromto{
