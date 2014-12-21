@@ -21,8 +21,7 @@
     function createHTMLEl(htmlEl, className, parent, htmlContent){
         var el = document.createElement(htmlEl);
             el.className = className;
-            if(!!htmlContent) el.innerHTML = htmlContent;
-            parent.appendChild(el);
-
+        if(!!htmlContent) el.innerHTML = htmlContent;
+        parent.appendChild(el);
         return el;    
     }

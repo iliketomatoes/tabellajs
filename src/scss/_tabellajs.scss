@@ -19,29 +19,40 @@
 ===========================
 Common rules
 ===========================*/
-.wrapper{
+.t-row{
 	position: relative;
 	display: block;
 	width: 100%;
+	margin-top: 1.5em;
 	border: 1px solid $border-color;
 	overflow: hidden;
 }
 
-.row-wrapper{
+.t-row-content{
 	position: relative;
 	display: block;
 	height: 100%;
 	overflow: hidden;
 }
 
-.row{
+.t-row-header{
+	display: block;
+	position: relative;
+	width: 100%;
+	padding: 0.3em 0.5em;
+	float: none;
+	overflow: auto;
+	color: $primary-color;
+}
+
+.t-row-values{
 	float: left;
 	position: relative;
 	font-size: 1em;
 	overflow: hidden;
 }
 
-.row-description{
+.t-row-desc{
 	float: left;
 	overflow: hidden;
 	padding: 0.4em 0.1em;
@@ -49,7 +60,7 @@ Common rules
 	text-align: center;
 }
 
-.cell{
+.t-row-cell{
 	float: left;
 	position: relative;
 	text-align: center;
@@ -57,18 +68,15 @@ Common rules
 	color: hsla(200,0%,0%,.7);
 
 	&:nth-of-type(odd){
-		//color: #000;
 		background-color: $odd-background-color;
 	}
 
 	&:nth-of-type(even){
-	
-		//color: #fff;
 		background-color: $even-background-color;
 	}
 }
 
-.cell-border-top::before{
+.t-cell-border-top::before{
 	content: "";
 	position: absolute;
 	top: 0;
@@ -78,7 +86,7 @@ Common rules
 	border-top: 1px dotted $border-color;
 }
 
-.element{
+.t-element{
 	display: inline-block;
 	margin: 0 auto;
 	overflow: hidden;
@@ -86,13 +94,13 @@ Common rules
 	vertical-align: middle;
 }
 
-.cell-value{
+.t-cell-value{
 	float: left;
 	display: inline-block;
 	text-align: left;
 }
 
-.cell-desc{
+.t-cell-desc-s{
 	float: left;
 	display: inline-block;
 	margin-right: 0.4em;
@@ -100,91 +108,13 @@ Common rules
 	color: hsla(200,0%,0%,.3);
 }
 
-.large-row-desc{
+.t-cell-desc-l{
 	display: inline-block;
 	position: relative;
-	//width: 100%;
 	height: 100%;
 	margin: 0 auto;
 	text-align: left;
-	//vertical-align: middle;
 	color: $primary-color;
 }
 
-/*
-===========================
-Period
-===========================*/
 
-.period-wrapper{
-	@extend .wrapper;
-}
-
-.period-row{
-	@extend .row;
-}
-
-.period-description{
-	@extend .row-description;
-}
-
-.period-cell{
-	@extend .cell;
-}
-
-.period-element{
-	@extend .element;
-}
-
-.period-date{
-	@extend .cell-value;
-}
-
-.period-large-fromto{
-	@extend .large-row-desc;
-}
-
-.period-fromto{
-	@extend .cell-desc;
-}
-
-/*
-===========================
-Item
-===========================*/
-.item-wrapper{
-	margin-top: 1.5em;
-	@extend .wrapper;
-}
-
-
-.item-row{
-	@extend .row;
-}
-
-
-.item-cell{
-	@extend .cell;
-}
-
-.item-element{
-	@extend .element;
-}
-
-.item-cell-desc{
-	@extend .cell-desc;
-}
-
-.item-value{
-	@extend .cell-value;
-}
-
-.item-desc{
-	display: block;
-	position: relative;
-	width: 100%;
-	padding: 0.3em 0.5em;
-	float: none;
-	overflow: auto;
-	color: $primary-color;
-}

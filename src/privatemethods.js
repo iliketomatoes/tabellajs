@@ -1,4 +1,37 @@
-		
+	
+/*
+SCHEMA: 
+
+*-----------------------------------------------------------------------------------*
+| this.el                                                                           |
+| *-------------------------------------------------------------------------------* |
+| | .t-row                                                                        | |
+| | *---------------------------------------------------------------------------* | |
+| | | .t-row-header /// OPTIONAL                                                | | |
+| | *---------------------------------------------------------------------------* | |
+| | *---------------------------------------------------------------------------* | |
+| | | .t-row-content                                                            | | |
+| | | *------------------------* *--------------------------------------------* | | |
+| | | | .t-row-desc            | | .t-row-values <<<<<< SLIDING PART >>>>>>   | | | |
+| | | | *--------------------* | | *----------------------------------------* | | | |
+| | | | | .t-element	     | | | | .t-row-cell                            | | | | |
+| | | | | *----------------* | | | |                                        | | | | |
+| | | |	| | .t-cell-desc-l | | | | |                                        | | | | |
+| | | | | *----------------* | | | |                                        | | | | |
+| | | | *--------------------* | | | *------------------------------------* | | | | |
+| | | |                        | | | | .t-element                         | | | | | |
+| | | |                        | | | | *----------------* *---------------* | | | | | 
+| | | |                        | | | | | .t-cell-desc-s | | .t-cell-value | | | | | | 
+| | | |                        | | | | *----------------* *---------------* | | | | | 
+| | | |                        | | | *------------------------------------* | | | | |
+| | | |                        | | *----------------------------------------* | | | |
+| | | *------------------------* *--------------------------------------------* | | |
+| | *---------------------------------------------------------------------------* | |
+| *-------------------------------------------------------------------------------* |
+*-----------------------------------------------------------------------------------*
+
+*/
+
 		function _setUpPeriods(options, container, cellWidth){
 			
 			var periods = options.periods;
@@ -9,36 +42,36 @@
 
 				var numberOfPeriods = periods.length;
 
-				var periodWrapper = createHTMLEl('div', 'period-wrapper', docfrag);
+				var tRow = createHTMLEl('div', 't-row', docfrag);
 
-				var rowWrapper = createHTMLEl('div', 'row-wrapper', periodWrapper);
+				var tRowContent = createHTMLEl('div', 't-row-content', tRow);
 
-				rowWrapper.style.width = cellWidth * (numberOfPeriods + 1) + 'px';
+				tRowContent.style.width = cellWidth * (numberOfPeriods + 1) + 'px';
 				
-				var periodDescHTML = '<div class="period-element">';
-					periodDescHTML +='<div class="period-large-fromto">';
-					periodDescHTML += options.from;
-					periodDescHTML += '<br>';
-					periodDescHTML += options.to;
-					periodDescHTML += '</div>';
-					periodDescHTML += '</div>';  
+				var tRowDescHTML = '<div class="t-element">';
+					tRowDescHTML +='<div class="t-cell-desc-l">';
+					tRowDescHTML += options.from;
+					tRowDescHTML += '<br>';
+					tRowDescHTML += options.to;
+					tRowDescHTML += '</div>';
+					tRowDescHTML += '</div>';  
 
-				var periodDescription = createHTMLEl('div', 'period-description', rowWrapper, periodDescHTML);
+				var tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
 
-				periodDescription.style.width = cellWidth + 'px';
+				tRowDesc.style.width = cellWidth + 'px';
 
-				var periodRow = createHTMLEl('div', 'period-row', rowWrapper);
+				var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
 
-				periodRow.style.width = cellWidth * numberOfPeriods + 'px';
+				tRowValues.style.width = cellWidth * numberOfPeriods + 'px';
 
 				for(var i = 0; i < numberOfPeriods; i++){
 
-					var periodCell = document.createElement('div');
-					periodCell.className = 'period-cell';
-					periodCell.style.width = cellWidth + 'px';
+					var tRowCell = document.createElement('div');
+					tRowCell.className = 't-row-cell';
+					tRowCell.style.width = cellWidth + 'px';
 
 					//From - to Div	
-					var periodHTML = '<div class="period-fromto">';
+					var periodHTML = '<div class="t-cell-desc-s">';
 						periodHTML += options.from;
 					if(typeof periods[i][1] !== 'undefined'){	
 						periodHTML += '<br>';
@@ -47,7 +80,7 @@
 						periodHTML += '</div>'; 	
 
 					//Period actual dates
-					periodHTML += '<div class="period-date">';
+					periodHTML += '<div class="t-cell-value">';
 					periodHTML += typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
 					if(typeof periods[i][1] !== 'undefined'){
 						periodHTML += '<br>';
@@ -55,15 +88,15 @@
 					}
 					periodHTML += '</div>'; 
 
-					var periodEl = createHTMLEl( 'div', 'period-element', periodCell, periodHTML);
+					var tEl = createHTMLEl( 'div', 't-element', tRowCell, periodHTML);
 
-					periodRow.appendChild(periodCell);
+					tRowValues.appendChild(tRowCell);
 
 				}
 
 				container.appendChild(docfrag);
 
-				return periodRow;
+				return tRow;
 
 			}else{
 				return false;
@@ -87,58 +120,71 @@
 
 						if(!matchingPeriodCells) break;
 
-						var itemWrapper = createHTMLEl('div', 'item-wrapper', docfrag);
+						var tRow = createHTMLEl('div', 't-row', docfrag);
 					
 						if(!!rows[i].desc){
-							var itemDesc = createHTMLEl('section','item-desc', itemWrapper, rows[i].desc);
+							var tHeader = createHTMLEl('section','t-row-header', tRow, rows[i].desc);
 						}
 
 						if(!!rows[i].prices){
+
+							var tRowContent = createHTMLEl('div', 't-row-content', tRow);
+
+							tRowContent.style.width = cellWidth * (numberOfPeriods + 1) + 'px';
 
 							for(var j = 0; j < rows[i].prices.length; j++){
 
 								if(!matchingPeriodCells) break;
 
-						
-								var itemRow = createHTMLEl('div', 'item-row', itemWrapper);
-								itemRow.style.width = cellWidth * numberOfPeriods + 'px';
+								var tRowDescHTML = '<div class="t-element">';
+									tRowDescHTML +='<div class="t-cell-desc-l">';
+									tRowDescHTML += rows[i].pricesDesc[j];
+									tRowDescHTML += '</div>';
+									tRowDescHTML += '</div>';  
+
+								var tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
+
+								tRowDesc.style.width = cellWidth + 'px';
+
+								var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
+								tRowValues.style.width = cellWidth * numberOfPeriods + 'px';
 							
 								for(var k = 0; k < rows[i].prices[j].length; k++){
 
 									if(rows[i].prices[j].length === numberOfPeriods){
-										var itemCell = document.createElement('div');
+										var tRowCell = document.createElement('div');
 
-										var itemClass = 'item-cell';
-										if(j >= 1) itemClass += ' cell-border-top';
+										var cellClass = 't-row-cell';
+										if(j >= 1) cellClass += ' cell-border-top';
 
-										itemCell.className = itemClass;
-										itemCell.style.width = cellWidth + 'px';
+										tRowCell.className = cellClass;
+										tRowCell.style.width = cellWidth + 'px';
 
-										var itemHTML = '';
+										var cellHTML = '';
 
 										//Cell description
 										if(!!rows[i].pricesDesc[j]){
-											itemHTML += '<div class="item-cell-desc">';
+											cellHTML += '<div class="t-cell-desc-s">';
 											if(!!rows[i].pricesDesc[j][k]){
-												itemHTML += rows[i].pricesDesc[j][k];
+												cellHTML += rows[i].pricesDesc[j][k];
 											}else{
 												if(!!rows[i].pricesDesc[j][0])
-													itemHTML += rows[i].pricesDesc[j][0];
+													cellHTML += rows[i].pricesDesc[j][0];
 											}
 											
-											itemHTML += '</div>';
+											cellHTML += '</div>';
 										}	
 
 										//Item current price
-										itemHTML += '<div class="item-value">';
-										itemHTML += typeof  rows[i].prices[j][k] !== 'undefined' ?  rows[i].prices[j][k] : 'not set';
-										itemHTML += ' ' + options.currency;
-										itemHTML+= '</div>'; 
+										cellHTML += '<div class="t-cell-value">';
+										cellHTML += typeof  rows[i].prices[j][k] !== 'undefined' ?  rows[i].prices[j][k] : 'not set';
+										cellHTML += ' ' + options.currency;
+										cellHTML+= '</div>'; 
 
 
-										var itemEl = createHTMLEl('div', 'item-element', itemCell, itemHTML);
+										var tEl = createHTMLEl('div', 't-element', tRowCell, cellHTML);
 
-										itemRow.appendChild(itemCell);
+										tRowValues.appendChild(tRowCell);
 									
 									}else{
 										matchingPeriodCells = false;

@@ -28,7 +28,8 @@
 		this.getCellWidth = function(){
 			var self = this,
 				//Number of cells = number of periods + 1 cell for descriptions
-				numberOfCells = self.options.periods.length + 1,
+				//numberOfCells = self.options.periods.length + 1,
+				numberOfCells = self.options.periods.length,
 				breakpoint,
 				cellWidth;
 

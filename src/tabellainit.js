@@ -1,5 +1,4 @@
 	
-
 	if(this.options.periods !== null && this.options.rows !== null){
 
 		this.cellWidth = this.getCellWidth();	
