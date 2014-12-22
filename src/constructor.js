@@ -16,6 +16,8 @@
 				large : [820,4],
 				xlarge : [1080,5]
 			},
+			switchLayout : 1,
+			descCellWidth : 200,
 			from : 'from',
 			to : 'to',
 			borderWidth : 1,
@@ -39,8 +41,4 @@
 			}
 		}else{
 				throw new TabellaException('You did not pass a valid target element to the constructor');
-			}		
-
-		
-
-		
+			}			

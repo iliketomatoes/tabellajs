@@ -1,59 +1,35 @@
-/*! tabella - v0.0.1 - 2014-12-22
-* https://github.com/iliketomatoes/tabellajs
-* Copyright (c) 2014 ; Licensed  */
-;(function(tabella) {
-
-	'use strict';
 	
-	if (typeof define === 'function' && define.amd) {
-        	// Register Tabella as an AMD module
-        	define(tabella);
-	} else {
-        	// Register Tabella on window
-        	window.Tabella = tabella();
-	}
+/*
+SCHEMA: 
 
-})(function () {
+*-------------------------------------------------------------------------------------*
+| container                                                                           |
+| *---------------------------------------------------------------------------------* |
+| | .t-row                                                                          | |
+| | *-----------------------------------------------------------------------------* | |
+| | | .t-row-header /// OPTIONAL                                                  | | |
+| | *-----------------------------------------------------------------------------* | |
+| | *-----------------------------------------------------------------------------* | |
+| | | .t-row-content                                                              | | |
+| | | *------------------------* *----------------------------------------------* | | |
+| | | | .t-row-desc            | | .t-row-values   <<<<<< SLIDING PART >>>>>>   | | | |
+| | | | *--------------------* | | *------------------------------------------* | | | |
+| | | | | .t-element	     | | | | .t-row-cell                              | | | | |
+| | | | | *----------------* | | | | *--------------------------------------* | | | | |                                       | | | | |
+| | | |	| | .t-cell-desc-l | | | | | | .t-element                           | | | | | |                                        | | | | |
+| | | | | *----------------* | | | | | *----------------* *---------------* | | | | | |
+| | | | *--------------------* | | | | |.t-cell-desc-s  | | .t-cell-value | | | | | | |
+| | | |						   | | | | *----------------* *---------------* | | | | | |                                      | | | | |
+| | | |  					   | | | *--------------------------------------* | | | | |
+| | | |                        | | *------------------------------------------* | | | |
+| | | *------------------------* *----------------------------------------------* | | |
+| | *-----------------------------------------------------------------------------* | |
+| *---------------------------------------------------------------------------------* |
+*-------------------------------------------------------------------------------------*
 
-	'use strict';
+*/
 
-    function extend( a, b ) {
-    	for( var key in b ) { 
-    		if( b.hasOwnProperty( key ) ) {
-    			a[key] = b[key];
-    		}
-    	}
-    	return a;
-    }
-
-    //http://stackoverflow.com/questions/7212102/detect-with-javascript-or-jquery-if-css-transform-2d-is-available
-    function getSupportedTransform() {
-        var prefixes = 'transform WebkitTransform MozTransform OTransform msTransform'.split(' ');
-        for(var i = 0; i < prefixes.length; i++) {
-            if(document.createElement('div').style[prefixes[i]] !== undefined) {
-                return prefixes[i];
-            }
-        }
-        return false;
-    }
-
-    function createHTMLEl(htmlEl, className, parent, htmlContent){
-        var el = document.createElement(htmlEl);
-            el.className = className;
-        if(!!htmlContent) el.innerHTML = htmlContent;
-        parent.appendChild(el);
-        return el;    
-    }
-	
-	function TabellaException(value) {			
-
-	   this.value = value;
-	   this.message = "Tabella.js error: ";
-	   this.toString = function() {
-	      return this.message + this.value;
-	   };
-	}
-//TabellaBuilder constructor ... just an empty function
+	//TabellaBuilder constructor ... just an empty function
 	function TabellaBuilder(){}
 
 
@@ -239,141 +215,3 @@
 	TabellaBuilder.prototype.attachEvents = function(){
 		//TODO
 	};
-
-	function Tabella(el, options){
-
-		this.defaults = {
-			periods : null,
-			rows : null,
-			/**
-			* BREAKPOINTS : 
-			* 1st element in array is the breakpoint, 
-			* the 2nd is the number of cells to be shown
-			* Default breakpoint is from [0,1], just one element is shown
-			*/
-			breakpoints : {
-				small : [360,2],
-				medium : [640,3],
-				large : [820,4],
-				xlarge : [1080,5]
-			},
-			switchLayout : 1,
-			descCellWidth : 200,
-			from : 'from',
-			to : 'to',
-			borderWidth : 1,
-			currency : '&euro;'
-		};
-
-		this.periodRow = null;
-
-		//Initialize the current breakpoint to the minimum breakpoint
-		this.currentBreakpoint = [0,1];
-		this.cellWidth = 0;
-
-		this.el = el;
-
-		
-		if(typeof el !== 'undefined'){
-			if(typeof options !== 'undefined'){
-				this.options = extend(this.defaults, options);
-				}else{
-				throw new TabellaException('You did not pass any options to the constructor');
-			}
-		}else{
-				throw new TabellaException('You did not pass a valid target element to the constructor');
-			}			
-	
-	var self = this;
-
-	if(self.options.periods !== null && self.options.rows !== null){
-
-		self.cellWidth = self.getCellWidth();	
-
-		self.periodRow = TabellaBuilder.prototype.setUpPeriods(self.options, self.el, self.cellWidth, self.el.clientWidth);
-
-		if(self.periodRow){
-	
-			if(TabellaBuilder.prototype.setUpRows(self.options, self.el, self.cellWidth, self.el.clientWidth)){
-
-				TabellaBuilder.prototype.setUpArrows(self.options, self.el, self.periodRow);
-
-				window.onload = function(){
-					self.refreshSize();
-					};
-
-			}else{
-				throw new TabellaException('There is a mismatch between periods and prices cells');
-			}
-		}else{
-			throw new TabellaException('Periods is not an Array');
-		}
-		
-	}else{
-		throw new TabellaException('Periods or rows are null');
-	}
-	
-
-		//self.init();
-
-	//Close Tabella constructor
-	}
-
-Tabella.prototype.refreshSize = function(){
-	var self = this;
-	//console.log(self.options);
-	return self.options;
-};
-
-Tabella.prototype.getCellWidth = function(){
-			var self = this,
-				//Number of cells = number of periods + 1 cell for descriptions
-				//numberOfCells = self.options.periods.length + 1,
-				numberOfCells = self.options.periods.length,
-				breakpoint,
-				cellWidth;
-
-			breakpoint = self.getBreakpoint();
-
-			if(breakpoint[1] > numberOfCells ){
-				cellWidth = self.el.clientWidth / numberOfCells;
-			}else{
-				cellWidth = self.el.clientWidth / breakpoint[1];
-			}
-			
-			//console.log(cellWidth);
-			//console.log(self.el.clientWidth);
-
-			return Math.round(cellWidth);
-		};
-
-Tabella.prototype.getBreakpoint = function(){
-
-			var self = this,
-				minWidth = 0,
-				containerWidth = self.el.clientWidth,
-				breakpoints = self.options.breakpoints;
-
-			for(var bp in breakpoints){
-
-				var bpWidth = breakpoints[bp][0];
-
-				if(typeof bpWidth === 'number' &&  bpWidth > 0 && bpWidth <= containerWidth){
-
-					if(Math.abs(containerWidth - bpWidth) < Math.abs(containerWidth - minWidth)){
-						minWidth = bpWidth;
-						self.currentBreakpoint = breakpoints[bp];
-					}
-
-				}
-
-			}
-
-			return self.currentBreakpoint;
-		};		
-	
-	// Register TabellaException on window
-    window.TabellaException = TabellaException;
-
-	return Tabella;
-});

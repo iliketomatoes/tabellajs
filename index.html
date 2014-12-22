@@ -21,6 +21,8 @@
         <main role="main">
             <h1>Tabella.js</h1>
             <div id="tabella" class="tabella-ctr"></div>
+
+            <div id="tabella-2" class="tabella-ctr"></div>
         </main>
 
         <script src="dist/tabella.js"></script>
@@ -28,6 +30,8 @@
             !(function(){
 
                 var tabellaCtr = document.getElementById('tabella');
+
+                var tabellaCtr2 = document.getElementById('tabella-2');
 
                 var test = new Tabella(
                     tabellaCtr,
@@ -57,6 +61,33 @@
                             } 
                                 
                         ]
+
+                       });
+
+                var test2 = new Tabella(
+                    tabellaCtr2,
+                    {   
+                        periods: [
+                            ['2014-12-14', '2014-12-20']
+                            ,['2014-12-21', '2015-1-10']
+                            ,['2015-2-1', '2015-3-7']
+                        ],
+
+                        rows : [
+                            {
+                                desc: '<h2 class="table-h">Single bed room</h2>',
+                                prices: [[190 , 210, 210],[190 , 210, 210]],
+                                pricesDesc : [['1 persona'], ['2 persone']]
+                            },
+                            {
+                                desc: '<h2 class="table-h">Double bed room</h2>',
+                                prices: [[190 , 210, 210]],
+                                pricesDesc : [['1 persona']]
+                            }
+                                
+                        ],
+
+                        currency : '&dollar;'
 
                        });
 

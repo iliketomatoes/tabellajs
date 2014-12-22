@@ -23,9 +23,8 @@ module.exports = function(grunt) {
               'src/intro.js',
               'src/helpers.js',
               'src/exception.js',
+              'src/tabellabuilder.js',
               'src/constructor.js',
-              'src/privatemethods.js',
-              'src/privilegedmethods.js',
               'src/tabellainit.js',
               'src/publicmethods.js',
               'src/outro.js'  
@@ -37,9 +36,8 @@ module.exports = function(grunt) {
               'src/intro.js',
               'src/helpers.js',
               'src/exception.js',
+              'src/tabellabuilder.js',
               'src/constructor.js',
-              'src/privatemethods.js',
-              'src/privilegedmethods.js',
               'src/tabellainit.js',
               'src/publicmethods.js',
               'src/testoutro.js'  

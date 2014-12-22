@@ -1,17 +1,17 @@
 	
-	if(this.options.periods !== null && this.options.rows !== null){
+	var self = this;
 
-		this.cellWidth = this.getCellWidth();	
+	if(self.options.periods !== null && self.options.rows !== null){
 
-		this.periodRow = _setUpPeriods(this.options, this.el, this.cellWidth, this.el.clientWidth);
+		self.cellWidth = self.getCellWidth();	
 
-		if(this.periodRow){
+		self.periodRow = TabellaBuilder.prototype.setUpPeriods(self.options, self.el, self.cellWidth, self.el.clientWidth);
+
+		if(self.periodRow){
 	
-			if(_setUpRows(this.options, this.el, this.cellWidth, this.el.clientWidth)){
+			if(TabellaBuilder.prototype.setUpRows(self.options, self.el, self.cellWidth, self.el.clientWidth)){
 
-				_setUpArrows(this.options, this.el, this.periodRow);
-
-				var self = this;
+				TabellaBuilder.prototype.setUpArrows(self.options, self.el, self.periodRow);
 
 				window.onload = function(){
 					self.refreshSize();
@@ -29,7 +29,7 @@
 	}
 	
 
-		//this.init();
+		//self.init();
 
 	//Close Tabella constructor
 	}
