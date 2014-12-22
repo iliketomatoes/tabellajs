@@ -340,9 +340,9 @@
 			cellBreakpoints : {
 				default : [0,1],
 				small : [360,2],
-				medium : [640,3],
-				large : [820,4],
-				xlarge : [1080,5]
+				medium : [640,4],
+				large : [820,5],
+				xlarge : [1080,6]
 			},
 			/**
 			* DESCRIPTION BREAKPOINTS : 

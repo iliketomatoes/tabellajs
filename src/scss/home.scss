@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Rufina:400,700);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700);
 /*! HTML5 Boilerplate v4.3.0 | MIT License | http://h5bp.com/ */
 
 @import "variables";
@@ -71,6 +71,7 @@ html, body{
 
 h1,h2,h3,h4,h5,h6{
     font-family: $header-font-family;
+    font-weight: bold;
 }
 
 main{

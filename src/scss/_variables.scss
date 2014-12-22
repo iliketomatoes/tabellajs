@@ -1,16 +1,20 @@
 
-$primary-color: #795548;
-$primary-1-tint : #EFEBE9;
-$primary-2-tint : #D7CCC8;
+$primary-color: #3F51B5;
+$primary-1-tint : #C5CAE9;
+$primary-2-tint : #9FA8DA;
 //$primary-fallback : #EFEBE9;
 
 $border-color: rgba(0,0,0,.12);
 
-$accent-color: #FF3D00;
+$accent-color: #FF4081;
+
+$primary-text: rgba(#000, .87);
+$secondary-text: rgba(#000, .54);
+$disabled-text: rgba(#000, .26);
 
 $odd-background-color :  $primary-1-tint;
 $even-background-color : $primary-2-tint;
 
 
-$header-font-family: 'Rufina', serif;
-$body-font-family: 'Lucida Console', Monaco, monospace;
+$header-font-family: 'Open Sans', sans-serif;
+$body-font-family: $header-font-family;
