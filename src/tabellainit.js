@@ -3,15 +3,15 @@
 
 	if(self.options.periods !== null && self.options.rows !== null){
 
-		self.cellWidth = self.getCellWidth();	
-
-		self.periodRow = TabellaBuilder.prototype.setUpPeriods(self.options, self.el, self.cellWidth, self.el.clientWidth);
+		var builder = new TabellaBuilder(self.options, self.el);
+	
+		self.periodRow = builder.setUpPeriods();
 
 		if(self.periodRow){
 	
-			if(TabellaBuilder.prototype.setUpRows(self.options, self.el, self.cellWidth, self.el.clientWidth)){
+			if(builder.setUpRows()){
 
-				TabellaBuilder.prototype.setUpArrows(self.options, self.el, self.periodRow);
+				builder.setUpArrows();
 
 				window.onload = function(){
 					self.refreshSize();

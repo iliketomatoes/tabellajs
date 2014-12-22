@@ -29,13 +29,20 @@ SCHEMA:
 
 */
 
-	//TabellaBuilder constructor ... just an empty function
-	function TabellaBuilder(){}
+	//TabellaBuilder constructor
+	function TabellaBuilder( options, el ){
+
+		this.options = options;
+		this.el = el;
+
+	}
 
 
-	TabellaBuilder.prototype.setUpPeriods = function(options, container, cellWidth){
+	TabellaBuilder.prototype.setUpPeriods = function(){
+
+		var self = this;
 		
-		var periods = options.periods;
+		var periods = self.options.periods;
 
 		var docfrag = document.createDocumentFragment();
 
@@ -47,36 +54,36 @@ SCHEMA:
 
 			var tRowContent = createHTMLEl('div', 't-row-content', tRow);
 
-			tRowContent.style.width = cellWidth * (numberOfPeriods + 1) + 'px';
+			//tRowContent.style.width = cellWidth * (numberOfPeriods + 1) + 'px';
 			
 			var tRowDescHTML = '<div class="t-element">';
 				tRowDescHTML +='<div class="t-cell-desc-l">';
-				tRowDescHTML += options.from;
+				tRowDescHTML += self.options.from;
 				tRowDescHTML += '<br>';
-				tRowDescHTML += options.to;
+				tRowDescHTML += self.options.to;
 				tRowDescHTML += '</div>';
 				tRowDescHTML += '</div>';  
 
 			var tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
 
-			tRowDesc.style.width = cellWidth + 'px';
+			//tRowDesc.style.width = cellWidth + 'px';
 
 			var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
 
-			tRowValues.style.width = cellWidth * numberOfPeriods + 'px';
+			//tRowValues.style.width = cellWidth * numberOfPeriods + 'px';
 
 			for(var i = 0; i < numberOfPeriods; i++){
 
 				var tRowCell = document.createElement('div');
 				tRowCell.className = 't-row-cell';
-				tRowCell.style.width = cellWidth + 'px';
+				//tRowCell.style.width = cellWidth + 'px';
 
 				//From - to Div	
 				var periodHTML = '<div class="t-cell-desc-s">';
-					periodHTML += options.from;
+					periodHTML += self.options.from;
 				if(typeof periods[i][1] !== 'undefined'){	
 					periodHTML += '<br>';
-					periodHTML += options.to;
+					periodHTML += self.options.to;
 				}	
 					periodHTML += '</div>'; 	
 
@@ -95,7 +102,7 @@ SCHEMA:
 
 			}
 
-			container.appendChild(docfrag);
+			self.el.appendChild(docfrag);
 
 			return tRow;
 
@@ -104,10 +111,11 @@ SCHEMA:
 		}
 	};	
 
-	TabellaBuilder.prototype.setUpRows = function (options, container, cellWidth){
+	TabellaBuilder.prototype.setUpRows = function (){
 
-		var periods = options.periods,
-			rows = options.rows,
+		var self = this,
+			periods = self.options.periods,
+			rows = self.options.rows,
 			numberOfPeriods = periods.length,
 			numberOfRows = rows.length;
 
@@ -129,11 +137,11 @@ SCHEMA:
 
 					if(!!rows[i].prices){
 
+						for(var j = 0; j < rows[i].prices.length; j++){
+
 						var tRowContent = createHTMLEl('div', 't-row-content', tRow);
 
-						tRowContent.style.width = cellWidth * (numberOfPeriods + 1) + 'px';
-
-						for(var j = 0; j < rows[i].prices.length; j++){
+						//tRowContent.style.width = cellWidth * (numberOfPeriods + 1) + 'px';	
 
 							if(!matchingPeriodCells) break;
 
@@ -141,14 +149,17 @@ SCHEMA:
 								tRowDescHTML +='<div class="t-cell-desc-l">';
 								tRowDescHTML += rows[i].pricesDesc[j];
 								tRowDescHTML += '</div>';
-								tRowDescHTML += '</div>';  
+								tRowDescHTML += '</div>';
 
-							var tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
+							var descClass = 't-row-desc';
+							if(j >= 1) descClass += ' t-cell-border-top';	  
 
-							tRowDesc.style.width = cellWidth + 'px';
+							var tRowDesc = createHTMLEl('div', descClass, tRowContent, tRowDescHTML);
+
+							//tRowDesc.style.width = cellWidth + 'px';
 
 							var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
-							tRowValues.style.width = cellWidth * numberOfPeriods + 'px';
+							//tRowValues.style.width = cellWidth * numberOfPeriods + 'px';
 						
 							for(var k = 0; k < rows[i].prices[j].length; k++){
 
@@ -156,10 +167,10 @@ SCHEMA:
 									var tRowCell = document.createElement('div');
 
 									var cellClass = 't-row-cell';
-									if(j >= 1) cellClass += ' cell-border-top';
+									if(j >= 1) cellClass += ' t-cell-border-top';
 
 									tRowCell.className = cellClass;
-									tRowCell.style.width = cellWidth + 'px';
+									//tRowCell.style.width = cellWidth + 'px';
 
 									var cellHTML = '';
 
@@ -179,7 +190,7 @@ SCHEMA:
 									//Item current price
 									cellHTML += '<div class="t-cell-value">';
 									cellHTML += typeof  rows[i].prices[j][k] !== 'undefined' ?  rows[i].prices[j][k] : 'not set';
-									cellHTML += ' ' + options.currency;
+									cellHTML += ' ' + self.options.currency;
 									cellHTML+= '</div>'; 
 
 
@@ -196,7 +207,7 @@ SCHEMA:
 					}
 				}
 
-			container.appendChild(docfrag);	
+			self.el.appendChild(docfrag);	
 
 			return matchingPeriodCells;	
 
@@ -208,7 +219,7 @@ SCHEMA:
 
 	};
 
-	TabellaBuilder.prototype.setUpArrows = function(options, container, periodRow){
+	TabellaBuilder.prototype.setUpArrows = function(){
 		//TODO
 	};
 

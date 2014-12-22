@@ -17,6 +17,75 @@
 
 	'use strict';
 
+    
+    /*!
+     * classie v1.0.1
+     * class helper functions
+     * from bonzo https://github.com/ded/bonzo
+     * MIT license
+     * 
+     * classie.has( elem, 'my-class' ) -> true/false
+     * classie.add( elem, 'my-new-class' )
+     * classie.remove( elem, 'my-unwanted-class' )
+     * classie.toggle( elem, 'my-class' )
+     */
+
+    /*jshint browser: true, strict: true, undef: true, unused: true */
+    /*global define: false, module: false */
+
+    // class helper functions from bonzo https://github.com/ded/bonzo
+
+    function classReg( className ) {
+      return new RegExp("(^|\\s+)" + className + "(\\s+|$)");
+    }
+
+    // classList support for class management
+    // altho to be fair, the api sucks because it won't accept multiple classes at once
+    var hasClass, addClass, removeClass;
+
+    if ( 'classList' in document.documentElement ) {
+      hasClass = function( elem, c ) {
+        return elem.classList.contains( c );
+      };
+      addClass = function( elem, c ) {
+        elem.classList.add( c );
+      };
+      removeClass = function( elem, c ) {
+        elem.classList.remove( c );
+      };
+    }
+    else {
+      hasClass = function( elem, c ) {
+        return classReg( c ).test( elem.className );
+      };
+      addClass = function( elem, c ) {
+        if ( !hasClass( elem, c ) ) {
+          elem.className = elem.className + ' ' + c;
+        }
+      };
+      removeClass = function( elem, c ) {
+        elem.className = elem.className.replace( classReg( c ), ' ' );
+      };
+    }
+
+    function toggleClass( elem, c ) {
+      var fn = hasClass( elem, c ) ? removeClass : addClass;
+      fn( elem, c );
+    }
+
+    var classie = {
+      // full names
+      hasClass: hasClass,
+      addClass: addClass,
+      removeClass: removeClass,
+      toggleClass: toggleClass,
+      // short names
+      has: hasClass,
+      add: addClass,
+      remove: removeClass,
+      toggle: toggleClass
+    };
+
     function extend( a, b ) {
     	for( var key in b ) { 
     		if( b.hasOwnProperty( key ) ) {
@@ -44,6 +113,12 @@
         parent.appendChild(el);
         return el;    
     }
+
+    function getArray(nodeList){
+
+        return Array.prototype.slice.call(nodeList,0);
+
+    }
 	
 	function TabellaException(value) {			
 
@@ -53,13 +128,20 @@
 	      return this.message + this.value;
 	   };
 	}
-//TabellaBuilder constructor ... just an empty function
-	function TabellaBuilder(){}
+//TabellaBuilder constructor
+	function TabellaBuilder( options, el ){
+
+		this.options = options;
+		this.el = el;
+
+	}
 
 
-	TabellaBuilder.prototype.setUpPeriods = function(options, container, cellWidth){
+	TabellaBuilder.prototype.setUpPeriods = function(){
+
+		var self = this;
 		
-		var periods = options.periods;
+		var periods = self.options.periods;
 
 		var docfrag = document.createDocumentFragment();
 
@@ -71,36 +153,36 @@
 
 			var tRowContent = createHTMLEl('div', 't-row-content', tRow);
 
-			tRowContent.style.width = cellWidth * (numberOfPeriods + 1) + 'px';
+			//tRowContent.style.width = cellWidth * (numberOfPeriods + 1) + 'px';
 			
 			var tRowDescHTML = '<div class="t-element">';
 				tRowDescHTML +='<div class="t-cell-desc-l">';
-				tRowDescHTML += options.from;
+				tRowDescHTML += self.options.from;
 				tRowDescHTML += '<br>';
-				tRowDescHTML += options.to;
+				tRowDescHTML += self.options.to;
 				tRowDescHTML += '</div>';
 				tRowDescHTML += '</div>';  
 
 			var tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
 
-			tRowDesc.style.width = cellWidth + 'px';
+			//tRowDesc.style.width = cellWidth + 'px';
 
 			var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
 
-			tRowValues.style.width = cellWidth * numberOfPeriods + 'px';
+			//tRowValues.style.width = cellWidth * numberOfPeriods + 'px';
 
 			for(var i = 0; i < numberOfPeriods; i++){
 
 				var tRowCell = document.createElement('div');
 				tRowCell.className = 't-row-cell';
-				tRowCell.style.width = cellWidth + 'px';
+				//tRowCell.style.width = cellWidth + 'px';
 
 				//From - to Div	
 				var periodHTML = '<div class="t-cell-desc-s">';
-					periodHTML += options.from;
+					periodHTML += self.options.from;
 				if(typeof periods[i][1] !== 'undefined'){	
 					periodHTML += '<br>';
-					periodHTML += options.to;
+					periodHTML += self.options.to;
 				}	
 					periodHTML += '</div>'; 	
 
@@ -119,7 +201,7 @@
 
 			}
 
-			container.appendChild(docfrag);
+			self.el.appendChild(docfrag);
 
 			return tRow;
 
@@ -128,10 +210,11 @@
 		}
 	};	
 
-	TabellaBuilder.prototype.setUpRows = function (options, container, cellWidth){
+	TabellaBuilder.prototype.setUpRows = function (){
 
-		var periods = options.periods,
-			rows = options.rows,
+		var self = this,
+			periods = self.options.periods,
+			rows = self.options.rows,
 			numberOfPeriods = periods.length,
 			numberOfRows = rows.length;
 
@@ -153,11 +236,11 @@
 
 					if(!!rows[i].prices){
 
+						for(var j = 0; j < rows[i].prices.length; j++){
+
 						var tRowContent = createHTMLEl('div', 't-row-content', tRow);
 
-						tRowContent.style.width = cellWidth * (numberOfPeriods + 1) + 'px';
-
-						for(var j = 0; j < rows[i].prices.length; j++){
+						//tRowContent.style.width = cellWidth * (numberOfPeriods + 1) + 'px';	
 
 							if(!matchingPeriodCells) break;
 
@@ -165,14 +248,17 @@
 								tRowDescHTML +='<div class="t-cell-desc-l">';
 								tRowDescHTML += rows[i].pricesDesc[j];
 								tRowDescHTML += '</div>';
-								tRowDescHTML += '</div>';  
+								tRowDescHTML += '</div>';
 
-							var tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
+							var descClass = 't-row-desc';
+							if(j >= 1) descClass += ' t-cell-border-top';	  
 
-							tRowDesc.style.width = cellWidth + 'px';
+							var tRowDesc = createHTMLEl('div', descClass, tRowContent, tRowDescHTML);
+
+							//tRowDesc.style.width = cellWidth + 'px';
 
 							var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
-							tRowValues.style.width = cellWidth * numberOfPeriods + 'px';
+							//tRowValues.style.width = cellWidth * numberOfPeriods + 'px';
 						
 							for(var k = 0; k < rows[i].prices[j].length; k++){
 
@@ -180,10 +266,10 @@
 									var tRowCell = document.createElement('div');
 
 									var cellClass = 't-row-cell';
-									if(j >= 1) cellClass += ' cell-border-top';
+									if(j >= 1) cellClass += ' t-cell-border-top';
 
 									tRowCell.className = cellClass;
-									tRowCell.style.width = cellWidth + 'px';
+									//tRowCell.style.width = cellWidth + 'px';
 
 									var cellHTML = '';
 
@@ -203,7 +289,7 @@
 									//Item current price
 									cellHTML += '<div class="t-cell-value">';
 									cellHTML += typeof  rows[i].prices[j][k] !== 'undefined' ?  rows[i].prices[j][k] : 'not set';
-									cellHTML += ' ' + options.currency;
+									cellHTML += ' ' + self.options.currency;
 									cellHTML+= '</div>'; 
 
 
@@ -220,7 +306,7 @@
 					}
 				}
 
-			container.appendChild(docfrag);	
+			self.el.appendChild(docfrag);	
 
 			return matchingPeriodCells;	
 
@@ -232,7 +318,7 @@
 
 	};
 
-	TabellaBuilder.prototype.setUpArrows = function(options, container, periodRow){
+	TabellaBuilder.prototype.setUpArrows = function(){
 		//TODO
 	};
 
@@ -247,18 +333,28 @@
 			rows : null,
 			/**
 			* BREAKPOINTS : 
-			* 1st element in array is the breakpoint, 
+			* 1st element in array is the row width, 
 			* the 2nd is the number of cells to be shown
 			* Default breakpoint is from [0,1], just one element is shown
 			*/
-			breakpoints : {
+			cellBreakpoints : {
+				default : [0,1],
 				small : [360,2],
 				medium : [640,3],
 				large : [820,4],
 				xlarge : [1080,5]
 			},
-			switchLayout : 1,
-			descCellWidth : 200,
+			/**
+			* DESCRIPTION BREAKPOINTS : 
+			* 1st element in array is the row width, 
+			* the 2nd is the description cell width,
+			* Default breakpoint is from [0,0]
+			*/
+			descBreakpoints : {
+				default : [0,0],
+				medium : [460, 160],
+				large : [900, 200]
+			},
 			from : 'from',
 			to : 'to',
 			borderWidth : 1,
@@ -266,9 +362,8 @@
 		};
 
 		this.periodRow = null;
-
-		//Initialize the current breakpoint to the minimum breakpoint
-		this.currentBreakpoint = [0,1];
+		//An object that has to hold the cellBreakpoint and descBreakpoint
+		this.currentBreakpoint = {};
 		this.cellWidth = 0;
 
 		this.el = el;
@@ -288,15 +383,15 @@
 
 	if(self.options.periods !== null && self.options.rows !== null){
 
-		self.cellWidth = self.getCellWidth();	
-
-		self.periodRow = TabellaBuilder.prototype.setUpPeriods(self.options, self.el, self.cellWidth, self.el.clientWidth);
+		var builder = new TabellaBuilder(self.options, self.el);
+	
+		self.periodRow = builder.setUpPeriods();
 
 		if(self.periodRow){
 	
-			if(TabellaBuilder.prototype.setUpRows(self.options, self.el, self.cellWidth, self.el.clientWidth)){
+			if(builder.setUpRows()){
 
-				TabellaBuilder.prototype.setUpArrows(self.options, self.el, self.periodRow);
+				builder.setUpArrows();
 
 				window.onload = function(){
 					self.refreshSize();
@@ -320,28 +415,85 @@
 	}
 
 Tabella.prototype.refreshSize = function(){
-	var self = this;
-	//console.log(self.options);
-	return self.options;
+	var self = this,
+		breakpoint = self.getBreakpoint();
+		console.log(breakpoint);
+
+	var cellWidth = self.getCellWidth(breakpoint),
+		descWidth = breakpoint.descBreakpoint[1],
+		numberOfPeriods = self.options.periods.length;
+
+
+	var rows = getArray(self.el.querySelectorAll('.t-row'));
+
+	rows.forEach(function(el){
+
+		var tContent = getArray(el.querySelectorAll('.t-row-content'));
+
+			if(breakpoint.descBreakpoint[1] > 0){
+
+				tContent.forEach(function(el){
+
+					el.style.width = descWidth + (numberOfPeriods * cellWidth) + 'px';
+
+					el.querySelector('.t-row-desc').style.width = descWidth + 'px';
+
+					getArray(el.querySelectorAll('.t-row-cell')).forEach(function(el){
+
+						el.style.width = cellWidth + 'px';
+
+					});
+
+					getArray(el.querySelectorAll('.t-cell-desc-s')).forEach(function(innerEl){
+						classie.add(innerEl, 't-hide');
+					});
+
+				});	
+				
+			}else{
+
+				tContent.forEach(function(el){
+
+					el.style.width = (numberOfPeriods * cellWidth) + 'px';
+
+					classie.add(el.querySelector('.t-row-desc'), 't-hide');
+
+					getArray(el.querySelectorAll('.t-row-cell')).forEach(function(el){
+
+						el.style.width = cellWidth + 'px';
+
+					});
+
+					getArray(el.querySelectorAll('.t-cell-desc-s')).forEach(function(innerEl){
+						classie.remove(innerEl, 't-hide');
+					});
+
+				});
+
+			}
+			
+
+	});
+
+
+	//return self.options;
 };
 
-Tabella.prototype.getCellWidth = function(){
+Tabella.prototype.getCellWidth = function(breakpoint){
 			var self = this,
 				//Number of cells = number of periods + 1 cell for descriptions
 				//numberOfCells = self.options.periods.length + 1,
 				numberOfCells = self.options.periods.length,
-				breakpoint,
+				cellBreakpoint = breakpoint.cellBreakpoint,
+				descBreakpoint = breakpoint.descBreakpoint,
 				cellWidth;
 
-			breakpoint = self.getBreakpoint();
-
-			if(breakpoint[1] > numberOfCells ){
-				cellWidth = self.el.clientWidth / numberOfCells;
+			if(cellBreakpoint[1] > numberOfCells ){
+				cellWidth = (self.el.clientWidth - descBreakpoint[1]) / numberOfCells;
 			}else{
-				cellWidth = self.el.clientWidth / breakpoint[1];
+				cellWidth = (self.el.clientWidth - descBreakpoint[1]) / cellBreakpoint[1];
 			}
 			
-			//console.log(cellWidth);
 			//console.log(self.el.clientWidth);
 
 			return Math.round(cellWidth);
@@ -352,24 +504,48 @@ Tabella.prototype.getBreakpoint = function(){
 			var self = this,
 				minWidth = 0,
 				containerWidth = self.el.clientWidth,
-				breakpoints = self.options.breakpoints;
+				cellBreakpoints = self.options.cellBreakpoints,
+				descBreakpoints = self.options.descBreakpoints;
 
-			for(var bp in breakpoints){
+			var cellBreakpoint = [0,1], 
+				descBreakpoint = [0,0];
 
-				var bpWidth = breakpoints[bp][0];
+			for(var cbp in cellBreakpoints){
 
-				if(typeof bpWidth === 'number' &&  bpWidth > 0 && bpWidth <= containerWidth){
+				var cbpWidth = cellBreakpoints[cbp][0];
 
-					if(Math.abs(containerWidth - bpWidth) < Math.abs(containerWidth - minWidth)){
-						minWidth = bpWidth;
-						self.currentBreakpoint = breakpoints[bp];
+				if(typeof cbpWidth === 'number' &&  cbpWidth > 0 && cbpWidth <= containerWidth){
+
+					if(Math.abs(containerWidth - cbpWidth) < Math.abs(containerWidth - minWidth)){
+						minWidth = cbpWidth;
+						cellBreakpoint = cellBreakpoints[cbp];
 					}
 
 				}
 
 			}
 
-			return self.currentBreakpoint;
+			minWidth = 0;
+
+			for(var dbp in descBreakpoints){
+
+				var dbpWidth = descBreakpoints[dbp][0];
+
+				if(typeof dbpWidth === 'number' &&  dbpWidth > 0 && dbpWidth <= containerWidth){
+
+					if(Math.abs(containerWidth - dbpWidth) < Math.abs(containerWidth - minWidth)){
+						minWidth = dbpWidth;
+						descBreakpoint = descBreakpoints[dbp];
+					}
+
+				}
+
+			}
+
+			return {
+					cellBreakpoint : cellBreakpoint,
+					descBreakpoint : descBreakpoint
+					};
 		};		
 	
 	// Register TabellaException on window

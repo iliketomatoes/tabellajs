@@ -54,6 +54,7 @@ Common rules
 
 .t-row-desc{
 	float: left;
+	position: relative;
 	overflow: hidden;
 	padding: 0.4em 0.1em;
 	font-size: 1em;
@@ -117,4 +118,10 @@ Common rules
 	color: $primary-color;
 }
 
+.t-hide{
+	display: none !important;
+	width: 0;
+	height: 0;
+	z-index: -1;
+}
 
