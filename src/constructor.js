@@ -31,10 +31,13 @@
 			from : 'from',
 			to : 'to',
 			borderWidth : 1,
-			currency : '&euro;'
+			currency : '&euro;',
+			arrowLeft : '<img src="dist/assets/img/left-arrow.svg" alt="left-arrow">',
+			arrowRight : '<img src="dist/assets/img/right-arrow.svg" alt="right-arrow">',
 		};
 
 		this.periodRow = null;
+		this.arrows = null;
 		//An object that has to hold the cellBreakpoint and descBreakpoint
 		this.currentBreakpoint = {};
 		this.cellWidth = 0;

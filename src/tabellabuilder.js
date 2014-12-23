@@ -209,8 +209,18 @@ SCHEMA:
 	};
 
 	TabellaBuilder.prototype.setUpArrows = function(periodRow){
-		//TODO
-		console.log(periodRow);
+
+		var self = this;
+
+		var arrowRight = createHTMLEl('div','t-arr-right', periodRow, self.options.arrowRight);
+
+		var arrowLeft = createHTMLEl('div','t-arr-left', periodRow, self.options.arrowLeft);
+		
+		return {
+			arrowRight : arrowRight,
+
+			arrowLeft : arrowLeft
+		};
 	};
 
 	TabellaBuilder.prototype.attachEvents = function(){

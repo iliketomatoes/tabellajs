@@ -308,8 +308,18 @@
 	};
 
 	TabellaBuilder.prototype.setUpArrows = function(periodRow){
-		//TODO
-		console.log(periodRow);
+
+		var self = this;
+
+		var arrowRight = createHTMLEl('div','t-arr-right', periodRow, self.options.arrowRight);
+
+		var arrowLeft = createHTMLEl('div','t-arr-left', periodRow, self.options.arrowLeft);
+		
+		return {
+			arrowRight : arrowRight,
+
+			arrowLeft : arrowLeft
+		};
 	};
 
 	TabellaBuilder.prototype.attachEvents = function(){
@@ -348,10 +358,13 @@
 			from : 'from',
 			to : 'to',
 			borderWidth : 1,
-			currency : '&euro;'
+			currency : '&euro;',
+			arrowLeft : '<img src="dist/assets/img/left-arrow.svg" alt="left-arrow">',
+			arrowRight : '<img src="dist/assets/img/right-arrow.svg" alt="right-arrow">',
 		};
 
 		this.periodRow = null;
+		this.arrows = null;
 		//An object that has to hold the cellBreakpoint and descBreakpoint
 		this.currentBreakpoint = {};
 		this.cellWidth = 0;
@@ -381,7 +394,7 @@
 	
 			if(builder.setUpRows()){
 
-				builder.setUpArrows(self.periodRow);
+				self.arrows = builder.setUpArrows(self.periodRow);
 
 				// Returns a function, that, as long as it continues to be invoked, will not
 				// be triggered. The function will be called after it stops being called for

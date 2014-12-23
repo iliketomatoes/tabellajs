@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   width="21.242395"
+   height="43.734344"
+   id="svg3963">
+  <defs
+     id="defs3965">
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter3850">
+      <feFlood
+         result="flood"
+         flood-color="rgb(0,0,0)"
+         flood-opacity="0.5"
+         id="feFlood3852" />
+      <feComposite
+         in2="SourceGraphic"
+         operator="in"
+         in="flood"
+         result="composite1"
+         id="feComposite3854" />
+      <feGaussianBlur
+         result="blur"
+         stdDeviation="2"
+         id="feGaussianBlur3856" />
+      <feOffset
+         result="offset"
+         dy="4"
+         dx="4"
+         id="feOffset3858" />
+      <feComposite
+         in2="offset"
+         operator="over"
+         in="SourceGraphic"
+         result="composite2"
+         id="feComposite3860" />
+    </filter>
+  </defs>
+  <metadata
+     id="metadata3968">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-357.95023,-787.63787)"
+     id="layer1">
+    <path
+       d="m 568.90063,492.77338 -170,170 0,-50 120,-120 -120,-130 0,-50 z"
+       transform="matrix(0.12197947,0,0,0.12197947,309.54549,750.0067)"
+       id="path2989-4"
+       style="fill:#ff4081;fill-opacity:1;stroke:none;filter:url(#filter3850)" />
+  </g>
+</svg>

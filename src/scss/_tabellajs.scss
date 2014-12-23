@@ -127,3 +127,22 @@ Common rules
 	z-index: -1;
 }
 
+.t-arrow{
+	position: absolute;
+	width: 1.4rem;
+	z-index: 500;
+	top: 0;
+	margin-top: 0.5em;
+}
+
+
+.t-arr-right{
+	@extend .t-arrow;
+	right: 0;
+}
+
+.t-arr-left{
+	@extend .t-arrow;
+	left: 0;
+}
+
