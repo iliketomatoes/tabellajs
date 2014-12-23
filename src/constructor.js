@@ -13,9 +13,9 @@
 			cellBreakpoints : {
 				default : [0,1],
 				small : [360,2],
-				medium : [640,4],
-				large : [820,5],
-				xlarge : [1080,6]
+				medium : [640,3],
+				large : [820,4],
+				xlarge : [1080,5]
 			},
 			/**
 			* DESCRIPTION BREAKPOINTS : 
@@ -50,4 +50,4 @@
 			}
 		}else{
 				throw new TabellaException('You did not pass a valid target element to the constructor');
-			}			
+			}				

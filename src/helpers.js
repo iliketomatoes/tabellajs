@@ -96,7 +96,6 @@
     }
 
     function getArray(nodeList){
-
         return Array.prototype.slice.call(nodeList,0);
-
     }
+

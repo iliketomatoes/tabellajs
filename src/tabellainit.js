@@ -11,11 +11,31 @@
 	
 			if(builder.setUpRows()){
 
-				builder.setUpArrows();
+				builder.setUpArrows(self.periodRow);
 
-				window.onload = function(){
-					self.refreshSize();
+				// Returns a function, that, as long as it continues to be invoked, will not
+				// be triggered. The function will be called after it stops being called for
+				// N milliseconds. If `immediate` is passed, trigger the function on the
+				// leading edge, instead of the trailing.
+				var debounce = function(func, wait, immediate) {
+					var timeout;
+					var context = self;
+					return function() {
+						var args = arguments;
+						var later = function() {
+							timeout = null;
+							if (!immediate) func.apply(context, args);
+						};
+						var callNow = immediate && !timeout;
+						clearTimeout(timeout);
+						timeout = setTimeout(later, wait);
+						if (callNow) func.apply(context, args);
 					};
+				};
+
+				window.addEventListener('resize', debounce(self.refreshSize, 250));
+
+				window.addEventListener('load', debounce(self.refreshSize, 50));
 
 			}else{
 				throw new TabellaException('There is a mismatch between periods and prices cells');

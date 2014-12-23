@@ -1,4 +1,4 @@
-/*! tabella - v0.0.1 - 2014-12-22
+/*! tabella - v0.0.1 - 2014-12-23
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2014 ; Licensed  */
 ;(function(tabella) {
@@ -115,10 +115,10 @@
     }
 
     function getArray(nodeList){
-
         return Array.prototype.slice.call(nodeList,0);
-
     }
+
+
 	
 	function TabellaException(value) {			
 
@@ -165,17 +165,12 @@
 
 			var tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
 
-			//tRowDesc.style.width = cellWidth + 'px';
-
 			var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
-
-			//tRowValues.style.width = cellWidth * numberOfPeriods + 'px';
 
 			for(var i = 0; i < numberOfPeriods; i++){
 
 				var tRowCell = document.createElement('div');
 				tRowCell.className = 't-row-cell';
-				//tRowCell.style.width = cellWidth + 'px';
 
 				//From - to Div	
 				var periodHTML = '<div class="t-cell-desc-s">';
@@ -240,8 +235,6 @@
 
 						var tRowContent = createHTMLEl('div', 't-row-content', tRow);
 
-						//tRowContent.style.width = cellWidth * (numberOfPeriods + 1) + 'px';	
-
 							if(!matchingPeriodCells) break;
 
 							var tRowDescHTML = '<div class="t-element">';
@@ -255,10 +248,7 @@
 
 							var tRowDesc = createHTMLEl('div', descClass, tRowContent, tRowDescHTML);
 
-							//tRowDesc.style.width = cellWidth + 'px';
-
 							var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
-							//tRowValues.style.width = cellWidth * numberOfPeriods + 'px';
 						
 							for(var k = 0; k < rows[i].prices[j].length; k++){
 
@@ -269,7 +259,6 @@
 									if(j >= 1) cellClass += ' t-cell-border-top';
 
 									tRowCell.className = cellClass;
-									//tRowCell.style.width = cellWidth + 'px';
 
 									var cellHTML = '';
 
@@ -318,8 +307,9 @@
 
 	};
 
-	TabellaBuilder.prototype.setUpArrows = function(){
+	TabellaBuilder.prototype.setUpArrows = function(periodRow){
 		//TODO
+		console.log(periodRow);
 	};
 
 	TabellaBuilder.prototype.attachEvents = function(){
@@ -340,9 +330,9 @@
 			cellBreakpoints : {
 				default : [0,1],
 				small : [360,2],
-				medium : [640,4],
-				large : [820,5],
-				xlarge : [1080,6]
+				medium : [640,3],
+				large : [820,4],
+				xlarge : [1080,5]
 			},
 			/**
 			* DESCRIPTION BREAKPOINTS : 
@@ -377,7 +367,7 @@
 			}
 		}else{
 				throw new TabellaException('You did not pass a valid target element to the constructor');
-			}			
+			}				
 	
 	var self = this;
 
@@ -391,11 +381,31 @@
 	
 			if(builder.setUpRows()){
 
-				builder.setUpArrows();
+				builder.setUpArrows(self.periodRow);
 
-				window.onload = function(){
-					self.refreshSize();
+				// Returns a function, that, as long as it continues to be invoked, will not
+				// be triggered. The function will be called after it stops being called for
+				// N milliseconds. If `immediate` is passed, trigger the function on the
+				// leading edge, instead of the trailing.
+				var debounce = function(func, wait, immediate) {
+					var timeout;
+					var context = self;
+					return function() {
+						var args = arguments;
+						var later = function() {
+							timeout = null;
+							if (!immediate) func.apply(context, args);
+						};
+						var callNow = immediate && !timeout;
+						clearTimeout(timeout);
+						timeout = setTimeout(later, wait);
+						if (callNow) func.apply(context, args);
 					};
+				};
+
+				window.addEventListener('resize', debounce(self.refreshSize, 250));
+
+				window.addEventListener('load', debounce(self.refreshSize, 50));
 
 			}else{
 				throw new TabellaException('There is a mismatch between periods and prices cells');
@@ -417,7 +427,7 @@
 Tabella.prototype.refreshSize = function(){
 	var self = this,
 		breakpoint = self.getBreakpoint();
-		console.log(breakpoint);
+		console.log('resized');
 
 	var cellWidth = self.getCellWidth(breakpoint),
 		descWidth = breakpoint.descBreakpoint[1],
@@ -436,7 +446,11 @@ Tabella.prototype.refreshSize = function(){
 
 					el.style.width = descWidth + (numberOfPeriods * cellWidth) + 'px';
 
-					el.querySelector('.t-row-desc').style.width = descWidth + 'px';
+					var tDescL = el.querySelector('.t-row-desc');
+
+					tDescL.style.width = descWidth + 'px';
+
+					classie.remove(tDescL, 't-hide');
 
 					getArray(el.querySelectorAll('.t-row-cell')).forEach(function(el){
 
@@ -546,7 +560,8 @@ Tabella.prototype.getBreakpoint = function(){
 					cellBreakpoint : cellBreakpoint,
 					descBreakpoint : descBreakpoint
 					};
-		};		
+		};
+
 	
 	// Register TabellaException on window
     window.TabellaException = TabellaException;

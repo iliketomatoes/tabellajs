@@ -66,17 +66,12 @@ SCHEMA:
 
 			var tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
 
-			//tRowDesc.style.width = cellWidth + 'px';
-
 			var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
-
-			//tRowValues.style.width = cellWidth * numberOfPeriods + 'px';
 
 			for(var i = 0; i < numberOfPeriods; i++){
 
 				var tRowCell = document.createElement('div');
 				tRowCell.className = 't-row-cell';
-				//tRowCell.style.width = cellWidth + 'px';
 
 				//From - to Div	
 				var periodHTML = '<div class="t-cell-desc-s">';
@@ -141,8 +136,6 @@ SCHEMA:
 
 						var tRowContent = createHTMLEl('div', 't-row-content', tRow);
 
-						//tRowContent.style.width = cellWidth * (numberOfPeriods + 1) + 'px';	
-
 							if(!matchingPeriodCells) break;
 
 							var tRowDescHTML = '<div class="t-element">';
@@ -156,10 +149,7 @@ SCHEMA:
 
 							var tRowDesc = createHTMLEl('div', descClass, tRowContent, tRowDescHTML);
 
-							//tRowDesc.style.width = cellWidth + 'px';
-
 							var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
-							//tRowValues.style.width = cellWidth * numberOfPeriods + 'px';
 						
 							for(var k = 0; k < rows[i].prices[j].length; k++){
 
@@ -170,7 +160,6 @@ SCHEMA:
 									if(j >= 1) cellClass += ' t-cell-border-top';
 
 									tRowCell.className = cellClass;
-									//tRowCell.style.width = cellWidth + 'px';
 
 									var cellHTML = '';
 
@@ -219,8 +208,9 @@ SCHEMA:
 
 	};
 
-	TabellaBuilder.prototype.setUpArrows = function(){
+	TabellaBuilder.prototype.setUpArrows = function(periodRow){
 		//TODO
+		console.log(periodRow);
 	};
 
 	TabellaBuilder.prototype.attachEvents = function(){

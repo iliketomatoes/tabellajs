@@ -2,7 +2,7 @@
 Tabella.prototype.refreshSize = function(){
 	var self = this,
 		breakpoint = self.getBreakpoint();
-		console.log(breakpoint);
+		console.log('resized');
 
 	var cellWidth = self.getCellWidth(breakpoint),
 		descWidth = breakpoint.descBreakpoint[1],
@@ -21,7 +21,11 @@ Tabella.prototype.refreshSize = function(){
 
 					el.style.width = descWidth + (numberOfPeriods * cellWidth) + 'px';
 
-					el.querySelector('.t-row-desc').style.width = descWidth + 'px';
+					var tDescL = el.querySelector('.t-row-desc');
+
+					tDescL.style.width = descWidth + 'px';
+
+					classie.remove(tDescL, 't-hide');
 
 					getArray(el.querySelectorAll('.t-row-cell')).forEach(function(el){
 
@@ -131,4 +135,4 @@ Tabella.prototype.getBreakpoint = function(){
 					cellBreakpoint : cellBreakpoint,
 					descBreakpoint : descBreakpoint
 					};
-		};		
+		};
