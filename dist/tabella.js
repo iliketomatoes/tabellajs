@@ -1,4 +1,4 @@
-/*! tabella - v0.0.1 - 2014-12-23
+/*! tabella - v0.0.1 - 2014-12-24
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2014 ; Licensed  */
 ;(function(tabella) {
@@ -151,7 +151,9 @@
 
 			var tRow = createHTMLEl('div', 't-row', docfrag);
 
-			var tRowContent = createHTMLEl('div', 't-row-content', tRow);
+			var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
+
+			var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);
 
 			//tRowContent.style.width = cellWidth * (numberOfPeriods + 1) + 'px';
 			
@@ -233,7 +235,9 @@
 
 						for(var j = 0; j < rows[i].prices.length; j++){
 
-						var tRowContent = createHTMLEl('div', 't-row-content', tRow);
+						var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
+
+						var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);	
 
 							if(!matchingPeriodCells) break;
 
@@ -359,8 +363,8 @@
 			to : 'to',
 			borderWidth : 1,
 			currency : '&euro;',
-			arrowLeft : '<img src="dist/assets/img/left-arrow.svg" alt="left-arrow">',
-			arrowRight : '<img src="dist/assets/img/right-arrow.svg" alt="right-arrow">',
+			arrowLeft : '\u2190',
+			arrowRight : '\u2192',
 		};
 
 		this.periodRow = null;

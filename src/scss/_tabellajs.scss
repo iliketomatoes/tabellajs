@@ -9,8 +9,7 @@
     display: block;
     position: relative;
     width: 100%;
-    margin: 1em 0;
-    overflow: hidden;
+    margin: 1rem 0;
     @include single-transition();
 }
 
@@ -23,8 +22,14 @@ Common rules
 	position: relative;
 	display: block;
 	width: 100%;
-	margin-top: 1.5em;
+	margin-top: 1.5rem;
 	border: 1px solid $border-color;
+}
+
+.t-row-content-wrapper{
+	position: relative;
+	display: block;
+	height: 100%;
 	overflow: hidden;
 }
 
@@ -39,7 +44,7 @@ Common rules
 	display: block;
 	position: relative;
 	width: 100%;
-	padding: 0.3em 0.5em;
+	padding: 0.3rem 0.5rem;
 	float: none;
 	overflow: auto;
 	color: $primary-color;
@@ -48,7 +53,7 @@ Common rules
 .t-row-values{
 	float: left;
 	position: relative;
-	font-size: 1em;
+	font-size: 1rem;
 	overflow: hidden;
 }
 
@@ -56,8 +61,8 @@ Common rules
 	float: left;
 	position: relative;
 	overflow: hidden;
-	padding: 0.4em 0.1em;
-	font-size: 1em;
+	padding: 0.4rem 0.1rem;
+	font-size: 1rem;
 	text-align: center;
 }
 
@@ -65,7 +70,7 @@ Common rules
 	float: left;
 	position: relative;
 	text-align: center;
-	padding: 0.4em 0.1em;
+	padding: 0.4rem 0.1rem;
 	color: hsla(200,0%,0%,.7);
 	//color: #fff;
 
@@ -82,8 +87,8 @@ Common rules
 	content: "";
 	position: absolute;
 	top: 0;
-	left: 0.9em;
-	right: 0.9em;
+	left: 0.9rem;
+	right: 0.9rem;
 	height: 0px;
 	border-top: 1px dotted $border-color;
 }
@@ -105,7 +110,7 @@ Common rules
 .t-cell-desc-s{
 	float: left;
 	display: inline-block;
-	margin-right: 0.4em;
+	margin-right: 0.4rem;
 	text-align: left;
 	color: hsla(200,0%,0%,.3);
 }
@@ -129,20 +134,31 @@ Common rules
 
 .t-arrow{
 	position: absolute;
-	width: 1.4rem;
+	width: 3rem;
+	height: 3rem;
 	z-index: 500;
 	top: 0;
-	margin-top: 0.5em;
+	//padding: .5rem;
+	//line-height: 3;
+	font-size: 2rem;
+	text-align: center;
+	margin-top: 0.25rem;
+	border-radius: 50%;
+	background-color: $accent-color;
+	color: #fff;
+	@include box-shadow;
 }
 
 
 .t-arr-right{
 	@extend .t-arrow;
 	right: 0;
+	margin-right: -0.4rem;
 }
 
 .t-arr-left{
 	@extend .t-arrow;
 	left: 0;
+	margin-left: -0.4rem;
 }
 

@@ -17,8 +17,8 @@
             transform: $transforms;
 }
 
-@mixin border-radius($radius) {
-	-webkit-border-radius: $radius;
-	border-radius: $radius;
-	background-clip: padding-box;  /* stops bg color from leaking outside the border: */
+@mixin box-shadow($shadow : 1px 1px 3px 0px rgba(50, 50, 50, 0.75)) {
+	-webkit-box-shadow: $shadow;
+	-moz-box-shadow:  $shadow;
+	box-shadow: $shadow;
 }

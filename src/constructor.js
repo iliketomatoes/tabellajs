@@ -32,8 +32,8 @@
 			to : 'to',
 			borderWidth : 1,
 			currency : '&euro;',
-			arrowLeft : '<img src="dist/assets/img/left-arrow.svg" alt="left-arrow">',
-			arrowRight : '<img src="dist/assets/img/right-arrow.svg" alt="right-arrow">',
+			arrowLeft : '\u2190',
+			arrowRight : '\u2192',
 		};
 
 		this.periodRow = null;
