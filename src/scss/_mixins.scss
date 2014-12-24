@@ -4,7 +4,7 @@
 // $property - Default: all, Options: http://www.w3.org/TR/css3-transitions/#animatable-properties
 // $speed - Default: 300ms
 // $ease - Default:ease-out, Options: http://css-tricks.com/almanac/properties/t/transition-timing-function/
-@mixin single-transition($property:all, $speed:300ms, $ease:ease-out) {
+@mixin single-transition($property:all, $speed:100ms, $ease:ease-out) {
   transition: $property $speed $ease;
 }
 
@@ -17,8 +17,16 @@
             transform: $transforms;
 }
 
-@mixin box-shadow($shadow : 1px 1px 3px 0px rgba(50, 50, 50, 0.75)) {
-	-webkit-box-shadow: $shadow;
-	-moz-box-shadow:  $shadow;
-	box-shadow: $shadow;
+@mixin box-shadow($shadow : 1px 1px 3px 0px, $color: rgba(50, 50, 50, 0.75)) {
+
+	@if $shadow == none{
+		-webkit-box-shadow: none;
+		-moz-box-shadow:  none;
+		box-shadow: none;
+	}@else{
+		-webkit-box-shadow: $shadow $color;
+		-moz-box-shadow:  $shadow $color;
+		box-shadow: $shadow $color;
+	}
+	
 }

@@ -2,12 +2,17 @@
 Tabella.prototype.refreshSize = function(){
 	var self = this,
 		breakpoint = self.getBreakpoint();
-		console.log('resized');
 
 	var cellWidth = self.getCellWidth(breakpoint),
 		descWidth = breakpoint.descBreakpoint[1],
 		numberOfPeriods = self.options.periods.length;
 
+		self.refreshArrowPosition({ 
+			cellWidth : cellWidth,
+			breakpoint : breakpoint,
+			descWidth : descWidth,
+			numberOfPeriods : numberOfPeriods
+		});
 
 	var rows = getArray(self.el.querySelectorAll('.t-row'));
 
@@ -60,12 +65,9 @@ Tabella.prototype.refreshSize = function(){
 				});
 
 			}
-			
 
 	});
 
-
-	//return self.options;
 };
 
 Tabella.prototype.getCellWidth = function(breakpoint){
@@ -82,8 +84,6 @@ Tabella.prototype.getCellWidth = function(breakpoint){
 			}else{
 				cellWidth = (self.el.clientWidth - descBreakpoint[1]) / cellBreakpoint[1];
 			}
-			
-			//console.log(self.el.clientWidth);
 
 			return Math.round(cellWidth);
 		};
@@ -136,3 +136,22 @@ Tabella.prototype.getBreakpoint = function(){
 					descBreakpoint : descBreakpoint
 					};
 		};
+
+Tabella.prototype.refreshArrowPosition = function(options){
+
+	var self = this,
+		breakpoint = options.breakpoint || self.getBreakpoint(),
+		cellWidth = options.cellWidth || self.getCellWidth(breakpoint),
+		descWidth = options.descWidth || breakpoint.descBreakpoint[1],
+		numberOfPeriods = options.numberOfPeriods ||self.options.periods.length;
+
+	self.arrows.arrowLeft.style.left = descWidth + 'px';
+
+	if(numberOfPeriods > breakpoint.cellBreakpoint[1]){
+		classie.remove(self.arrows.arrowLeft, 't-hide');
+		classie.remove(self.arrows.arrowRight, 't-hide');
+	}else{
+		classie.add(self.arrows.arrowLeft, 't-hide');
+		classie.add(self.arrows.arrowRight, 't-hide');
+	}
+};

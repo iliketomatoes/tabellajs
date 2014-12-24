@@ -88,7 +88,7 @@ SCHEMA:
 					periodHTML += '</div>'; 	
 
 				//Period actual dates
-				periodHTML += '<div class="t-cell-value">';
+				periodHTML += '<div class="t-cell-value t-bold">';
 				periodHTML += typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
 				if(typeof periods[i][1] !== 'undefined'){
 					periodHTML += '<br>';
@@ -219,9 +219,9 @@ SCHEMA:
 
 		var self = this;
 
-		var arrowRight = createHTMLEl('div','t-arr-right', periodRow, self.options.arrowRight);
+		var arrowRight = createHTMLEl('div','t-arr-right t-hide', periodRow, self.options.arrowRight);
 
-		var arrowLeft = createHTMLEl('div','t-arr-left', periodRow, self.options.arrowLeft);
+		var arrowLeft = createHTMLEl('div','t-arr-left t-hide', periodRow, self.options.arrowLeft);
 		
 		return {
 			arrowRight : arrowRight,

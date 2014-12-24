@@ -146,7 +146,14 @@ Common rules
 	border-radius: 50%;
 	background-color: $accent-color;
 	color: #fff;
+	cursor: pointer;
 	@include box-shadow;
+	@include single-transition;
+
+	&:active{
+		@include box-shadow(none);
+		margin-top: 0.28rem;
+	}
 }
 
 
@@ -162,3 +169,6 @@ Common rules
 	margin-left: -0.4rem;
 }
 
+.t-bold{
+	font-weight: bold;
+}
