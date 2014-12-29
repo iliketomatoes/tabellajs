@@ -33,9 +33,16 @@
 					};
 				};
 
+				window.addEventListener('load', debounce(self.refreshSize, 50));
+
 				window.addEventListener('resize', debounce(self.refreshSize, 250));
 
-				window.addEventListener('load', debounce(self.refreshSize, 50));
+				self.arrows.arrowLeft.addEventListener('click', function(){
+					self.swipe('left');
+				});
+				self.arrows.arrowRight.addEventListener('click', function(){
+					self.swipe('right');
+				});
 
 			}else{
 				throw new TabellaException('There is a mismatch between periods and prices cells');

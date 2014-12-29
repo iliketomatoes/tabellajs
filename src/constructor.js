@@ -38,6 +38,7 @@
 
 		this.periodRow = null;
 		this.arrows = null;
+		this.pointer = 0;
 		//An object that has to hold the cellBreakpoint and descBreakpoint
 		this.currentBreakpoint = {};
 		this.cellWidth = 0;

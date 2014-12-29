@@ -1,4 +1,4 @@
-/*! tabella - v0.0.1 - 2014-12-24
+/*! tabella - v0.0.1 - 2014-12-29
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2014 ; Licensed  */
 ;(function(tabella) {
@@ -369,6 +369,7 @@
 
 		this.periodRow = null;
 		this.arrows = null;
+		this.pointer = 0;
 		//An object that has to hold the cellBreakpoint and descBreakpoint
 		this.currentBreakpoint = {};
 		this.cellWidth = 0;
@@ -420,9 +421,16 @@
 					};
 				};
 
+				window.addEventListener('load', debounce(self.refreshSize, 50));
+
 				window.addEventListener('resize', debounce(self.refreshSize, 250));
 
-				window.addEventListener('load', debounce(self.refreshSize, 50));
+				self.arrows.arrowLeft.addEventListener('click', function(){
+					self.swipe('left');
+				});
+				self.arrows.arrowRight.addEventListener('click', function(){
+					self.swipe('right');
+				});
 
 			}else{
 				throw new TabellaException('There is a mismatch between periods and prices cells');
@@ -443,18 +451,13 @@
 
 Tabella.prototype.refreshSize = function(){
 	var self = this,
-		breakpoint = self.getBreakpoint();
+		breakpoint = self.currentBreakpoint = self.getBreakpoint();
 
 	var cellWidth = self.getCellWidth(breakpoint),
 		descWidth = breakpoint.descBreakpoint[1],
 		numberOfPeriods = self.options.periods.length;
 
-		self.refreshArrowPosition({ 
-			cellWidth : cellWidth,
-			breakpoint : breakpoint,
-			descWidth : descWidth,
-			numberOfPeriods : numberOfPeriods
-		});
+		self.refreshArrowPosition(descWidth);
 
 	var rows = getArray(self.el.querySelectorAll('.t-row'));
 
@@ -514,8 +517,6 @@ Tabella.prototype.refreshSize = function(){
 
 Tabella.prototype.getCellWidth = function(breakpoint){
 			var self = this,
-				//Number of cells = number of periods + 1 cell for descriptions
-				//numberOfCells = self.options.periods.length + 1,
 				numberOfCells = self.options.periods.length,
 				cellBreakpoint = breakpoint.cellBreakpoint,
 				descBreakpoint = breakpoint.descBreakpoint,
@@ -579,22 +580,58 @@ Tabella.prototype.getBreakpoint = function(){
 					};
 		};
 
-Tabella.prototype.refreshArrowPosition = function(options){
+Tabella.prototype.refreshArrowPosition = function(descriptionWidth){
 
 	var self = this,
-		breakpoint = options.breakpoint || self.getBreakpoint(),
-		cellWidth = options.cellWidth || self.getCellWidth(breakpoint),
-		descWidth = options.descWidth || breakpoint.descBreakpoint[1],
-		numberOfPeriods = options.numberOfPeriods ||self.options.periods.length;
+		descWidth = descriptionWidth || self.currentBreakpoint.descBreakpoint[1];
 
 	self.arrows.arrowLeft.style.left = descWidth + 'px';
+	self.updatePointer();
+};
 
-	if(numberOfPeriods > breakpoint.cellBreakpoint[1]){
-		classie.remove(self.arrows.arrowLeft, 't-hide');
-		classie.remove(self.arrows.arrowRight, 't-hide');
+Tabella.prototype.updatePointer = function(increment){
+
+	var self = this,
+		breakpoint = self.currentBreakpoint || self.getBreakpoint(),
+		numberOfPeriods = self.options.periods.length;
+
+		if(!!increment && (self.pointer + increment) < numberOfPeriods){
+			self.pointer = self.pointer + increment;
+		}
+
+		if(numberOfPeriods > breakpoint.cellBreakpoint[1]){
+
+			if(self.pointer === 0){
+				classie.add(self.arrows.arrowLeft, 't-hide');
+				classie.remove(self.arrows.arrowRight, 't-hide');
+			}else{
+				if(self.pointer + increment + 1 === numberOfPeriods){
+					classie.remove(self.arrows.arrowLeft, 't-hide');
+					classie.add(self.arrows.arrowRight, 't-hide');
+				}else{
+					classie.remove(self.arrows.arrowLeft, 't-hide');
+					classie.remove(self.arrows.arrowRight, 't-hide');
+				}
+			}
+			
+		}else{
+			classie.add(self.arrows.arrowLeft, 't-hide');
+			classie.add(self.arrows.arrowRight, 't-hide');
+		}
+};
+
+Tabella.prototype.swipe = function(direction){
+
+	var self = this,
+		breakpoint = self.currentBreakpoint || self.getBreakpoint(),
+		numberOfPeriods = self.options.periods.length;
+
+	if(direction === 'right'){
+		console.log(breakpoint);
 	}else{
-		classie.add(self.arrows.arrowLeft, 't-hide');
-		classie.add(self.arrows.arrowRight, 't-hide');
+		if(direction === 'left'){
+			console.log(breakpoint);
+		}
 	}
 };
 
