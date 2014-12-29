@@ -50,6 +50,11 @@ Common rules
 	color: $primary-color;
 }
 
+.t-sliding-row{
+	position: relative;
+	overflow: auto;
+}
+
 .t-row-values{
 	float: left;
 	position: relative;

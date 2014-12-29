@@ -128,6 +128,7 @@
 	      return this.message + this.value;
 	   };
 	}
+
 //TabellaBuilder constructor
 	function TabellaBuilder( options, el ){
 
@@ -154,8 +155,6 @@
 			var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
 
 			var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);
-
-			//tRowContent.style.width = cellWidth * (numberOfPeriods + 1) + 'px';
 			
 			var tRowDescHTML = '<div class="t-element">';
 				tRowDescHTML +='<div class="t-cell-desc-l">';
@@ -168,6 +167,8 @@
 			var tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
 
 			var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
+
+			var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
 
 			for(var i = 0; i < numberOfPeriods; i++){
 
@@ -194,7 +195,7 @@
 
 				var tEl = createHTMLEl( 'div', 't-element', tRowCell, periodHTML);
 
-				tRowValues.appendChild(tRowCell);
+				tSlidingRow.appendChild(tRowCell);
 
 			}
 
@@ -253,6 +254,8 @@
 							var tRowDesc = createHTMLEl('div', descClass, tRowContent, tRowDescHTML);
 
 							var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
+
+							var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
 						
 							for(var k = 0; k < rows[i].prices[j].length; k++){
 
@@ -288,7 +291,7 @@
 
 									var tEl = createHTMLEl('div', 't-element', tRowCell, cellHTML);
 
-									tRowValues.appendChild(tRowCell);
+									tSlidingRow.appendChild(tRowCell);
 								
 								}else{
 									matchingPeriodCells = false;
