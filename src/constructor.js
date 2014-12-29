@@ -34,11 +34,14 @@
 			currency : '&euro;',
 			arrowLeft : '\u2190',
 			arrowRight : '\u2192',
+			easing : 'easeInOutSine',
+			duration : 600
 		};
 
 		this.periodRow = null;
 		this.arrows = null;
 		this.pointer = 0;
+		this.animator = null;
 		//An object that has to hold the cellBreakpoint and descBreakpoint
 		this.currentBreakpoint = {};
 		this.cellWidth = 0;

@@ -37,11 +37,13 @@
 
 				window.addEventListener('resize', debounce(self.refreshSize, 250));
 
+				self.animator = new Animator(self.options.easing);
+
 				self.arrows.arrowLeft.addEventListener('click', function(){
-					self.swipe('left');
+					self.move('left');
 				});
 				self.arrows.arrowRight.addEventListener('click', function(){
-					self.swipe('right');
+					self.move('right');
 				});
 
 			}else{

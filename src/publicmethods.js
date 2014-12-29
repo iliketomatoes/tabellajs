@@ -61,6 +61,10 @@ Tabella.prototype.refreshSize = function(){
 
 			}
 
+			if(self.pointer > 0){
+				self.move();
+			}
+
 	});
 
 };
@@ -136,18 +140,14 @@ Tabella.prototype.refreshArrowPosition = function(descriptionWidth){
 		descWidth = descriptionWidth || self.currentBreakpoint.descBreakpoint[1];
 
 	self.arrows.arrowLeft.style.left = descWidth + 'px';
-	self.updatePointer();
+	self.updateArrows();
 };
 
-Tabella.prototype.updatePointer = function(increment){
+Tabella.prototype.updateArrows = function(){
 
 	var self = this,
 		breakpoint = self.currentBreakpoint || self.getBreakpoint(),
 		numberOfPeriods = self.options.periods.length;
-
-		if(!!increment && (self.pointer + increment) < numberOfPeriods){
-			self.pointer = self.pointer + increment;
-		}
 
 		if(numberOfPeriods > breakpoint.cellBreakpoint[1]){
 
@@ -155,7 +155,7 @@ Tabella.prototype.updatePointer = function(increment){
 				classie.add(self.arrows.arrowLeft, 't-hide');
 				classie.remove(self.arrows.arrowRight, 't-hide');
 			}else{
-				if(self.pointer + increment + 1 === numberOfPeriods){
+				if(self.pointer === numberOfPeriods - breakpoint.cellBreakpoint[1]){
 					classie.remove(self.arrows.arrowLeft, 't-hide');
 					classie.add(self.arrows.arrowRight, 't-hide');
 				}else{
@@ -170,17 +170,25 @@ Tabella.prototype.updatePointer = function(increment){
 		}
 };
 
-Tabella.prototype.swipe = function(direction){
+Tabella.prototype.move = function(direction){
 
 	var self = this,
-		breakpoint = self.currentBreakpoint || self.getBreakpoint(),
-		numberOfPeriods = self.options.periods.length;
+		cellWidth = self.getCellWidth(self.currentBreakpoint),
+		numberOfPeriods = self.options.periods.length,
+		slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
 
 	if(direction === 'right'){
-		console.log(breakpoint);
+		self.animator.animate(slidingRows, cellWidth, self.options.duration);
+		self.pointer++;
 	}else{
 		if(direction === 'left'){
-			console.log(breakpoint);
+			self.animator.animate(slidingRows, -cellWidth, self.options.duration);
+			self.pointer--;
+		}else{
+			self.animator.reset(slidingRows, self.options.duration);
+			self.pointer = 0;
 		}
 	}
+
+	self.updateArrows();
 };

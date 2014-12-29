@@ -70,6 +70,11 @@ html, body{
     color: $primary-text;
 }
 
+a{
+    text-decoration: none;
+    color: $accent-color;
+}
+
 h1,h2,h3,h4,h5,h6{
     font-family: $header-font-family;
     font-weight: bold;
