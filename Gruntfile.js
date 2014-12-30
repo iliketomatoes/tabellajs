@@ -71,7 +71,7 @@ module.exports = function(grunt) {
     sass: {
       dist: {
         options: {
-          outputStyle: 'compressed'
+          outputStyle: 'expanded'
         },
         files: {
           'dist/assets/css/tabella.css': 'src/scss/app.scss',

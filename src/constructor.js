@@ -30,7 +30,6 @@
 			},
 			from : 'from',
 			to : 'to',
-			borderWidth : 1,
 			currency : '&euro;',
 			arrowLeft : '\u2190',
 			arrowRight : '\u2192',
