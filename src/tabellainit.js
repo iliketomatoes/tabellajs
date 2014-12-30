@@ -33,7 +33,13 @@
 					};
 				};
 
-				window.addEventListener('load', debounce(self.refreshSize, 50));
+				var firstSet = function(){
+					self.currentBreakpoint = self.getBreakpoint();
+					self.currentCellWidth = self.getCellWidth(self.currentBreakpoint);
+					self.refreshSize();
+				};
+
+				window.addEventListener('load', debounce(firstSet, 50));
 
 				window.addEventListener('resize', debounce(self.refreshSize, 250));
 

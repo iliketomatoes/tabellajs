@@ -1,4 +1,4 @@
-/*! tabella - v0.0.1 - 2014-12-29
+/*! tabella - v0.0.1 - 2014-12-30
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2014 ; Licensed  */
 ;(function(tabella) {
@@ -610,7 +610,7 @@
 		this.animator = null;
 		//An object that has to hold the cellBreakpoint and descBreakpoint
 		this.currentBreakpoint = {};
-		this.cellWidth = 0;
+		this.currentCellWidth = 0;
 
 		this.el = el;
 
@@ -659,7 +659,13 @@
 					};
 				};
 
-				window.addEventListener('load', debounce(self.refreshSize, 50));
+				var firstSet = function(){
+					self.currentBreakpoint = self.getBreakpoint();
+					self.currentCellWidth = self.getCellWidth(self.currentBreakpoint);
+					self.refreshSize();
+				};
+
+				window.addEventListener('load', debounce(firstSet, 50));
 
 				window.addEventListener('resize', debounce(self.refreshSize, 250));
 
@@ -691,9 +697,11 @@
 
 Tabella.prototype.refreshSize = function(){
 	var self = this,
+		oldBreakpoint = self.currentBreakpoint,
 		breakpoint = self.currentBreakpoint = self.getBreakpoint();
 
-	var cellWidth = self.getCellWidth(breakpoint),
+	var oldCellWidth = self.currentCellWidth,
+		cellWidth = self.currentCellWidth = self.getCellWidth(breakpoint),
 		descWidth = breakpoint.descBreakpoint[1],
 		numberOfPeriods = self.options.periods.length;
 
@@ -751,11 +759,20 @@ Tabella.prototype.refreshSize = function(){
 
 			}
 
-			if(self.pointer > 0){
-				self.move();
-			}
-
 	});
+
+	
+
+	if(self.pointer > 0){ 
+		if(oldBreakpoint.cellBreakpoint[0] != breakpoint.cellBreakpoint[0] || 
+			oldBreakpoint.descBreakpoint[1] != breakpoint.descBreakpoint[1]){
+			self.move();
+		}else{
+			if(oldCellWidth != cellWidth ){
+				self.move(parseInt(cellWidth - oldCellWidth) * parseInt(self.pointer));
+			}
+		}
+	}
 
 };
 
@@ -860,23 +877,29 @@ Tabella.prototype.updateArrows = function(){
 		}
 };
 
-Tabella.prototype.move = function(direction){
+Tabella.prototype.move = function(x){
 
 	var self = this,
 		cellWidth = self.getCellWidth(self.currentBreakpoint),
 		numberOfPeriods = self.options.periods.length,
 		slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
 
-	if(direction === 'right'){
+	if(x === 'right'){
 		self.animator.animate(slidingRows, cellWidth, self.options.duration);
 		self.pointer++;
 	}else{
-		if(direction === 'left'){
+		if(x === 'left'){
 			self.animator.animate(slidingRows, -cellWidth, self.options.duration);
 			self.pointer--;
 		}else{
-			self.animator.reset(slidingRows, self.options.duration);
-			self.pointer = 0;
+
+			if(typeof x === 'number'){
+				self.animator.animate(slidingRows, x, self.options.duration);
+			}else{
+				self.animator.reset(slidingRows, self.options.duration);
+				self.pointer = 0;
+			}
+			
 		}
 	}
 

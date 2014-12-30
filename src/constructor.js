@@ -44,7 +44,7 @@
 		this.animator = null;
 		//An object that has to hold the cellBreakpoint and descBreakpoint
 		this.currentBreakpoint = {};
-		this.cellWidth = 0;
+		this.currentCellWidth = 0;
 
 		this.el = el;
 
