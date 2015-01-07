@@ -142,9 +142,10 @@
 
 	Animator.prototype.actualAnimation = (requestAnimationFrame && cancelAnimationFrame) ? Animator.prototype.modernAnimation : Animator.prototype.oldAnimation;
 
-	Animator.prototype.animate = function(target, offset, duration){
+	Animator.prototype.animate = function(target, offset, expectedDuration){
 
-		var self = this;
+		var self = this,
+			duration = expectedDuration || 5;
 
 		if(self.animated) return false;
 		self.animated = true;

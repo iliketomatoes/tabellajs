@@ -99,3 +99,12 @@
         return Array.prototype.slice.call(nodeList,0);
     }
 
+   function setListener(elm, events, callback) {
+      var eventsArray = events.split(' '),
+        i = eventsArray.length;
+
+      while (i--) {
+        elm.addEventListener(eventsArray[i], callback, false);
+      }
+    }
+

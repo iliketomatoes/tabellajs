@@ -1,6 +1,6 @@
-/*! tabella - v0.0.1 - 2014-12-30
+/*! tabella - v0.0.1 - 2015-01-07
 * https://github.com/iliketomatoes/tabellajs
-* Copyright (c) 2014 ; Licensed  */
+* Copyright (c) 2015 ; Licensed  */
 ;(function(tabella) {
 
 	'use strict';
@@ -116,6 +116,15 @@
 
     function getArray(nodeList){
         return Array.prototype.slice.call(nodeList,0);
+    }
+
+   function setListener(elm, events, callback) {
+      var eventsArray = events.split(' '),
+        i = eventsArray.length;
+
+      while (i--) {
+        elm.addEventListener(eventsArray[i], callback, false);
+      }
     }
 
 
@@ -272,9 +281,10 @@
 
 	Animator.prototype.actualAnimation = (requestAnimationFrame && cancelAnimationFrame) ? Animator.prototype.modernAnimation : Animator.prototype.oldAnimation;
 
-	Animator.prototype.animate = function(target, offset, duration){
+	Animator.prototype.animate = function(target, offset, expectedDuration){
 
-		var self = this;
+		var self = this,
+			duration = expectedDuration || 5;
 
 		if(self.animated) return false;
 		self.animated = true;
@@ -361,6 +371,100 @@
 		    return curveY(t2);
 	    };
 	}
+	var msPointerEnabled = !!navigator.pointerEnabled || navigator.msPointerEnabled,
+		msEventType = function(type) {
+			var lo = type.toLowerCase(),
+				ms = 'MS' + type;
+			return navigator.msPointerEnabled ? ms : lo;
+		};
+
+	function invokeCallback(cb, cbContext){
+		var context = cbContext || null,
+			params = Array.prototype.slice.call(arguments, 2);
+    	return cb.apply(context, params);
+	}	
+
+	function Toucher(){
+		
+		this.points = {
+			cachedX : null,
+			cachedY : null,
+			currX : null,
+			currY : null
+		};
+		this.touchStarted = false;
+	}
+
+	Toucher.prototype.touchEvents = {
+			start: msEventType('PointerDown') + ' touchstart mousedown',
+			end: msEventType('PointerUp') + ' touchend mouseup',
+			move: msEventType('PointerMove') + ' touchmove mousemove'
+		};
+
+	Toucher.prototype.getPointerEvent = function(event) {
+			return event.targetTouches ? event.targetTouches[0] : event;
+		};
+
+	Toucher.prototype.onTouchStart = function(e, cb, cbContext) {
+
+			var self = this,
+				pointer = self.getPointerEvent(e);
+
+			// caching the current x
+			self.points.cachedX = self.points.currX = pointer.pageX;
+			// caching the current y
+			self.points.cachedY = self.points.currY = pointer.pageY;
+			// a touch event is detected
+			self.touchStarted = true;
+
+			if(typeof callback === 'function'){
+				invokeCallback(cb, cbContext);
+			}
+
+			return self.points;
+
+		};
+
+	Toucher.prototype.onTouchEnd = function(e, callback, context) {
+
+			var self = this,
+				deltaY = self.points.cachedY - self.points.currY,
+				deltaX = self.points.cachedX - self.points.currX;
+
+				self.touchStarted = false;
+
+			if(typeof callback === 'function'){
+				invokeCallback(callback, context);
+			}
+
+			return {
+				deltaX : deltaX,
+				deltaY : deltaY
+			};
+
+		};
+
+	Toucher.prototype.onTouchMove = function(e, callback, context) {
+			var self = this;
+
+			if(self.touchStarted === false) return false;
+
+			var pointer = self.getPointerEvent(e);
+
+			self.points.currX = pointer.pageX;
+			self.points.currY = pointer.pageY;
+
+			if(typeof callback === 'function'){
+				invokeCallback(callback, context);
+			}
+
+			return self.points;
+		};			
+
+
+
+
+
 //TabellaBuilder constructor
 	function TabellaBuilder( options, el ){
 
@@ -670,11 +774,27 @@
 
 				self.animator = new Animator(self.options.easing);
 
+				self.toucher = new Toucher();
+
 				self.arrows.arrowLeft.addEventListener('click', function(){
 					self.move('left');
 				});
 				self.arrows.arrowRight.addEventListener('click', function(){
 					self.move('right');
+				});
+
+				//setting the events listeners
+				setListener(self.periodRow, self.toucher.touchEvents.start, function(e){
+					e.preventDefault();
+					console.log(self.toucher.onTouchStart(e));
+				});
+				setListener(self.periodRow, self.toucher.touchEvents.move, function(e){
+					e.preventDefault();
+					console.log(self.toucher.onTouchMove(e));
+				});
+				setListener(self.periodRow, self.toucher.touchEvents.end, function(e){
+					e.preventDefault();
+					console.log(self.toucher.onTouchEnd(e));
 				});
 
 			}else{
@@ -725,9 +845,7 @@ Tabella.prototype.refreshSize = function(){
 					classie.remove(tDescL, 't-hide');
 
 					getArray(el.querySelectorAll('.t-row-cell')).forEach(function(el){
-
 						el.style.width = cellWidth + 'px';
-
 					});
 
 					getArray(el.querySelectorAll('.t-cell-desc-s')).forEach(function(innerEl){
@@ -745,9 +863,7 @@ Tabella.prototype.refreshSize = function(){
 					classie.add(el.querySelector('.t-row-desc'), 't-hide');
 
 					getArray(el.querySelectorAll('.t-row-cell')).forEach(function(el){
-
 						el.style.width = cellWidth + 'px';
-
 					});
 
 					getArray(el.querySelectorAll('.t-cell-desc-s')).forEach(function(innerEl){
@@ -893,7 +1009,7 @@ Tabella.prototype.move = function(x){
 		}else{
 
 			if(typeof x === 'number'){
-				self.animator.animate(slidingRows, x, self.options.duration);
+				self.animator.animate(slidingRows, x, 251);
 			}else{
 				self.animator.reset(slidingRows, self.options.duration);
 				self.pointer = 0;

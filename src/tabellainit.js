@@ -45,11 +45,27 @@
 
 				self.animator = new Animator(self.options.easing);
 
+				self.toucher = new Toucher();
+
 				self.arrows.arrowLeft.addEventListener('click', function(){
 					self.move('left');
 				});
 				self.arrows.arrowRight.addEventListener('click', function(){
 					self.move('right');
+				});
+
+				//setting the events listeners
+				setListener(self.periodRow, self.toucher.touchEvents.start, function(e){
+					e.preventDefault();
+					console.log(self.toucher.onTouchStart(e));
+				});
+				setListener(self.periodRow, self.toucher.touchEvents.move, function(e){
+					e.preventDefault();
+					console.log(self.toucher.onTouchMove(e));
+				});
+				setListener(self.periodRow, self.toucher.touchEvents.end, function(e){
+					e.preventDefault();
+					console.log(self.toucher.onTouchEnd(e));
 				});
 
 			}else{

@@ -30,9 +30,7 @@ Tabella.prototype.refreshSize = function(){
 					classie.remove(tDescL, 't-hide');
 
 					getArray(el.querySelectorAll('.t-row-cell')).forEach(function(el){
-
 						el.style.width = cellWidth + 'px';
-
 					});
 
 					getArray(el.querySelectorAll('.t-cell-desc-s')).forEach(function(innerEl){
@@ -50,9 +48,7 @@ Tabella.prototype.refreshSize = function(){
 					classie.add(el.querySelector('.t-row-desc'), 't-hide');
 
 					getArray(el.querySelectorAll('.t-row-cell')).forEach(function(el){
-
 						el.style.width = cellWidth + 'px';
-
 					});
 
 					getArray(el.querySelectorAll('.t-cell-desc-s')).forEach(function(innerEl){
@@ -198,7 +194,7 @@ Tabella.prototype.move = function(x){
 		}else{
 
 			if(typeof x === 'number'){
-				self.animator.animate(slidingRows, x, self.options.duration);
+				self.animator.animate(slidingRows, x, 251);
 			}else{
 				self.animator.reset(slidingRows, self.options.duration);
 				self.pointer = 0;

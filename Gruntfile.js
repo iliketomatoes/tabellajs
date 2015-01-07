@@ -24,6 +24,7 @@ module.exports = function(grunt) {
               'src/helpers.js',
               'src/exception.js',
               'src/animator.js',
+              'src/toucher.js',
               'src/tabellabuilder.js',
               'src/constructor.js',
               'src/tabellainit.js',
