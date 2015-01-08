@@ -13,6 +13,8 @@
 
 				self.arrows = builder.setUpArrows(self.periodRow);
 
+				builder = null;
+
 				// Returns a function, that, as long as it continues to be invoked, will not
 				// be triggered. The function will be called after it stops being called for
 				// N milliseconds. If `immediate` is passed, trigger the function on the
@@ -43,44 +45,7 @@
 
 				window.addEventListener('resize', debounce(self.refreshSize, 250));
 
-				self.animator = new Animator(self.options.easing);
-
-				self.toucher = new Toucher();
-
-				self.arrows.arrowLeft.addEventListener('click', function(){
-					self.move('left');
-				});
-				self.arrows.arrowRight.addEventListener('click', function(){
-					self.move('right');
-				});
-
-				var position,
-					cachedPosition,
-					slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
-
-				self.slidingRows = self.periodRow.querySelector('.t-sliding-row');
-				//setting the events listeners
-				setListener(self.slidingRows, self.toucher.touchEvents.start, function(e){
-					e.preventDefault();
-					cachedPosition = self.toucher.onTouchStart(e);
-				});
-
-
-				setListener(self.slidingRows, self.toucher.touchEvents.move, function(e){
-					e.preventDefault();
-
-					position = self.toucher.onTouchMove(e);
-
-					if(position){
-							self.animator.drag(slidingRows, (position.currX - cachedPosition.cachedX));
-							cachedPosition = position;
-					}
-				});
-				setListener(self.slidingRows, self.toucher.touchEvents.end, function(e){
-					e.preventDefault();
-					self.animator.stopDragging();
-					console.log(self.toucher.onTouchEnd(e));
-				});
+				self.attachEvents();
 
 			}else{
 				throw new TabellaException('There is a mismatch between periods and prices cells');

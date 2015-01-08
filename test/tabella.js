@@ -312,7 +312,9 @@
 		if(self.animated) return false;
 
 		target.forEach(function(el){
-			self.dragged = requestAnimationFrame(function(){self.offset(el,length);});
+			self.dragged = requestAnimationFrame(function(){
+					self.offset(el, length);
+			});
 		});
 
 	};
@@ -381,6 +383,82 @@
 		    return curveY(t2);
 	    };
 	}
+	var msPointerEnabled = !!navigator.pointerEnabled || navigator.msPointerEnabled,
+		msEventType = function(type) {
+			var lo = type.toLowerCase(),
+				ms = 'MS' + type;
+			return navigator.msPointerEnabled ? ms : lo;
+		};
+
+	function Toucher(){
+		
+		this.points = {
+			cachedX : null,
+			cachedY : null,
+			currX : null,
+			currY : null
+		};
+		this.touchStarted = false;
+	}
+
+	Toucher.prototype.touchEvents = {
+			start: msEventType('PointerDown') + ' touchstart mousedown',
+			end: msEventType('PointerUp') + ' touchend mouseup',
+			move: msEventType('PointerMove') + ' touchmove mousemove'
+		};
+
+	Toucher.prototype.getPointerEvent = function(event) {
+			return event.targetTouches ? event.targetTouches[0] : event;
+		};
+
+	Toucher.prototype.onTouchStart = function(e) {
+
+			var self = this,
+				pointer = self.getPointerEvent(e);
+
+			// caching the current x
+			self.points.cachedX = self.points.currX = pointer.pageX;
+			// caching the current y
+			self.points.cachedY = self.points.currY = pointer.pageY;
+			// a touch event is detected
+			self.touchStarted = true;
+
+			return self.points;
+
+		};
+
+	Toucher.prototype.onTouchEnd = function() {
+
+			var self = this,
+				deltaY = self.points.cachedY - self.points.currY,
+				deltaX = self.points.cachedX - self.points.currX;
+
+				self.touchStarted = false;
+
+			return {
+				deltaX : deltaX,
+				deltaY : deltaY
+			};
+
+		};
+
+	Toucher.prototype.onTouchMove = function(e) {
+			var self = this;
+
+			if(self.touchStarted === false) return false;
+
+			var pointer = self.getPointerEvent(e);
+
+			self.points.currX = pointer.pageX;
+			self.points.currY = pointer.pageY;
+
+			return self.points;
+		};			
+
+
+
+
+
 //TabellaBuilder constructor
 	function TabellaBuilder( options, el ){
 
@@ -659,6 +737,8 @@
 
 				self.arrows = builder.setUpArrows(self.periodRow);
 
+				builder = null;
+
 				// Returns a function, that, as long as it continues to be invoked, will not
 				// be triggered. The function will be called after it stops being called for
 				// N milliseconds. If `immediate` is passed, trigger the function on the
@@ -689,44 +769,7 @@
 
 				window.addEventListener('resize', debounce(self.refreshSize, 250));
 
-				self.animator = new Animator(self.options.easing);
-
-				self.toucher = new Toucher();
-
-				self.arrows.arrowLeft.addEventListener('click', function(){
-					self.move('left');
-				});
-				self.arrows.arrowRight.addEventListener('click', function(){
-					self.move('right');
-				});
-
-				var position,
-					cachedPosition,
-					slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
-
-				self.slidingRows = self.periodRow.querySelector('.t-sliding-row');
-				//setting the events listeners
-				setListener(self.slidingRows, self.toucher.touchEvents.start, function(e){
-					e.preventDefault();
-					cachedPosition = self.toucher.onTouchStart(e);
-				});
-
-
-				setListener(self.slidingRows, self.toucher.touchEvents.move, function(e){
-					e.preventDefault();
-
-					position = self.toucher.onTouchMove(e);
-
-					if(position){
-							self.animator.drag(slidingRows, (position.currX - cachedPosition.cachedX));
-							cachedPosition = position;
-					}
-				});
-				setListener(self.slidingRows, self.toucher.touchEvents.end, function(e){
-					e.preventDefault();
-					self.animator.stopDragging();
-					console.log(self.toucher.onTouchEnd(e));
-				});
+				self.attachEvents();
 
 			}else{
 				throw new TabellaException('There is a mismatch between periods and prices cells');
@@ -951,6 +994,51 @@ Tabella.prototype.move = function(x){
 
 	self.updateArrows();
 };
+
+Tabella.prototype.attachEvents = function(){
+
+	var self = this;
+
+	self.animator = new Animator(self.options.easing);
+
+	self.toucher = new Toucher();
+
+	self.arrows.arrowLeft.addEventListener('click', function(){
+		self.move('left');
+	});
+	self.arrows.arrowRight.addEventListener('click', function(){
+		self.move('right');
+	});
+
+	var position,
+		cachedPosition,
+		startingOffset,
+		slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row')),
+		slidingPeriodRow = self.periodRow.querySelector('.t-sliding-row');
+
+	//setting the events listeners
+	setListener(slidingPeriodRow, self.toucher.touchEvents.start, function(e){
+		e.preventDefault();
+		startingOffset = self.animator.offset(slidingPeriodRow);
+		cachedPosition = self.toucher.onTouchStart(e);
+	});
+
+	setListener(slidingPeriodRow, self.toucher.touchEvents.move, function(e){
+		e.preventDefault();
+		position = self.toucher.onTouchMove(e);
+		if(position){
+				self.animator.drag(slidingRows, (position.currX - cachedPosition.cachedX + parseInt(startingOffset)));
+				cachedPosition = position;
+		}
+	});
+
+	setListener(slidingPeriodRow, self.toucher.touchEvents.end, function(e){
+		e.preventDefault();
+		startingOffset = 0;
+		self.animator.stopDragging();
+	});
+};
+
 
 	
 	// Register TabellaException on window
