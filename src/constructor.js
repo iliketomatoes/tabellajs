@@ -38,6 +38,7 @@
 		};
 
 		this.periodRow = null;
+		this.slidingRows = null;
 		this.arrows = null;
 		this.pointer = 0;
 		this.animator = null;

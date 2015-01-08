@@ -108,3 +108,9 @@
       }
     }
 
+    function invokeCallback(cb, cbContext){
+    var context = cbContext || null,
+      params = Array.prototype.slice.call(arguments, 2);
+      return cb.apply(context, params);
+  } 
+

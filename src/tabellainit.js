@@ -54,17 +54,31 @@
 					self.move('right');
 				});
 
+				var position,
+					cachedPosition,
+					slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
+
+				self.slidingRows = self.periodRow.querySelector('.t-sliding-row');
 				//setting the events listeners
-				setListener(self.periodRow, self.toucher.touchEvents.start, function(e){
+				setListener(self.slidingRows, self.toucher.touchEvents.start, function(e){
 					e.preventDefault();
-					console.log(self.toucher.onTouchStart(e));
+					cachedPosition = self.toucher.onTouchStart(e);
 				});
-				setListener(self.periodRow, self.toucher.touchEvents.move, function(e){
+
+
+				setListener(self.slidingRows, self.toucher.touchEvents.move, function(e){
 					e.preventDefault();
-					console.log(self.toucher.onTouchMove(e));
+
+					position = self.toucher.onTouchMove(e);
+
+					if(position){
+							self.animator.drag(slidingRows, (position.currX - cachedPosition.cachedX));
+							cachedPosition = position;
+					}
 				});
-				setListener(self.periodRow, self.toucher.touchEvents.end, function(e){
+				setListener(self.slidingRows, self.toucher.touchEvents.end, function(e){
 					e.preventDefault();
+					self.animator.stopDragging();
 					console.log(self.toucher.onTouchEnd(e));
 				});
 

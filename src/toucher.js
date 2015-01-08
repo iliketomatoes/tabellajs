@@ -5,12 +5,6 @@
 			return navigator.msPointerEnabled ? ms : lo;
 		};
 
-	function invokeCallback(cb, cbContext){
-		var context = cbContext || null,
-			params = Array.prototype.slice.call(arguments, 2);
-    	return cb.apply(context, params);
-	}	
-
 	function Toucher(){
 		
 		this.points = {
@@ -32,7 +26,7 @@
 			return event.targetTouches ? event.targetTouches[0] : event;
 		};
 
-	Toucher.prototype.onTouchStart = function(e, cb, cbContext) {
+	Toucher.prototype.onTouchStart = function(e) {
 
 			var self = this,
 				pointer = self.getPointerEvent(e);
@@ -44,25 +38,17 @@
 			// a touch event is detected
 			self.touchStarted = true;
 
-			if(typeof callback === 'function'){
-				invokeCallback(cb, cbContext);
-			}
-
 			return self.points;
 
 		};
 
-	Toucher.prototype.onTouchEnd = function(e, callback, context) {
+	Toucher.prototype.onTouchEnd = function() {
 
 			var self = this,
 				deltaY = self.points.cachedY - self.points.currY,
 				deltaX = self.points.cachedX - self.points.currX;
 
 				self.touchStarted = false;
-
-			if(typeof callback === 'function'){
-				invokeCallback(callback, context);
-			}
 
 			return {
 				deltaX : deltaX,
@@ -71,7 +57,7 @@
 
 		};
 
-	Toucher.prototype.onTouchMove = function(e, callback, context) {
+	Toucher.prototype.onTouchMove = function(e) {
 			var self = this;
 
 			if(self.touchStarted === false) return false;
@@ -80,10 +66,6 @@
 
 			self.points.currX = pointer.pageX;
 			self.points.currY = pointer.pageY;
-
-			if(typeof callback === 'function'){
-				invokeCallback(callback, context);
-			}
 
 			return self.points;
 		};			
