@@ -1,4 +1,4 @@
-/*! tabella - v0.0.1 - 2015-01-08
+/*! tabella - v0.0.1 - 2015-01-09
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2015 ; Licensed  */
 ;(function(tabella) {
@@ -274,10 +274,9 @@
 		}
 	};
 
-	Animator.prototype.animate = function(target, offset, expectedDuration){
+	Animator.prototype.animate = function(target, offset, duration){
 
-		var self = this,
-			duration = expectedDuration || 5;
+		var self = this;
 
 		if(self.animated) return false;
 		self.animated = true;
@@ -388,30 +387,32 @@
 			var lo = type.toLowerCase(),
 				ms = 'MS' + type;
 			return navigator.msPointerEnabled ? ms : lo;
+		},
+		touchEvents = {
+			start: msEventType('PointerDown') + ' touchstart mousedown',
+			end: msEventType('PointerUp') + ' touchend mouseup',
+			move: msEventType('PointerMove') + ' touchmove mousemove'
+		},
+		getPointerEvent = function(event) {
+			return event.targetTouches ? event.targetTouches[0] : event;
 		};
 
-	function Toucher(){
-		
-		this.points = {
+	var Toucher = {
+
+		points : {
 			cachedX : null,
 			cachedY : null,
 			currX : null,
 			currY : null
-		};
-		this.touchStarted = false;
-	}
+		},
 
-	Toucher.prototype.touchEvents = {
-			start: msEventType('PointerDown') + ' touchstart mousedown',
-			end: msEventType('PointerUp') + ' touchend mouseup',
-			move: msEventType('PointerMove') + ' touchmove mousemove'
-		};
+	    touchStarted : false,
 
-	Toucher.prototype.getPointerEvent = function(event) {
-			return event.targetTouches ? event.targetTouches[0] : event;
-		};
+	    touchEvents : touchEvents,
 
-	Toucher.prototype.onTouchStart = function(e) {
+	    getPointerEvent : getPointerEvent,
+
+	    onTouchStart : function(e) {
 
 			var self = this,
 				pointer = self.getPointerEvent(e);
@@ -425,9 +426,9 @@
 
 			return self.points;
 
-		};
+		},
 
-	Toucher.prototype.onTouchEnd = function() {
+		onTouchEnd : function() {
 
 			var self = this,
 				deltaY = self.points.cachedY - self.points.currY,
@@ -435,14 +436,16 @@
 
 				self.touchStarted = false;
 
+				console.log('touchend');
+
 			return {
 				deltaX : deltaX,
 				deltaY : deltaY
 			};
 
-		};
+		},
 
-	Toucher.prototype.onTouchMove = function(e) {
+		onTouchMove : function(e) {
 			var self = this;
 
 			if(self.touchStarted === false) return false;
@@ -453,7 +456,9 @@
 			self.points.currY = pointer.pageY;
 
 			return self.points;
-		};			
+		}
+	};
+
 
 
 
@@ -737,8 +742,6 @@
 
 				self.arrows = builder.setUpArrows(self.periodRow);
 
-				builder = null;
-
 				// Returns a function, that, as long as it continues to be invoked, will not
 				// be triggered. The function will be called after it stops being called for
 				// N milliseconds. If `immediate` is passed, trigger the function on the
@@ -1001,8 +1004,6 @@ Tabella.prototype.attachEvents = function(){
 
 	self.animator = new Animator(self.options.easing);
 
-	self.toucher = new Toucher();
-
 	self.arrows.arrowLeft.addEventListener('click', function(){
 		self.move('left');
 	});
@@ -1017,23 +1018,24 @@ Tabella.prototype.attachEvents = function(){
 		slidingPeriodRow = self.periodRow.querySelector('.t-sliding-row');
 
 	//setting the events listeners
-	setListener(slidingPeriodRow, self.toucher.touchEvents.start, function(e){
+	setListener(slidingPeriodRow, Toucher.touchEvents.start, function(e){
 		e.preventDefault();
 		startingOffset = self.animator.offset(slidingPeriodRow);
-		cachedPosition = self.toucher.onTouchStart(e);
+		cachedPosition = Toucher.onTouchStart(e);
 	});
 
-	setListener(slidingPeriodRow, self.toucher.touchEvents.move, function(e){
+	setListener(slidingPeriodRow, Toucher.touchEvents.move, function(e){
 		e.preventDefault();
-		position = self.toucher.onTouchMove(e);
+		position = Toucher.onTouchMove(e);
 		if(position){
 				self.animator.drag(slidingRows, (position.currX - cachedPosition.cachedX + parseInt(startingOffset)));
 				cachedPosition = position;
 		}
 	});
 
-	setListener(slidingPeriodRow, self.toucher.touchEvents.end, function(e){
+	setListener(slidingPeriodRow, Toucher.touchEvents.end, function(e){
 		e.preventDefault();
+		Toucher.onTouchEnd();
 		startingOffset = 0;
 		self.animator.stopDragging();
 	});

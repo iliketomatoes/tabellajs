@@ -3,30 +3,32 @@
 			var lo = type.toLowerCase(),
 				ms = 'MS' + type;
 			return navigator.msPointerEnabled ? ms : lo;
+		},
+		touchEvents = {
+			start: msEventType('PointerDown') + ' touchstart mousedown',
+			end: msEventType('PointerUp') + ' touchend mouseup',
+			move: msEventType('PointerMove') + ' touchmove mousemove'
+		},
+		getPointerEvent = function(event) {
+			return event.targetTouches ? event.targetTouches[0] : event;
 		};
 
-	function Toucher(){
-		
-		this.points = {
+	var Toucher = {
+
+		points : {
 			cachedX : null,
 			cachedY : null,
 			currX : null,
 			currY : null
-		};
-		this.touchStarted = false;
-	}
+		},
 
-	Toucher.prototype.touchEvents = {
-			start: msEventType('PointerDown') + ' touchstart mousedown',
-			end: msEventType('PointerUp') + ' touchend mouseup',
-			move: msEventType('PointerMove') + ' touchmove mousemove'
-		};
+	    touchStarted : false,
 
-	Toucher.prototype.getPointerEvent = function(event) {
-			return event.targetTouches ? event.targetTouches[0] : event;
-		};
+	    touchEvents : touchEvents,
 
-	Toucher.prototype.onTouchStart = function(e) {
+	    getPointerEvent : getPointerEvent,
+
+	    onTouchStart : function(e) {
 
 			var self = this,
 				pointer = self.getPointerEvent(e);
@@ -40,9 +42,9 @@
 
 			return self.points;
 
-		};
+		},
 
-	Toucher.prototype.onTouchEnd = function() {
+		onTouchEnd : function() {
 
 			var self = this,
 				deltaY = self.points.cachedY - self.points.currY,
@@ -50,14 +52,16 @@
 
 				self.touchStarted = false;
 
+				console.log('touchend');
+
 			return {
 				deltaX : deltaX,
 				deltaY : deltaY
 			};
 
-		};
+		},
 
-	Toucher.prototype.onTouchMove = function(e) {
+		onTouchMove : function(e) {
 			var self = this;
 
 			if(self.touchStarted === false) return false;
@@ -68,7 +72,9 @@
 			self.points.currY = pointer.pageY;
 
 			return self.points;
-		};			
+		}
+	};
+
 
 
 

@@ -129,10 +129,9 @@
 		}
 	};
 
-	Animator.prototype.animate = function(target, offset, expectedDuration){
+	Animator.prototype.animate = function(target, offset, duration){
 
-		var self = this,
-			duration = expectedDuration || 5;
+		var self = this;
 
 		if(self.animated) return false;
 		self.animated = true;

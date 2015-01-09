@@ -4,8 +4,6 @@ Tabella.prototype.attachEvents = function(){
 
 	self.animator = new Animator(self.options.easing);
 
-	self.toucher = new Toucher();
-
 	self.arrows.arrowLeft.addEventListener('click', function(){
 		self.move('left');
 	});
@@ -20,23 +18,24 @@ Tabella.prototype.attachEvents = function(){
 		slidingPeriodRow = self.periodRow.querySelector('.t-sliding-row');
 
 	//setting the events listeners
-	setListener(slidingPeriodRow, self.toucher.touchEvents.start, function(e){
+	setListener(slidingPeriodRow, Toucher.touchEvents.start, function(e){
 		e.preventDefault();
 		startingOffset = self.animator.offset(slidingPeriodRow);
-		cachedPosition = self.toucher.onTouchStart(e);
+		cachedPosition = Toucher.onTouchStart(e);
 	});
 
-	setListener(slidingPeriodRow, self.toucher.touchEvents.move, function(e){
+	setListener(slidingPeriodRow, Toucher.touchEvents.move, function(e){
 		e.preventDefault();
-		position = self.toucher.onTouchMove(e);
+		position = Toucher.onTouchMove(e);
 		if(position){
 				self.animator.drag(slidingRows, (position.currX - cachedPosition.cachedX + parseInt(startingOffset)));
 				cachedPosition = position;
 		}
 	});
 
-	setListener(slidingPeriodRow, self.toucher.touchEvents.end, function(e){
+	setListener(slidingPeriodRow, Toucher.touchEvents.end, function(e){
 		e.preventDefault();
+		Toucher.onTouchEnd();
 		startingOffset = 0;
 		self.animator.stopDragging();
 	});
