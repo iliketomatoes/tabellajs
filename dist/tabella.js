@@ -1,4 +1,4 @@
-/*! tabella - v0.0.1 - 2015-01-09
+/*! tabella - v0.0.1 - 2015-01-12
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2015 ; Licensed  */
 ;(function(tabella) {
@@ -197,138 +197,140 @@
             clearTimeout(id);
         };
 
-	function Animator(easeing){
-
-		this.easeing = easeingObj.hasOwnProperty(easeing) ? easeingObj[easeing] : easeingObj.easeInOutSine;
-
-		this.animated = false;
-
-		this.dragged = null;
-	}
-
-	Animator.prototype.getAnimationCurve = function(duration){
-		var self = this,
-			epsilon = (1000 / 60 / duration) / 4;
-
-		return getBezier(self.easeing,epsilon);
-	};
-
-	Animator.prototype.actualAnimation = function(el, offset, duration, animationCurve, startingOffset){
-
-		var self = this,
-			targetOffset = startingOffset - offset,
-			start = null,
-			myReq;
-
-		function animationStep(timestamp){
+	var Animator = {
+		easeing : 'easeInOutSine',
 		
-			if (start === null) start = timestamp;
+		animated : false,
+		
+		dragged : null,
 
-			var timePassed = (timestamp - start);
-			var progress = timePassed / duration;
+		getAnimationCurve : function(duration){
+			var self = this,
+				epsilon = (1000 / 60 / duration) / 4;
 
-			if (progress >= 1) progress = 1;
+			return getBezier(getEaseing(self.easeing),epsilon);
+			},
 
-			var delta = animationCurve(progress).toFixed(2);
+		actualAnimation : function(el, offset, duration, animationCurve, startingOffset){
 
-			self.step(el, delta, startingOffset, targetOffset);
+			var self = this,
+				targetOffset = startingOffset - offset,
+				start = null,
+				myReq;
 
-			if (progress === 1){
-				cancelAnimationFrame(myReq);
-				start = null;
-				}else{
-				requestAnimationFrame(animationStep);
+			function animationStep(timestamp){
+			
+				if (start === null) start = timestamp;
+
+				var timePassed = (timestamp - start);
+				var progress = timePassed / duration;
+
+				if (progress >= 1) progress = 1;
+
+				var delta = animationCurve(progress).toFixed(2);
+
+				self.step(el, delta, startingOffset, targetOffset);
+
+				if (progress === 1){
+					cancelAnimationFrame(myReq);
+					start = null;
+					}else{
+					requestAnimationFrame(animationStep);
+				}
+
 			}
 
-		}
+			myReq = requestAnimationFrame(animationStep);
 
-		myReq = requestAnimationFrame(animationStep);
+			},
 
-	};
+		step : function(el, delta, startingOffset, targetOffset){
+			this.offset(el,parseInt(startingOffset) + parseInt((targetOffset - startingOffset) * delta));
+			},
 
-	Animator.prototype.step = function(el, delta, startingOffset, targetOffset){
-		this.offset(el,parseInt(startingOffset) + parseInt((targetOffset - startingOffset) * delta));
-	};
+		offset : function(elem, length){
 
-	Animator.prototype.offset = function(elem, length){
+			if(typeof length === 'undefined'){
 
-		if(typeof length === 'undefined'){
+				if(vendorTransform){
+					/**
+					* @return {Number} the x offset of the translation
+					*/
+					var parsedXOffset = elem.style[vendorTransform] ? elem.style[vendorTransform].match(/-?\d+/g)[0] : 0;
 
-			if(vendorTransform){
-				/**
-				* @return {Number} the x offset of the translation
-				*/
-				var parsedXOffset = elem.style[vendorTransform] ? elem.style[vendorTransform].match(/-?\d+/g)[0] : 0;
+					return parsedXOffset;
+					}else{
+						return elem.style.left;
+					}		
 
-				return parsedXOffset;
-			}else{
-				return elem.style.left;
-			}		
+				}else{
+					if(vendorTransform){
+						elem.style[vendorTransform] = 'translate(' + length + 'px, 0px)';
+					}else{
+						elem.style.left = length + 'px';
+					}	
+				}
+			},
 
-		}else{
-			if(vendorTransform){
-				elem.style[vendorTransform] = 'translate(' + length + 'px, 0px)';
-			}else{
-				elem.style.left = length + 'px';
-			}	
-		}
-	};
+		animate : function(target, offset, duration){
 
-	Animator.prototype.animate = function(target, offset, duration){
+			var self = this;
 
-		var self = this;
+			if(self.animated) return false;
+			self.animated = true;
 
-		if(self.animated) return false;
-		self.animated = true;
+			var animationCurve = self.getAnimationCurve(duration);
 
-		var animationCurve = self.getAnimationCurve(duration);
-
-		target.forEach(function(el){
-			self.actualAnimation(el, offset, duration, animationCurve, self.offset(el));
-		});
-
-		self.animated = false;
-	};
-
-	Animator.prototype.reset = function(target, duration){
-		var self = this;
-
-		if(self.animated) return false;
-		self.animated = true;
-
-		var animationCurve = self.getAnimationCurve(duration);
-
-		target.forEach(function(el){
-			self.actualAnimation(el, 0, duration, animationCurve, 0);
-		});
-
-		self.animated = false;
-	};
-
-	Animator.prototype.drag = function(target, length){
-		var self = this;
-
-		if(self.animated) return false;
-
-		target.forEach(function(el){
-			self.dragged = requestAnimationFrame(function(){
-					self.offset(el, length);
+			target.forEach(function(el){
+				self.actualAnimation(el, offset, duration, animationCurve, self.offset(el));
 			});
-		});
+
+			self.animated = false;
+			},
+
+		reset : function(target, duration){
+			var self = this;
+
+			if(self.animated) return false;
+			self.animated = true;
+
+			var animationCurve = self.getAnimationCurve(duration);
+
+			target.forEach(function(el){
+				self.actualAnimation(el, 0, duration, animationCurve, 0);
+			});
+
+			self.animated = false;
+			},
+
+		drag : function(target, length){
+			var self = this;
+
+			if(self.animated) return false;
+
+			target.forEach(function(el){
+				self.dragged = requestAnimationFrame(function(){
+						self.offset(el, length);
+				});
+			});
+
+			},
+
+		stopDragging : function(){
+			var self = this;
+			cancelAnimationFrame(self.dragged);
+			}	
 
 	};
 
-	Animator.prototype.stopDragging = function(){
-		var self = this;
-
-		cancelAnimationFrame(self.dragged);
-	};
 
 	/* 
 	====================================================
 	FUNCTIONS DEALING WITH THE ACTUAL SLIDING ANIMATION
 	====================================================*/
-
+	function getEaseing(easeing){
+		return easeingObj.hasOwnProperty(easeing) ? easeingObj[easeing] : easeingObj.easeInOutSine;
+	}
 
 	function getBezier(easeingArr, epsilon){
 		return bezier(easeingArr[0], easeingArr[1], easeingArr[2], easeingArr[3], epsilon);
@@ -436,8 +438,6 @@
 
 				self.touchStarted = false;
 
-				console.log('touchend');
-
 			return {
 				deltaX : deltaX,
 				deltaY : deltaY
@@ -464,213 +464,339 @@
 
 
 
-//TabellaBuilder constructor
-	function TabellaBuilder( options, el ){
-
-		this.options = options;
-		this.el = el;
-
-	}
-
-
-	TabellaBuilder.prototype.setUpPeriods = function(){
-
-		var self = this;
+var TabellaBuilder = {
 		
-		var periods = self.options.periods;
+		options : null,
 
-		var docfrag = document.createDocumentFragment();
+		el : null,
 
-		if(periods instanceof Array && periods.length){
+		setUpPeriods : function(){
 
-			var numberOfPeriods = periods.length;
-
-			var tRow = createHTMLEl('div', 't-row', docfrag);
-
-			var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
-
-			var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);
+			var self = this;
 			
-			var tRowDescHTML = '<div class="t-element">';
-				tRowDescHTML +='<div class="t-cell-desc-l">';
-				tRowDescHTML += self.options.from;
-				tRowDescHTML += '<br>';
-				tRowDescHTML += self.options.to;
-				tRowDescHTML += '</div>';
-				tRowDescHTML += '</div>';  
+			var periods = self.options.periods;
 
-			var tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
+			var docfrag = document.createDocumentFragment();
 
-			var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
+			if(periods instanceof Array && periods.length){
 
-			var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
+				var numberOfPeriods = periods.length;
 
-			for(var i = 0; i < numberOfPeriods; i++){
+				var tRow = createHTMLEl('div', 't-row', docfrag);
 
-				var tRowCell = document.createElement('div');
-				tRowCell.className = 't-row-cell';
+				var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
 
-				//From - to Div	
-				var periodHTML = '<div class="t-cell-desc-s">';
-					periodHTML += self.options.from;
-				if(typeof periods[i][1] !== 'undefined'){	
-					periodHTML += '<br>';
-					periodHTML += self.options.to;
-				}	
-					periodHTML += '</div>'; 	
-
-				//Period actual dates
-				periodHTML += '<div class="t-cell-value t-bold">';
-				periodHTML += typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
-				if(typeof periods[i][1] !== 'undefined'){
-					periodHTML += '<br>';
-					periodHTML += periods[i][1];
-				}
-				periodHTML += '</div>'; 
-
-				var tEl = createHTMLEl( 'div', 't-element', tRowCell, periodHTML);
-
-				tSlidingRow.appendChild(tRowCell);
-
-			}
-
-			self.el.appendChild(docfrag);
-
-			return tRow;
-
-		}else{
-			return false;
-		}
-	};	
-
-	TabellaBuilder.prototype.setUpRows = function (){
-
-		var self = this,
-			periods = self.options.periods,
-			rows = self.options.rows,
-			numberOfPeriods = periods.length,
-			numberOfRows = rows.length;
-
-		var docfrag = document.createDocumentFragment();
-
-		if(numberOfRows > 0){
-
-				var matchingPeriodCells = true;
-
-				for(var i = 0; i < numberOfRows; i++){
-
-					if(!matchingPeriodCells) break;
-
-					var tRow = createHTMLEl('div', 't-row', docfrag);
+				var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);
 				
-					if(!!rows[i].desc){
-						var tHeader = createHTMLEl('section','t-row-header', tRow, rows[i].desc);
+				var tRowDescHTML = '<div class="t-element">';
+					tRowDescHTML +='<div class="t-cell-desc-l">';
+					tRowDescHTML += self.options.from;
+					tRowDescHTML += '<br>';
+					tRowDescHTML += self.options.to;
+					tRowDescHTML += '</div>';
+					tRowDescHTML += '</div>';  
+
+				var tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
+
+				var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
+
+				var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
+
+				for(var i = 0; i < numberOfPeriods; i++){
+
+					var tRowCell = document.createElement('div');
+					tRowCell.className = 't-row-cell';
+
+					//From - to Div	
+					var periodHTML = '<div class="t-cell-desc-s">';
+						periodHTML += self.options.from;
+					if(typeof periods[i][1] !== 'undefined'){	
+						periodHTML += '<br>';
+						periodHTML += self.options.to;
+					}	
+						periodHTML += '</div>'; 	
+
+					//Period actual dates
+					periodHTML += '<div class="t-cell-value t-bold">';
+					periodHTML += typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
+					if(typeof periods[i][1] !== 'undefined'){
+						periodHTML += '<br>';
+						periodHTML += periods[i][1];
 					}
+					periodHTML += '</div>'; 
 
-					if(!!rows[i].prices){
+					var tEl = createHTMLEl( 'div', 't-element', tRowCell, periodHTML);
 
-						for(var j = 0; j < rows[i].prices.length; j++){
+					tSlidingRow.appendChild(tRowCell);
 
-						var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
+				}
 
-						var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);	
+				self.el.appendChild(docfrag);
 
-							if(!matchingPeriodCells) break;
+				return tRow;
 
-							var tRowDescHTML = '<div class="t-element">';
-								tRowDescHTML +='<div class="t-cell-desc-l">';
-								tRowDescHTML += rows[i].pricesDesc[j];
-								tRowDescHTML += '</div>';
-								tRowDescHTML += '</div>';
+			}else{
+				return false;
+			}
+		},
 
-							var descClass = 't-row-desc';
-							if(j >= 1) descClass += ' t-cell-border-top';	  
+		setUpRows : function (){
 
-							var tRowDesc = createHTMLEl('div', descClass, tRowContent, tRowDescHTML);
+			var self = this,
+				periods = self.options.periods,
+				rows = self.options.rows,
+				numberOfPeriods = periods.length,
+				numberOfRows = rows.length;
 
-							var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
+			var docfrag = document.createDocumentFragment();
 
-							var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
-						
-							for(var k = 0; k < rows[i].prices[j].length; k++){
+			if(numberOfRows > 0){
 
-								if(rows[i].prices[j].length === numberOfPeriods){
-									var tRowCell = document.createElement('div');
+					var matchingPeriodCells = true;
 
-									var cellClass = 't-row-cell';
-									if(j >= 1) cellClass += ' t-cell-border-top';
+					for(var i = 0; i < numberOfRows; i++){
 
-									tRowCell.className = cellClass;
+						if(!matchingPeriodCells) break;
 
-									var cellHTML = '';
+						var tRow = createHTMLEl('div', 't-row', docfrag);
+					
+						if(!!rows[i].desc){
+							var tHeader = createHTMLEl('section','t-row-header', tRow, rows[i].desc);
+						}
 
-									//Cell description
-									if(!!rows[i].pricesDesc[j]){
-										cellHTML += '<div class="t-cell-desc-s">';
-										if(!!rows[i].pricesDesc[j][k]){
-											cellHTML += rows[i].pricesDesc[j][k];
-										}else{
-											if(!!rows[i].pricesDesc[j][0])
-												cellHTML += rows[i].pricesDesc[j][0];
-										}
-										
-										cellHTML += '</div>';
-									}	
+						if(!!rows[i].prices){
 
-									//Item current price
-									cellHTML += '<div class="t-cell-value">';
-									cellHTML += typeof  rows[i].prices[j][k] !== 'undefined' ?  rows[i].prices[j][k] : 'not set';
-									cellHTML += ' ' + self.options.currency;
-									cellHTML+= '</div>'; 
+							for(var j = 0; j < rows[i].prices.length; j++){
+
+							var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
+
+							var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);	
+
+								if(!matchingPeriodCells) break;
+
+								var tRowDescHTML = '<div class="t-element">';
+									tRowDescHTML +='<div class="t-cell-desc-l">';
+									tRowDescHTML += rows[i].pricesDesc[j];
+									tRowDescHTML += '</div>';
+									tRowDescHTML += '</div>';
+
+								var descClass = 't-row-desc';
+								if(j >= 1) descClass += ' t-cell-border-top';	  
+
+								var tRowDesc = createHTMLEl('div', descClass, tRowContent, tRowDescHTML);
+
+								var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
+
+								var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
+							
+								for(var k = 0; k < rows[i].prices[j].length; k++){
+
+									if(rows[i].prices[j].length === numberOfPeriods){
+										var tRowCell = document.createElement('div');
+
+										var cellClass = 't-row-cell';
+										if(j >= 1) cellClass += ' t-cell-border-top';
+
+										tRowCell.className = cellClass;
+
+										var cellHTML = '';
+
+										//Cell description
+										if(!!rows[i].pricesDesc[j]){
+											cellHTML += '<div class="t-cell-desc-s">';
+											if(!!rows[i].pricesDesc[j][k]){
+												cellHTML += rows[i].pricesDesc[j][k];
+											}else{
+												if(!!rows[i].pricesDesc[j][0])
+													cellHTML += rows[i].pricesDesc[j][0];
+											}
+											
+											cellHTML += '</div>';
+										}	
+
+										//Item current price
+										cellHTML += '<div class="t-cell-value">';
+										cellHTML += typeof  rows[i].prices[j][k] !== 'undefined' ?  rows[i].prices[j][k] : 'not set';
+										cellHTML += ' ' + self.options.currency;
+										cellHTML+= '</div>'; 
 
 
-									var tEl = createHTMLEl('div', 't-element', tRowCell, cellHTML);
+										var tEl = createHTMLEl('div', 't-element', tRowCell, cellHTML);
 
-									tSlidingRow.appendChild(tRowCell);
-								
-								}else{
-									matchingPeriodCells = false;
-									break;
+										tSlidingRow.appendChild(tRowCell);
+									
+									}else{
+										matchingPeriodCells = false;
+										break;
+									}
 								}
 							}
 						}
 					}
-				}
 
-			self.el.appendChild(docfrag);	
+				self.el.appendChild(docfrag);	
 
-			return matchingPeriodCells;	
+				return matchingPeriodCells;	
 
-		}else{
+			}else{
 
-			return false;
+				return false;
 
+			}
+
+		},
+
+		setUpArrows : function(periodRow){
+
+			var self = this;
+
+			var arrowRight = createHTMLEl('div','t-arr-right t-hide', periodRow, self.options.arrowRight);
+
+			var arrowLeft = createHTMLEl('div','t-arr-left t-hide', periodRow, self.options.arrowLeft);
+			
+			return {
+				arrowRight : arrowRight,
+
+				arrowLeft : arrowLeft
+			};
 		}
 
 	};
 
-	TabellaBuilder.prototype.setUpArrows = function(periodRow){
+	
+	function init(context, el, options){
+		var self = context;
 
-		var self = this;
+		if(typeof el !== 'undefined'){
+			if(typeof options !== 'undefined'){
+				self.options = extend(self.defaults, options);
+				}else{
+				throw new TabellaException('You did not pass any options to the constructor');
+			}
+		}else{
+				throw new TabellaException('You did not pass a valid target element to the constructor');
+			}
 
-		var arrowRight = createHTMLEl('div','t-arr-right t-hide', periodRow, self.options.arrowRight);
+		self.periodRow = null;
+		//self.slidingRows = null;
+		self.arrows = null;
+		self.pointer = 0;
+		self.animator = null;
+		//An object that has to hold the cellBreakpoint and descBreakpoint
+		self.currentBreakpoint = {};
+		self.currentCellWidth = 0;
 
-		var arrowLeft = createHTMLEl('div','t-arr-left t-hide', periodRow, self.options.arrowLeft);
+		self.el = el;
+
+		if(self.options.periods !== null && self.options.rows !== null){
+
+		TabellaBuilder.el = self.el;	
+		TabellaBuilder.options = self.options;
+	
+		self.periodRow = TabellaBuilder.setUpPeriods();
+
+		if(self.periodRow){
+	
+			if(TabellaBuilder.setUpRows()){
+
+				self.arrows = TabellaBuilder.setUpArrows(self.periodRow);
+
+				// Returns a function, that, as long as it continues to be invoked, will not
+				// be triggered. The function will be called after it stops being called for
+				// N milliseconds. If `immediate` is passed, trigger the function on the
+				// leading edge, instead of the trailing.
+				var debounce = function(func, wait, immediate) {
+					var timeout;
+					//var context = self;
+					return function() {
+						var args = arguments;
+						var later = function() {
+							timeout = null;
+							if (!immediate) func.apply(context, args);
+						};
+						var callNow = immediate && !timeout;
+						clearTimeout(timeout);
+						timeout = setTimeout(later, wait);
+						if (callNow) func.apply(context, args);
+					};
+				};
+
+				var firstSet = function(){
+					self.currentBreakpoint = self.getBreakpoint();
+					self.currentCellWidth = self.getCellWidth(self.currentBreakpoint);
+					self.refreshSize();
+				};
+
+				window.addEventListener('load', debounce(firstSet, 50));
+
+				window.addEventListener('resize', debounce(self.refreshSize, 250));
+
+				//self.attachEvents();
+				attachEvents(context, el, self.options);
+
+			}else{
+				throw new TabellaException('There is a mismatch between periods and prices cells');
+			}
+		}else{
+			throw new TabellaException('Periods is not an Array');
+		}
 		
-		return {
-			arrowRight : arrowRight,
-
-			arrowLeft : arrowLeft
-		};
-	};
-
-	TabellaBuilder.prototype.attachEvents = function(){
-		//TODO
-	};
+	}else{
+		throw new TabellaException('Periods or rows are null');
+	}
+				
+	}
 
 	function Tabella(el, options){
+			init(this, el, options);
+		}
+			
+function attachEvents(context, el, options){
 
-		this.defaults = {
+	var self = context;
+
+	//Animator = new Animator(options.easing);
+	Animator.easing = options.easing;
+
+	self.arrows.arrowLeft.addEventListener('click', function(){
+		self.move('left');
+	});
+	self.arrows.arrowRight.addEventListener('click', function(){
+		self.move('right');
+	});
+
+	var position,
+		cachedPosition,
+		startingOffset,
+		slidingRows = getArray(el.querySelectorAll('.t-sliding-row')),
+		slidingPeriodRow = self.periodRow.querySelector('.t-sliding-row');
+
+	//setting the events listeners
+	setListener(slidingPeriodRow, Toucher.touchEvents.start, function(e){
+		e.preventDefault();
+		startingOffset = Animator.offset(slidingPeriodRow);
+		cachedPosition = Toucher.onTouchStart(e);
+	});
+
+	setListener(slidingPeriodRow, Toucher.touchEvents.move, function(e){
+		e.preventDefault();
+		position = Toucher.onTouchMove(e);
+		if(position){
+				Animator.drag(slidingRows, (position.currX - cachedPosition.cachedX + parseInt(startingOffset)));
+				cachedPosition = position;
+		}
+	});
+
+	setListener(slidingPeriodRow, Toucher.touchEvents.end, function(e){
+		e.preventDefault();
+		Toucher.onTouchEnd();
+		startingOffset = 0;
+		Animator.stopDragging();
+	});
+}
+
+
+Tabella.prototype.defaults = {
 			periods : null,
 			rows : null,
 			/**
@@ -705,91 +831,6 @@
 			easing : 'easeInOutSine',
 			duration : 600
 		};
-
-		this.periodRow = null;
-		this.slidingRows = null;
-		this.arrows = null;
-		this.pointer = 0;
-		this.animator = null;
-		//An object that has to hold the cellBreakpoint and descBreakpoint
-		this.currentBreakpoint = {};
-		this.currentCellWidth = 0;
-
-		this.el = el;
-
-		
-		if(typeof el !== 'undefined'){
-			if(typeof options !== 'undefined'){
-				this.options = extend(this.defaults, options);
-				}else{
-				throw new TabellaException('You did not pass any options to the constructor');
-			}
-		}else{
-				throw new TabellaException('You did not pass a valid target element to the constructor');
-			}				
-	
-	var self = this;
-
-	if(self.options.periods !== null && self.options.rows !== null){
-
-		var builder = new TabellaBuilder(self.options, self.el);
-	
-		self.periodRow = builder.setUpPeriods();
-
-		if(self.periodRow){
-	
-			if(builder.setUpRows()){
-
-				self.arrows = builder.setUpArrows(self.periodRow);
-
-				// Returns a function, that, as long as it continues to be invoked, will not
-				// be triggered. The function will be called after it stops being called for
-				// N milliseconds. If `immediate` is passed, trigger the function on the
-				// leading edge, instead of the trailing.
-				var debounce = function(func, wait, immediate) {
-					var timeout;
-					var context = self;
-					return function() {
-						var args = arguments;
-						var later = function() {
-							timeout = null;
-							if (!immediate) func.apply(context, args);
-						};
-						var callNow = immediate && !timeout;
-						clearTimeout(timeout);
-						timeout = setTimeout(later, wait);
-						if (callNow) func.apply(context, args);
-					};
-				};
-
-				var firstSet = function(){
-					self.currentBreakpoint = self.getBreakpoint();
-					self.currentCellWidth = self.getCellWidth(self.currentBreakpoint);
-					self.refreshSize();
-				};
-
-				window.addEventListener('load', debounce(firstSet, 50));
-
-				window.addEventListener('resize', debounce(self.refreshSize, 250));
-
-				self.attachEvents();
-
-			}else{
-				throw new TabellaException('There is a mismatch between periods and prices cells');
-			}
-		}else{
-			throw new TabellaException('Periods is not an Array');
-		}
-		
-	}else{
-		throw new TabellaException('Periods or rows are null');
-	}
-	
-
-		//self.init();
-
-	//Close Tabella constructor
-	}
 
 Tabella.prototype.refreshSize = function(){
 	var self = this,
@@ -977,18 +1018,18 @@ Tabella.prototype.move = function(x){
 		slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
 
 	if(x === 'right'){
-		self.animator.animate(slidingRows, cellWidth, self.options.duration);
+		Animator.animate(slidingRows, cellWidth, self.options.duration);
 		self.pointer++;
 	}else{
 		if(x === 'left'){
-			self.animator.animate(slidingRows, -cellWidth, self.options.duration);
+			Animator.animate(slidingRows, -cellWidth, self.options.duration);
 			self.pointer--;
 		}else{
 
 			if(typeof x === 'number'){
-				self.animator.animate(slidingRows, x, 251);
+				Animator.animate(slidingRows, x, 251);
 			}else{
-				self.animator.reset(slidingRows, self.options.duration);
+				Animator.reset(slidingRows, self.options.duration);
 				self.pointer = 0;
 			}
 			
@@ -997,50 +1038,6 @@ Tabella.prototype.move = function(x){
 
 	self.updateArrows();
 };
-
-Tabella.prototype.attachEvents = function(){
-
-	var self = this;
-
-	self.animator = new Animator(self.options.easing);
-
-	self.arrows.arrowLeft.addEventListener('click', function(){
-		self.move('left');
-	});
-	self.arrows.arrowRight.addEventListener('click', function(){
-		self.move('right');
-	});
-
-	var position,
-		cachedPosition,
-		startingOffset,
-		slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row')),
-		slidingPeriodRow = self.periodRow.querySelector('.t-sliding-row');
-
-	//setting the events listeners
-	setListener(slidingPeriodRow, Toucher.touchEvents.start, function(e){
-		e.preventDefault();
-		startingOffset = self.animator.offset(slidingPeriodRow);
-		cachedPosition = Toucher.onTouchStart(e);
-	});
-
-	setListener(slidingPeriodRow, Toucher.touchEvents.move, function(e){
-		e.preventDefault();
-		position = Toucher.onTouchMove(e);
-		if(position){
-				self.animator.drag(slidingRows, (position.currX - cachedPosition.cachedX + parseInt(startingOffset)));
-				cachedPosition = position;
-		}
-	});
-
-	setListener(slidingPeriodRow, Toucher.touchEvents.end, function(e){
-		e.preventDefault();
-		Toucher.onTouchEnd();
-		startingOffset = 0;
-		self.animator.stopDragging();
-	});
-};
-
 
 
 	return Tabella;

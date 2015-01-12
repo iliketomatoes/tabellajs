@@ -35,206 +35,201 @@ SCHEMA:
 
 */
 
-	//TabellaBuilder constructor
-	function TabellaBuilder( options, el ){
-
-		this.options = options;
-		this.el = el;
-
-	}
-
-
-	TabellaBuilder.prototype.setUpPeriods = function(){
-
-		var self = this;
+	var TabellaBuilder = {
 		
-		var periods = self.options.periods;
+		options : null,
 
-		var docfrag = document.createDocumentFragment();
+		el : null,
 
-		if(periods instanceof Array && periods.length){
+		setUpPeriods : function(){
 
-			var numberOfPeriods = periods.length;
-
-			var tRow = createHTMLEl('div', 't-row', docfrag);
-
-			var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
-
-			var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);
+			var self = this;
 			
-			var tRowDescHTML = '<div class="t-element">';
-				tRowDescHTML +='<div class="t-cell-desc-l">';
-				tRowDescHTML += self.options.from;
-				tRowDescHTML += '<br>';
-				tRowDescHTML += self.options.to;
-				tRowDescHTML += '</div>';
-				tRowDescHTML += '</div>';  
+			var periods = self.options.periods;
 
-			var tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
+			var docfrag = document.createDocumentFragment();
 
-			var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
+			if(periods instanceof Array && periods.length){
 
-			var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
+				var numberOfPeriods = periods.length;
 
-			for(var i = 0; i < numberOfPeriods; i++){
+				var tRow = createHTMLEl('div', 't-row', docfrag);
 
-				var tRowCell = document.createElement('div');
-				tRowCell.className = 't-row-cell';
+				var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
 
-				//From - to Div	
-				var periodHTML = '<div class="t-cell-desc-s">';
-					periodHTML += self.options.from;
-				if(typeof periods[i][1] !== 'undefined'){	
-					periodHTML += '<br>';
-					periodHTML += self.options.to;
-				}	
-					periodHTML += '</div>'; 	
-
-				//Period actual dates
-				periodHTML += '<div class="t-cell-value t-bold">';
-				periodHTML += typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
-				if(typeof periods[i][1] !== 'undefined'){
-					periodHTML += '<br>';
-					periodHTML += periods[i][1];
-				}
-				periodHTML += '</div>'; 
-
-				var tEl = createHTMLEl( 'div', 't-element', tRowCell, periodHTML);
-
-				tSlidingRow.appendChild(tRowCell);
-
-			}
-
-			self.el.appendChild(docfrag);
-
-			return tRow;
-
-		}else{
-			return false;
-		}
-	};	
-
-	TabellaBuilder.prototype.setUpRows = function (){
-
-		var self = this,
-			periods = self.options.periods,
-			rows = self.options.rows,
-			numberOfPeriods = periods.length,
-			numberOfRows = rows.length;
-
-		var docfrag = document.createDocumentFragment();
-
-		if(numberOfRows > 0){
-
-				var matchingPeriodCells = true;
-
-				for(var i = 0; i < numberOfRows; i++){
-
-					if(!matchingPeriodCells) break;
-
-					var tRow = createHTMLEl('div', 't-row', docfrag);
+				var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);
 				
-					if(!!rows[i].desc){
-						var tHeader = createHTMLEl('section','t-row-header', tRow, rows[i].desc);
+				var tRowDescHTML = '<div class="t-element">';
+					tRowDescHTML +='<div class="t-cell-desc-l">';
+					tRowDescHTML += self.options.from;
+					tRowDescHTML += '<br>';
+					tRowDescHTML += self.options.to;
+					tRowDescHTML += '</div>';
+					tRowDescHTML += '</div>';  
+
+				var tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
+
+				var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
+
+				var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
+
+				for(var i = 0; i < numberOfPeriods; i++){
+
+					var tRowCell = document.createElement('div');
+					tRowCell.className = 't-row-cell';
+
+					//From - to Div	
+					var periodHTML = '<div class="t-cell-desc-s">';
+						periodHTML += self.options.from;
+					if(typeof periods[i][1] !== 'undefined'){	
+						periodHTML += '<br>';
+						periodHTML += self.options.to;
+					}	
+						periodHTML += '</div>'; 	
+
+					//Period actual dates
+					periodHTML += '<div class="t-cell-value t-bold">';
+					periodHTML += typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
+					if(typeof periods[i][1] !== 'undefined'){
+						periodHTML += '<br>';
+						periodHTML += periods[i][1];
 					}
+					periodHTML += '</div>'; 
 
-					if(!!rows[i].prices){
+					var tEl = createHTMLEl( 'div', 't-element', tRowCell, periodHTML);
 
-						for(var j = 0; j < rows[i].prices.length; j++){
+					tSlidingRow.appendChild(tRowCell);
 
-						var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
+				}
 
-						var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);	
+				self.el.appendChild(docfrag);
 
-							if(!matchingPeriodCells) break;
+				return tRow;
 
-							var tRowDescHTML = '<div class="t-element">';
-								tRowDescHTML +='<div class="t-cell-desc-l">';
-								tRowDescHTML += rows[i].pricesDesc[j];
-								tRowDescHTML += '</div>';
-								tRowDescHTML += '</div>';
+			}else{
+				return false;
+			}
+		},
 
-							var descClass = 't-row-desc';
-							if(j >= 1) descClass += ' t-cell-border-top';	  
+		setUpRows : function (){
 
-							var tRowDesc = createHTMLEl('div', descClass, tRowContent, tRowDescHTML);
+			var self = this,
+				periods = self.options.periods,
+				rows = self.options.rows,
+				numberOfPeriods = periods.length,
+				numberOfRows = rows.length;
 
-							var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
+			var docfrag = document.createDocumentFragment();
 
-							var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
-						
-							for(var k = 0; k < rows[i].prices[j].length; k++){
+			if(numberOfRows > 0){
 
-								if(rows[i].prices[j].length === numberOfPeriods){
-									var tRowCell = document.createElement('div');
+					var matchingPeriodCells = true;
 
-									var cellClass = 't-row-cell';
-									if(j >= 1) cellClass += ' t-cell-border-top';
+					for(var i = 0; i < numberOfRows; i++){
 
-									tRowCell.className = cellClass;
+						if(!matchingPeriodCells) break;
 
-									var cellHTML = '';
+						var tRow = createHTMLEl('div', 't-row', docfrag);
+					
+						if(!!rows[i].desc){
+							var tHeader = createHTMLEl('section','t-row-header', tRow, rows[i].desc);
+						}
 
-									//Cell description
-									if(!!rows[i].pricesDesc[j]){
-										cellHTML += '<div class="t-cell-desc-s">';
-										if(!!rows[i].pricesDesc[j][k]){
-											cellHTML += rows[i].pricesDesc[j][k];
-										}else{
-											if(!!rows[i].pricesDesc[j][0])
-												cellHTML += rows[i].pricesDesc[j][0];
-										}
-										
-										cellHTML += '</div>';
-									}	
+						if(!!rows[i].prices){
 
-									//Item current price
-									cellHTML += '<div class="t-cell-value">';
-									cellHTML += typeof  rows[i].prices[j][k] !== 'undefined' ?  rows[i].prices[j][k] : 'not set';
-									cellHTML += ' ' + self.options.currency;
-									cellHTML+= '</div>'; 
+							for(var j = 0; j < rows[i].prices.length; j++){
+
+							var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
+
+							var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);	
+
+								if(!matchingPeriodCells) break;
+
+								var tRowDescHTML = '<div class="t-element">';
+									tRowDescHTML +='<div class="t-cell-desc-l">';
+									tRowDescHTML += rows[i].pricesDesc[j];
+									tRowDescHTML += '</div>';
+									tRowDescHTML += '</div>';
+
+								var descClass = 't-row-desc';
+								if(j >= 1) descClass += ' t-cell-border-top';	  
+
+								var tRowDesc = createHTMLEl('div', descClass, tRowContent, tRowDescHTML);
+
+								var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
+
+								var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
+							
+								for(var k = 0; k < rows[i].prices[j].length; k++){
+
+									if(rows[i].prices[j].length === numberOfPeriods){
+										var tRowCell = document.createElement('div');
+
+										var cellClass = 't-row-cell';
+										if(j >= 1) cellClass += ' t-cell-border-top';
+
+										tRowCell.className = cellClass;
+
+										var cellHTML = '';
+
+										//Cell description
+										if(!!rows[i].pricesDesc[j]){
+											cellHTML += '<div class="t-cell-desc-s">';
+											if(!!rows[i].pricesDesc[j][k]){
+												cellHTML += rows[i].pricesDesc[j][k];
+											}else{
+												if(!!rows[i].pricesDesc[j][0])
+													cellHTML += rows[i].pricesDesc[j][0];
+											}
+											
+											cellHTML += '</div>';
+										}	
+
+										//Item current price
+										cellHTML += '<div class="t-cell-value">';
+										cellHTML += typeof  rows[i].prices[j][k] !== 'undefined' ?  rows[i].prices[j][k] : 'not set';
+										cellHTML += ' ' + self.options.currency;
+										cellHTML+= '</div>'; 
 
 
-									var tEl = createHTMLEl('div', 't-element', tRowCell, cellHTML);
+										var tEl = createHTMLEl('div', 't-element', tRowCell, cellHTML);
 
-									tSlidingRow.appendChild(tRowCell);
-								
-								}else{
-									matchingPeriodCells = false;
-									break;
+										tSlidingRow.appendChild(tRowCell);
+									
+									}else{
+										matchingPeriodCells = false;
+										break;
+									}
 								}
 							}
 						}
 					}
-				}
 
-			self.el.appendChild(docfrag);	
+				self.el.appendChild(docfrag);	
 
-			return matchingPeriodCells;	
+				return matchingPeriodCells;	
 
-		}else{
+			}else{
 
-			return false;
+				return false;
 
+			}
+
+		},
+
+		setUpArrows : function(periodRow){
+
+			var self = this;
+
+			var arrowRight = createHTMLEl('div','t-arr-right t-hide', periodRow, self.options.arrowRight);
+
+			var arrowLeft = createHTMLEl('div','t-arr-left t-hide', periodRow, self.options.arrowLeft);
+			
+			return {
+				arrowRight : arrowRight,
+
+				arrowLeft : arrowLeft
+			};
 		}
 
-	};
-
-	TabellaBuilder.prototype.setUpArrows = function(periodRow){
-
-		var self = this;
-
-		var arrowRight = createHTMLEl('div','t-arr-right t-hide', periodRow, self.options.arrowRight);
-
-		var arrowLeft = createHTMLEl('div','t-arr-left t-hide', periodRow, self.options.arrowLeft);
-		
-		return {
-			arrowRight : arrowRight,
-
-			arrowLeft : arrowLeft
-		};
-	};
-
-	TabellaBuilder.prototype.attachEvents = function(){
-		//TODO
 	};

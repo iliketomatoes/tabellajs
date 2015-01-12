@@ -1,8 +1,9 @@
-Tabella.prototype.attachEvents = function(){
+function attachEvents(context, el, options){
 
-	var self = this;
+	var self = context;
 
-	self.animator = new Animator(self.options.easing);
+	//Animator = new Animator(options.easing);
+	Animator.easing = options.easing;
 
 	self.arrows.arrowLeft.addEventListener('click', function(){
 		self.move('left');
@@ -14,13 +15,13 @@ Tabella.prototype.attachEvents = function(){
 	var position,
 		cachedPosition,
 		startingOffset,
-		slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row')),
+		slidingRows = getArray(el.querySelectorAll('.t-sliding-row')),
 		slidingPeriodRow = self.periodRow.querySelector('.t-sliding-row');
 
 	//setting the events listeners
 	setListener(slidingPeriodRow, Toucher.touchEvents.start, function(e){
 		e.preventDefault();
-		startingOffset = self.animator.offset(slidingPeriodRow);
+		startingOffset = Animator.offset(slidingPeriodRow);
 		cachedPosition = Toucher.onTouchStart(e);
 	});
 
@@ -28,7 +29,7 @@ Tabella.prototype.attachEvents = function(){
 		e.preventDefault();
 		position = Toucher.onTouchMove(e);
 		if(position){
-				self.animator.drag(slidingRows, (position.currX - cachedPosition.cachedX + parseInt(startingOffset)));
+				Animator.drag(slidingRows, (position.currX - cachedPosition.cachedX + parseInt(startingOffset)));
 				cachedPosition = position;
 		}
 	});
@@ -37,7 +38,7 @@ Tabella.prototype.attachEvents = function(){
 		e.preventDefault();
 		Toucher.onTouchEnd();
 		startingOffset = 0;
-		self.animator.stopDragging();
+		Animator.stopDragging();
 	});
-};
+}
 

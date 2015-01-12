@@ -1,60 +1,88 @@
+	
+	function init(context, el, options){
+		var self = context;
 
-	function Tabella(el, options){
-
-		this.defaults = {
-			periods : null,
-			rows : null,
-			/**
-			* BREAKPOINTS : 
-			* 1st element in array is the row width, 
-			* the 2nd is the number of cells to be shown
-			* Default breakpoint is from [0,1], just one element is shown
-			*/
-			cellBreakpoints : {
-				default : [0,1],
-				small : [360,2],
-				medium : [640,3],
-				large : [820,4],
-				xlarge : [1080,5]
-			},
-			/**
-			* DESCRIPTION BREAKPOINTS : 
-			* 1st element in array is the row width, 
-			* the 2nd is the description cell width,
-			* Default breakpoint is from [0,0]
-			*/
-			descBreakpoints : {
-				default : [0,0],
-				medium : [460, 160],
-				large : [900, 200]
-			},
-			from : 'from',
-			to : 'to',
-			currency : '&euro;',
-			arrowLeft : '\u2190',
-			arrowRight : '\u2192',
-			easing : 'easeInOutSine',
-			duration : 600
-		};
-
-		this.periodRow = null;
-		this.slidingRows = null;
-		this.arrows = null;
-		this.pointer = 0;
-		this.animator = null;
-		//An object that has to hold the cellBreakpoint and descBreakpoint
-		this.currentBreakpoint = {};
-		this.currentCellWidth = 0;
-
-		this.el = el;
-
-		
 		if(typeof el !== 'undefined'){
 			if(typeof options !== 'undefined'){
-				this.options = extend(this.defaults, options);
+				self.options = extend(self.defaults, options);
 				}else{
 				throw new TabellaException('You did not pass any options to the constructor');
 			}
 		}else{
 				throw new TabellaException('You did not pass a valid target element to the constructor');
-			}				
+			}
+
+		self.periodRow = null;
+		//self.slidingRows = null;
+		self.arrows = null;
+		self.pointer = 0;
+		self.animator = null;
+		//An object that has to hold the cellBreakpoint and descBreakpoint
+		self.currentBreakpoint = {};
+		self.currentCellWidth = 0;
+
+		self.el = el;
+
+		if(self.options.periods !== null && self.options.rows !== null){
+
+		TabellaBuilder.el = self.el;	
+		TabellaBuilder.options = self.options;
+	
+		self.periodRow = TabellaBuilder.setUpPeriods();
+
+		if(self.periodRow){
+	
+			if(TabellaBuilder.setUpRows()){
+
+				self.arrows = TabellaBuilder.setUpArrows(self.periodRow);
+
+				// Returns a function, that, as long as it continues to be invoked, will not
+				// be triggered. The function will be called after it stops being called for
+				// N milliseconds. If `immediate` is passed, trigger the function on the
+				// leading edge, instead of the trailing.
+				var debounce = function(func, wait, immediate) {
+					var timeout;
+					//var context = self;
+					return function() {
+						var args = arguments;
+						var later = function() {
+							timeout = null;
+							if (!immediate) func.apply(context, args);
+						};
+						var callNow = immediate && !timeout;
+						clearTimeout(timeout);
+						timeout = setTimeout(later, wait);
+						if (callNow) func.apply(context, args);
+					};
+				};
+
+				var firstSet = function(){
+					self.currentBreakpoint = self.getBreakpoint();
+					self.currentCellWidth = self.getCellWidth(self.currentBreakpoint);
+					self.refreshSize();
+				};
+
+				window.addEventListener('load', debounce(firstSet, 50));
+
+				window.addEventListener('resize', debounce(self.refreshSize, 250));
+
+				//self.attachEvents();
+				attachEvents(context, el, self.options);
+
+			}else{
+				throw new TabellaException('There is a mismatch between periods and prices cells');
+			}
+		}else{
+			throw new TabellaException('Periods is not an Array');
+		}
+		
+	}else{
+		throw new TabellaException('Periods or rows are null');
+	}
+				
+	}
+
+	function Tabella(el, options){
+			init(this, el, options);
+		}
+			

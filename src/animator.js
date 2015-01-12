@@ -52,138 +52,140 @@
             clearTimeout(id);
         };
 
-	function Animator(easeing){
-
-		this.easeing = easeingObj.hasOwnProperty(easeing) ? easeingObj[easeing] : easeingObj.easeInOutSine;
-
-		this.animated = false;
-
-		this.dragged = null;
-	}
-
-	Animator.prototype.getAnimationCurve = function(duration){
-		var self = this,
-			epsilon = (1000 / 60 / duration) / 4;
-
-		return getBezier(self.easeing,epsilon);
-	};
-
-	Animator.prototype.actualAnimation = function(el, offset, duration, animationCurve, startingOffset){
-
-		var self = this,
-			targetOffset = startingOffset - offset,
-			start = null,
-			myReq;
-
-		function animationStep(timestamp){
+	var Animator = {
+		easeing : 'easeInOutSine',
 		
-			if (start === null) start = timestamp;
+		animated : false,
+		
+		dragged : null,
 
-			var timePassed = (timestamp - start);
-			var progress = timePassed / duration;
+		getAnimationCurve : function(duration){
+			var self = this,
+				epsilon = (1000 / 60 / duration) / 4;
 
-			if (progress >= 1) progress = 1;
+			return getBezier(getEaseing(self.easeing),epsilon);
+			},
 
-			var delta = animationCurve(progress).toFixed(2);
+		actualAnimation : function(el, offset, duration, animationCurve, startingOffset){
 
-			self.step(el, delta, startingOffset, targetOffset);
+			var self = this,
+				targetOffset = startingOffset - offset,
+				start = null,
+				myReq;
 
-			if (progress === 1){
-				cancelAnimationFrame(myReq);
-				start = null;
-				}else{
-				requestAnimationFrame(animationStep);
+			function animationStep(timestamp){
+			
+				if (start === null) start = timestamp;
+
+				var timePassed = (timestamp - start);
+				var progress = timePassed / duration;
+
+				if (progress >= 1) progress = 1;
+
+				var delta = animationCurve(progress).toFixed(2);
+
+				self.step(el, delta, startingOffset, targetOffset);
+
+				if (progress === 1){
+					cancelAnimationFrame(myReq);
+					start = null;
+					}else{
+					requestAnimationFrame(animationStep);
+				}
+
 			}
 
-		}
+			myReq = requestAnimationFrame(animationStep);
 
-		myReq = requestAnimationFrame(animationStep);
+			},
 
-	};
+		step : function(el, delta, startingOffset, targetOffset){
+			this.offset(el,parseInt(startingOffset) + parseInt((targetOffset - startingOffset) * delta));
+			},
 
-	Animator.prototype.step = function(el, delta, startingOffset, targetOffset){
-		this.offset(el,parseInt(startingOffset) + parseInt((targetOffset - startingOffset) * delta));
-	};
+		offset : function(elem, length){
 
-	Animator.prototype.offset = function(elem, length){
+			if(typeof length === 'undefined'){
 
-		if(typeof length === 'undefined'){
+				if(vendorTransform){
+					/**
+					* @return {Number} the x offset of the translation
+					*/
+					var parsedXOffset = elem.style[vendorTransform] ? elem.style[vendorTransform].match(/-?\d+/g)[0] : 0;
 
-			if(vendorTransform){
-				/**
-				* @return {Number} the x offset of the translation
-				*/
-				var parsedXOffset = elem.style[vendorTransform] ? elem.style[vendorTransform].match(/-?\d+/g)[0] : 0;
+					return parsedXOffset;
+					}else{
+						return elem.style.left;
+					}		
 
-				return parsedXOffset;
-			}else{
-				return elem.style.left;
-			}		
+				}else{
+					if(vendorTransform){
+						elem.style[vendorTransform] = 'translate(' + length + 'px, 0px)';
+					}else{
+						elem.style.left = length + 'px';
+					}	
+				}
+			},
 
-		}else{
-			if(vendorTransform){
-				elem.style[vendorTransform] = 'translate(' + length + 'px, 0px)';
-			}else{
-				elem.style.left = length + 'px';
-			}	
-		}
-	};
+		animate : function(target, offset, duration){
 
-	Animator.prototype.animate = function(target, offset, duration){
+			var self = this;
 
-		var self = this;
+			if(self.animated) return false;
+			self.animated = true;
 
-		if(self.animated) return false;
-		self.animated = true;
+			var animationCurve = self.getAnimationCurve(duration);
 
-		var animationCurve = self.getAnimationCurve(duration);
-
-		target.forEach(function(el){
-			self.actualAnimation(el, offset, duration, animationCurve, self.offset(el));
-		});
-
-		self.animated = false;
-	};
-
-	Animator.prototype.reset = function(target, duration){
-		var self = this;
-
-		if(self.animated) return false;
-		self.animated = true;
-
-		var animationCurve = self.getAnimationCurve(duration);
-
-		target.forEach(function(el){
-			self.actualAnimation(el, 0, duration, animationCurve, 0);
-		});
-
-		self.animated = false;
-	};
-
-	Animator.prototype.drag = function(target, length){
-		var self = this;
-
-		if(self.animated) return false;
-
-		target.forEach(function(el){
-			self.dragged = requestAnimationFrame(function(){
-					self.offset(el, length);
+			target.forEach(function(el){
+				self.actualAnimation(el, offset, duration, animationCurve, self.offset(el));
 			});
-		});
+
+			self.animated = false;
+			},
+
+		reset : function(target, duration){
+			var self = this;
+
+			if(self.animated) return false;
+			self.animated = true;
+
+			var animationCurve = self.getAnimationCurve(duration);
+
+			target.forEach(function(el){
+				self.actualAnimation(el, 0, duration, animationCurve, 0);
+			});
+
+			self.animated = false;
+			},
+
+		drag : function(target, length){
+			var self = this;
+
+			if(self.animated) return false;
+
+			target.forEach(function(el){
+				self.dragged = requestAnimationFrame(function(){
+						self.offset(el, length);
+				});
+			});
+
+			},
+
+		stopDragging : function(){
+			var self = this;
+			cancelAnimationFrame(self.dragged);
+			}	
 
 	};
 
-	Animator.prototype.stopDragging = function(){
-		var self = this;
-
-		cancelAnimationFrame(self.dragged);
-	};
 
 	/* 
 	====================================================
 	FUNCTIONS DEALING WITH THE ACTUAL SLIDING ANIMATION
 	====================================================*/
-
+	function getEaseing(easeing){
+		return easeingObj.hasOwnProperty(easeing) ? easeingObj[easeing] : easeingObj.easeInOutSine;
+	}
 
 	function getBezier(easeingArr, epsilon){
 		return bezier(easeingArr[0], easeingArr[1], easeingArr[2], easeingArr[3], epsilon);

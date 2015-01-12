@@ -27,9 +27,8 @@ module.exports = function(grunt) {
               'src/toucher.js',
               'src/tabellabuilder.js',
               'src/constructor.js',
-              'src/tabellainit.js',
-              'src/publicmethods.js',
               'src/events.js',
+              'src/publicmethods.js',
               'src/outro.js'  
              ],
         dest: 'dist/<%= pkg.name %>.js'
@@ -43,9 +42,8 @@ module.exports = function(grunt) {
               'src/toucher.js',
               'src/tabellabuilder.js',
               'src/constructor.js',
-              'src/tabellainit.js',
-              'src/publicmethods.js',
               'src/events.js',
+              'src/publicmethods.js',
               'src/testoutro.js'  
              ],
         dest: 'test/<%= pkg.name %>.js'

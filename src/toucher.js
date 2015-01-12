@@ -52,8 +52,6 @@
 
 				self.touchStarted = false;
 
-				console.log('touchend');
-
 			return {
 				deltaX : deltaX,
 				deltaY : deltaY
