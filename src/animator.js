@@ -84,7 +84,7 @@
 
 				var delta = animationCurve(progress).toFixed(2);
 
-				console.log(delta);
+				//console.log(delta);
 
 				self.step(el, delta, startingOffset, targetOffset);
 
@@ -178,9 +178,8 @@
 
 		stopDragging : function(){
 			var self = this;
-			self.animated = false;
-				cancelAnimationFrame(self.dragged);
-			console.log(self.dragged);
+			//self.animated = true;
+			cancelAnimationFrame(self.dragged);
 			}	
 
 	};

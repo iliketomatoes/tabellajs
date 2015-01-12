@@ -17,7 +17,9 @@ Tabella.prototype.attachEvents = function(){
 		startingOffset,
 		numberOfPeriods = self.options.periods.length,
 		slidingPeriodRow = self.periodRow.querySelector('.t-sliding-row'),
-		legalPosition = true;
+		legalPosition = true,
+		delta,
+		offsetMultiplier = 0;
 
 	//setting the events listeners
 	setListener(slidingPeriodRow, Toucher.touchEvents.start, function(e){
@@ -29,29 +31,35 @@ Tabella.prototype.attachEvents = function(){
 	setListener(slidingPeriodRow, Toucher.touchEvents.move, function(e){
 		e.preventDefault();
 		position = Toucher.onTouchMove(e);
+		
 		if(position && legalPosition){
-				var delta = position.currX - cachedPosition.cachedX;
-				Animator.drag(self.slidingRows, (delta + parseInt(startingOffset)));
 
-				//Swipe right
-				if(delta >= 0){
-					if(self.pointer === 0 && Math.abs(delta) >= 150){
-						legalPosition = false;
-					}
+			delta = position.currX - cachedPosition.cachedX;
+
+			//Let's drag the sliding rows around
+			Animator.drag(self.slidingRows, (delta + parseInt(startingOffset)));
+
+			//Swipe right
+			if(delta >= 0){
+				if(self.pointer === 0 && Math.abs(delta) >= 150){
+					legalPosition = false;
+				}
 				//Swipe left	
 				}else{
+					
+					if(Math.abs(delta) >= (parseInt(self.currentCellWidth) + 150)){
+						legalPosition = false;
+						console.log('troppo a destraaa');
+						//if(self.pointer + 1 + self.currentBreakpoint.cellBreakpoint[1] + numberOfPeriods){
 
-					if(delta >= self.currentCellWidth / 2 && delta < self.currentCellWidth){
-						if(self.pointer + 1 + self.currentBreakpoint.cellBreakpoint[1] + numberOfPeriods){
-
-						}
+						//}
 					}
-					if(self.pointer + self.currentBreakpoint.cellBreakpoint[1] + 1 >= numberOfPeriods){
+					//if(self.pointer + self.currentBreakpoint.cellBreakpoint[1] + 1 >= numberOfPeriods){
 
-					}
+					//}
 					
 				}
-				cachedPosition = position;
+			cachedPosition = position;
 		}
 	});
 
@@ -60,15 +68,19 @@ Tabella.prototype.attachEvents = function(){
 		Toucher.onTouchEnd();
 		startingOffset = 0;
 
-		if(self.pointer === 0){
-			var offset = parseInt(Animator.offset(slidingPeriodRow));
-			self.resetDragging(offset);
-			
-			}else{
-				Animator.stopDragging();
-			}
+		if(legalPosition && Math.abs(delta) >= (self.currentCellWidth / 2)){
+			offsetMultiplier++;
+		}
 
-		legalPosition = true;			
+		//if(!legalPosition){
+			var offset = parseInt(Animator.offset(slidingPeriodRow));
+			self.resetDragging(parseInt(offset + offsetMultiplier * self.currentCellWidth));
+			legalPosition = true;
+			//}else{
+				//Animator.stopDragging();
+			//}
+
+					
 	});
 };
 

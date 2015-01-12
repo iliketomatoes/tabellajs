@@ -115,6 +115,6 @@
   } 
 
   function getReboundTime(space, speed){
-    return Math.round((space / speed) * 1000);
+    return Math.round((Math.abs(space) / speed) * 1000);
   }
 
