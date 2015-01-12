@@ -179,7 +179,8 @@
 		stopDragging : function(){
 			var self = this;
 			self.animated = false;
-			cancelAnimationFrame(self.dragged);
+				cancelAnimationFrame(self.dragged);
+			console.log(self.dragged);
 			}	
 
 	};

@@ -15,6 +15,7 @@ Tabella.prototype.attachEvents = function(){
 	var position,
 		cachedPosition,
 		startingOffset,
+		numberOfPeriods = self.options.periods.length,
 		slidingPeriodRow = self.periodRow.querySelector('.t-sliding-row'),
 		legalPosition = true;
 
@@ -31,14 +32,24 @@ Tabella.prototype.attachEvents = function(){
 		if(position && legalPosition){
 				var delta = position.currX - cachedPosition.cachedX;
 				Animator.drag(self.slidingRows, (delta + parseInt(startingOffset)));
+
+				//Swipe right
 				if(delta >= 0){
 					if(self.pointer === 0 && Math.abs(delta) >= 150){
 						legalPosition = false;
-						var offset = parseInt(Animator.offset(slidingPeriodRow));
-						self.resetDragging(offset);
 					}
+				//Swipe left	
 				}else{
-					console.log('swipe left');
+
+					if(delta >= self.currentCellWidth / 2 && delta < self.currentCellWidth){
+						if(self.pointer + 1 + self.currentBreakpoint.cellBreakpoint[1] + numberOfPeriods){
+
+						}
+					}
+					if(self.pointer + self.currentBreakpoint.cellBreakpoint[1] + 1 >= numberOfPeriods){
+
+					}
+					
 				}
 				cachedPosition = position;
 		}
@@ -49,10 +60,12 @@ Tabella.prototype.attachEvents = function(){
 		Toucher.onTouchEnd();
 		startingOffset = 0;
 
-		if(self.pointer === 0 && legalPosition){
+		if(self.pointer === 0){
 			var offset = parseInt(Animator.offset(slidingPeriodRow));
 			self.resetDragging(offset);
 			
+			}else{
+				Animator.stopDragging();
 			}
 
 		legalPosition = true;			
