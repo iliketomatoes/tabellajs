@@ -13,7 +13,7 @@
 			}
 
 		self.periodRow = null;
-		//self.slidingRows = null;
+		self.slidingRows = null;
 		self.arrows = null;
 		self.pointer = 0;
 		self.animator = null;
@@ -35,7 +35,7 @@
 			if(TabellaBuilder.setUpRows()){
 
 				self.arrows = TabellaBuilder.setUpArrows(self.periodRow);
-
+				self.slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
 				// Returns a function, that, as long as it continues to be invoked, will not
 				// be triggered. The function will be called after it stops being called for
 				// N milliseconds. If `immediate` is passed, trigger the function on the
@@ -66,8 +66,8 @@
 
 				window.addEventListener('resize', debounce(self.refreshSize, 250));
 
-				//self.attachEvents();
-				attachEvents(context, el, self.options);
+				self.attachEvents();
+				//attachEvents(context, el, self.options);
 
 			}else{
 				throw new TabellaException('There is a mismatch between periods and prices cells');

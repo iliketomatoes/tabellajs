@@ -59,11 +59,11 @@
 		
 		dragged : null,
 
-		getAnimationCurve : function(duration){
+		getAnimationCurve : function(duration, easeing){
 			var self = this,
 				epsilon = (1000 / 60 / duration) / 4;
 
-			return getBezier(getEaseing(self.easeing),epsilon);
+			return getBezier(easeing, epsilon);
 			},
 
 		actualAnimation : function(el, offset, duration, animationCurve, startingOffset){
@@ -83,6 +83,8 @@
 				if (progress >= 1) progress = 1;
 
 				var delta = animationCurve(progress).toFixed(2);
+
+				console.log(delta);
 
 				self.step(el, delta, startingOffset, targetOffset);
 
@@ -127,14 +129,17 @@
 				}
 			},
 
-		animate : function(target, offset, duration){
+		animate : function(target, offset, duration, easeing){
 
-			var self = this;
+			var self = this,
+				easeingVar = easeing || self.easeing;
+
+			var actualEaseing = getEaseing(easeingVar);	
 
 			if(self.animated) return false;
 			self.animated = true;
 
-			var animationCurve = self.getAnimationCurve(duration);
+			var animationCurve = self.getAnimationCurve(duration, actualEaseing);
 
 			target.forEach(function(el){
 				self.actualAnimation(el, offset, duration, animationCurve, self.offset(el));
@@ -143,13 +148,13 @@
 			self.animated = false;
 			},
 
-		reset : function(target, duration){
+		resetRows : function(target, duration, easeing){
 			var self = this;
 
 			if(self.animated) return false;
 			self.animated = true;
 
-			var animationCurve = self.getAnimationCurve(duration);
+			var animationCurve = self.getAnimationCurve(duration, easeing || getEaseing(self.easeing));
 
 			target.forEach(function(el){
 				self.actualAnimation(el, 0, duration, animationCurve, 0);
@@ -173,6 +178,7 @@
 
 		stopDragging : function(){
 			var self = this;
+			self.animated = false;
 			cancelAnimationFrame(self.dragged);
 			}	
 

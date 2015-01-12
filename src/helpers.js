@@ -114,3 +114,7 @@
       return cb.apply(context, params);
   } 
 
+  function getReboundTime(space, speed){
+    return Math.round((space / speed) * 1000);
+  }
+

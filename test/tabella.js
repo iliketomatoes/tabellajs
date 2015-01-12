@@ -133,6 +133,10 @@
       return cb.apply(context, params);
   } 
 
+  function getReboundTime(space, speed){
+    return Math.round((space / speed) * 1000);
+  }
+
 
 	
 	function TabellaException(value) {			
@@ -204,11 +208,11 @@
 		
 		dragged : null,
 
-		getAnimationCurve : function(duration){
+		getAnimationCurve : function(duration, easeing){
 			var self = this,
 				epsilon = (1000 / 60 / duration) / 4;
 
-			return getBezier(getEaseing(self.easeing),epsilon);
+			return getBezier(easeing, epsilon);
 			},
 
 		actualAnimation : function(el, offset, duration, animationCurve, startingOffset){
@@ -228,6 +232,8 @@
 				if (progress >= 1) progress = 1;
 
 				var delta = animationCurve(progress).toFixed(2);
+
+				console.log(delta);
 
 				self.step(el, delta, startingOffset, targetOffset);
 
@@ -272,14 +278,17 @@
 				}
 			},
 
-		animate : function(target, offset, duration){
+		animate : function(target, offset, duration, easeing){
 
-			var self = this;
+			var self = this,
+				easeingVar = easeing || self.easeing;
+
+			var actualEaseing = getEaseing(easeingVar);	
 
 			if(self.animated) return false;
 			self.animated = true;
 
-			var animationCurve = self.getAnimationCurve(duration);
+			var animationCurve = self.getAnimationCurve(duration, actualEaseing);
 
 			target.forEach(function(el){
 				self.actualAnimation(el, offset, duration, animationCurve, self.offset(el));
@@ -288,13 +297,13 @@
 			self.animated = false;
 			},
 
-		reset : function(target, duration){
+		resetRows : function(target, duration, easeing){
 			var self = this;
 
 			if(self.animated) return false;
 			self.animated = true;
 
-			var animationCurve = self.getAnimationCurve(duration);
+			var animationCurve = self.getAnimationCurve(duration, easeing || getEaseing(self.easeing));
 
 			target.forEach(function(el){
 				self.actualAnimation(el, 0, duration, animationCurve, 0);
@@ -318,6 +327,7 @@
 
 		stopDragging : function(){
 			var self = this;
+			self.animated = false;
 			cancelAnimationFrame(self.dragged);
 			}	
 
@@ -678,7 +688,7 @@ var TabellaBuilder = {
 			}
 
 		self.periodRow = null;
-		//self.slidingRows = null;
+		self.slidingRows = null;
 		self.arrows = null;
 		self.pointer = 0;
 		self.animator = null;
@@ -700,7 +710,7 @@ var TabellaBuilder = {
 			if(TabellaBuilder.setUpRows()){
 
 				self.arrows = TabellaBuilder.setUpArrows(self.periodRow);
-
+				self.slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
 				// Returns a function, that, as long as it continues to be invoked, will not
 				// be triggered. The function will be called after it stops being called for
 				// N milliseconds. If `immediate` is passed, trigger the function on the
@@ -731,8 +741,8 @@ var TabellaBuilder = {
 
 				window.addEventListener('resize', debounce(self.refreshSize, 250));
 
-				//self.attachEvents();
-				attachEvents(context, el, self.options);
+				self.attachEvents();
+				//attachEvents(context, el, self.options);
 
 			}else{
 				throw new TabellaException('There is a mismatch between periods and prices cells');
@@ -751,12 +761,12 @@ var TabellaBuilder = {
 			init(this, el, options);
 		}
 			
-function attachEvents(context, el, options){
+Tabella.prototype.attachEvents = function(){
 
-	var self = context;
+	var self = this;
 
 	//Animator = new Animator(options.easing);
-	Animator.easing = options.easing;
+	Animator.easing = self.options.easing;
 
 	self.arrows.arrowLeft.addEventListener('click', function(){
 		self.move('left');
@@ -768,8 +778,8 @@ function attachEvents(context, el, options){
 	var position,
 		cachedPosition,
 		startingOffset,
-		slidingRows = getArray(el.querySelectorAll('.t-sliding-row')),
-		slidingPeriodRow = self.periodRow.querySelector('.t-sliding-row');
+		slidingPeriodRow = self.periodRow.querySelector('.t-sliding-row'),
+		legalPosition = true;
 
 	//setting the events listeners
 	setListener(slidingPeriodRow, Toucher.touchEvents.start, function(e){
@@ -781,8 +791,18 @@ function attachEvents(context, el, options){
 	setListener(slidingPeriodRow, Toucher.touchEvents.move, function(e){
 		e.preventDefault();
 		position = Toucher.onTouchMove(e);
-		if(position){
-				Animator.drag(slidingRows, (position.currX - cachedPosition.cachedX + parseInt(startingOffset)));
+		if(position && legalPosition){
+				var delta = position.currX - cachedPosition.cachedX;
+				Animator.drag(self.slidingRows, (delta + parseInt(startingOffset)));
+				if(delta >= 0){
+					if(self.pointer === 0 && Math.abs(delta) >= 150){
+						legalPosition = false;
+						var offset = parseInt(Animator.offset(slidingPeriodRow));
+						self.resetDragging(offset);
+					}
+				}else{
+					console.log('swipe left');
+				}
 				cachedPosition = position;
 		}
 	});
@@ -791,9 +811,23 @@ function attachEvents(context, el, options){
 		e.preventDefault();
 		Toucher.onTouchEnd();
 		startingOffset = 0;
-		Animator.stopDragging();
+
+		if(self.pointer === 0 && legalPosition){
+			var offset = parseInt(Animator.offset(slidingPeriodRow));
+			self.resetDragging(offset);
+			
+			}
+
+		legalPosition = true;			
 	});
-}
+};
+
+
+Tabella.prototype.resetDragging = function(offset){
+	var self = this;
+	Animator.stopDragging();
+	Animator.animate(self.slidingRows, offset, getReboundTime(offset, self.options.reboundSpeed), 'easeOutBack');
+};
 
 
 Tabella.prototype.defaults = {
@@ -829,7 +863,8 @@ Tabella.prototype.defaults = {
 			arrowLeft : '\u2190',
 			arrowRight : '\u2192',
 			easing : 'easeInOutSine',
-			duration : 600
+			duration : 600,
+			reboundSpeed : 200
 		};
 
 Tabella.prototype.refreshSize = function(){
@@ -1014,22 +1049,22 @@ Tabella.prototype.move = function(x){
 
 	var self = this,
 		cellWidth = self.getCellWidth(self.currentBreakpoint),
-		numberOfPeriods = self.options.periods.length,
-		slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
+		numberOfPeriods = self.options.periods.length;
+		//slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
 
 	if(x === 'right'){
-		Animator.animate(slidingRows, cellWidth, self.options.duration);
+		Animator.animate(self.slidingRows, cellWidth, self.options.duration);
 		self.pointer++;
 	}else{
 		if(x === 'left'){
-			Animator.animate(slidingRows, -cellWidth, self.options.duration);
+			Animator.animate(self.slidingRows, -cellWidth, self.options.duration);
 			self.pointer--;
 		}else{
 
 			if(typeof x === 'number'){
-				Animator.animate(slidingRows, x, 251);
+				Animator.animate(self.slidingRows, x, getReboundTime(x, self.options.reboundSpeed));
 			}else{
-				Animator.reset(slidingRows, self.options.duration);
+				Animator.resetRows(self.slidingRows, 200);
 				self.pointer = 0;
 			}
 			

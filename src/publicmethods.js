@@ -31,7 +31,8 @@ Tabella.prototype.defaults = {
 			arrowLeft : '\u2190',
 			arrowRight : '\u2192',
 			easing : 'easeInOutSine',
-			duration : 600
+			duration : 600,
+			reboundSpeed : 200
 		};
 
 Tabella.prototype.refreshSize = function(){
@@ -216,22 +217,22 @@ Tabella.prototype.move = function(x){
 
 	var self = this,
 		cellWidth = self.getCellWidth(self.currentBreakpoint),
-		numberOfPeriods = self.options.periods.length,
-		slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
+		numberOfPeriods = self.options.periods.length;
+		//slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
 
 	if(x === 'right'){
-		Animator.animate(slidingRows, cellWidth, self.options.duration);
+		Animator.animate(self.slidingRows, cellWidth, self.options.duration);
 		self.pointer++;
 	}else{
 		if(x === 'left'){
-			Animator.animate(slidingRows, -cellWidth, self.options.duration);
+			Animator.animate(self.slidingRows, -cellWidth, self.options.duration);
 			self.pointer--;
 		}else{
 
 			if(typeof x === 'number'){
-				Animator.animate(slidingRows, x, 251);
+				Animator.animate(self.slidingRows, x, getReboundTime(x, self.options.reboundSpeed));
 			}else{
-				Animator.reset(slidingRows, self.options.duration);
+				Animator.resetRows(self.slidingRows, 200);
 				self.pointer = 0;
 			}
 			
