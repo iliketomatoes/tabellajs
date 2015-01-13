@@ -78,15 +78,35 @@ a{
 h1,h2,h3,h4,h5,h6{
     font-family: $header-font-family;
     font-weight: bold;
+    color: inherit;
 }
 
-main{
+.common-home-rule{
     margin: 0 auto;
     max-width: 67.5em;
     padding-left: 0.875em;
     padding-right: 0.875em;
+    overflow: auto;
 }
 
+#main-header{
+     background-color: $primary-color;
+     color: #fff;
+}
+
+.header-content{
+    @extend .common-home-rule;
+}
+
+main{
+    @extend .common-home-rule;
+}
+
+.waikiki{
+    h1,h2{
+        color: $primary-color;
+    }
+}
 
 .table-h{
     margin: 0.2em 0; 

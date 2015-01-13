@@ -53,13 +53,22 @@ a {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Open Sans', sans-serif;
-  font-weight: bold; }
+  font-weight: bold;
+  color: inherit; }
 
-main {
+.common-home-rule, .header-content, main {
   margin: 0 auto;
   max-width: 67.5em;
   padding-left: 0.875em;
-  padding-right: 0.875em; }
+  padding-right: 0.875em;
+  overflow: auto; }
+
+#main-header {
+  background-color: #3F51B5;
+  color: #fff; }
+
+.waikiki h1, .waikiki h2 {
+  color: #3F51B5; }
 
 .table-h {
   margin: 0.2em 0; }

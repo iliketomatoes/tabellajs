@@ -66,7 +66,6 @@ Tabella.prototype.attachEvents = function(){
 
 						if(offset >= self.options.edgeTreshold + (currentCellWidth * self.pointer)){
 							legalPosition = false;
-							console.log('troppo a destraaa');
 						}
 					}else{
 						self.pointer = startingPointer + tick;
