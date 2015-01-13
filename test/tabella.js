@@ -806,7 +806,7 @@ Tabella.prototype.attachEvents = function(){
 			//Let's drag the sliding rows around
 			Animator.drag(self.slidingRows, (delta + parseInt(startingOffset)));
 
-			tick = Math.abs(Math.round(delta / currentCellWidth));
+			tick = Math.abs(Math.floor(delta / self.swipeTreshold));
 
 			//Swipe right
 			if(delta >= 0){ 
@@ -829,7 +829,6 @@ Tabella.prototype.attachEvents = function(){
 
 						if(offset >= self.options.edgeTreshold + (currentCellWidth * self.pointer)){
 							legalPosition = false;
-							console.log('troppo a destraaa');
 						}
 					}else{
 						self.pointer = startingPointer + tick;
@@ -846,7 +845,6 @@ Tabella.prototype.attachEvents = function(){
 		var offset = parseInt(Animator.offset(slidingPeriodRow));
 		self.resetDragging(parseInt(offset + self.pointer * currentCellWidth));
 		legalPosition = true;
-		
 		self.updateArrows();					
 	});
 };
@@ -894,7 +892,8 @@ Tabella.prototype.defaults = {
 			easing : 'easeInOutSine',
 			duration : 600,
 			reboundSpeed : 250,
-			edgeTreshold : 150
+			edgeTreshold : 150,
+			swipeTreshold : 80
 		};
 
 Tabella.prototype.refreshSize = function(){
