@@ -33,7 +33,8 @@ Tabella.prototype.defaults = {
 			easing : 'easeInOutSine',
 			duration : 600,
 			reboundSpeed : 250,
-			edgeTreshold : 150
+			edgeTreshold : 150,
+			swipeTreshold : 80
 		};
 
 Tabella.prototype.refreshSize = function(){
