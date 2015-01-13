@@ -32,7 +32,8 @@ Tabella.prototype.defaults = {
 			arrowRight : '\u2192',
 			easing : 'easeInOutSine',
 			duration : 600,
-			reboundSpeed : 200
+			reboundSpeed : 250,
+			edgeTreshold : 150
 		};
 
 Tabella.prototype.refreshSize = function(){

@@ -2,7 +2,6 @@ Tabella.prototype.attachEvents = function(){
 
 	var self = this;
 
-	//Animator = new Animator(options.easing);
 	Animator.easing = self.options.easing;
 
 	self.arrows.arrowLeft.addEventListener('click', function(){
@@ -19,13 +18,18 @@ Tabella.prototype.attachEvents = function(){
 		slidingPeriodRow = self.periodRow.querySelector('.t-sliding-row'),
 		legalPosition = true,
 		delta,
-		offsetMultiplier = 0;
+		currentCellWidth,
+		tick = 0,
+		startingPointer;
 
 	//setting the events listeners
 	setListener(slidingPeriodRow, Toucher.touchEvents.start, function(e){
 		e.preventDefault();
 		startingOffset = Animator.offset(slidingPeriodRow);
 		cachedPosition = Toucher.onTouchStart(e);
+		currentCellWidth = parseInt(self.currentCellWidth);
+		tick = 0;
+		startingPointer = self.pointer;
 	});
 
 	setListener(slidingPeriodRow, Toucher.touchEvents.move, function(e){
@@ -39,25 +43,34 @@ Tabella.prototype.attachEvents = function(){
 			//Let's drag the sliding rows around
 			Animator.drag(self.slidingRows, (delta + parseInt(startingOffset)));
 
+			tick = Math.abs(Math.round(delta / currentCellWidth));
+
 			//Swipe right
-			if(delta >= 0){
-				if(self.pointer === 0 && Math.abs(delta) >= 150){
-					legalPosition = false;
+			if(delta >= 0){ 
+
+				if(self.pointer === 0){                  
+
+					if(Math.abs(parseInt(Animator.offset(slidingPeriodRow))) >= self.options.edgeTreshold) legalPosition = false;
+					
+				}else{
+					self.pointer = startingPointer - tick;
 				}
+
 				//Swipe left	
 				}else{
 					
-					if(Math.abs(delta) >= (parseInt(self.currentCellWidth) + 150)){
-						legalPosition = false;
-						console.log('troppo a destraaa');
-						//if(self.pointer + 1 + self.currentBreakpoint.cellBreakpoint[1] + numberOfPeriods){
+					if(self.pointer === numberOfPeriods - self.currentBreakpoint.cellBreakpoint[1]){
+	
+						var offset = Math.abs(parseInt(Animator.offset(slidingPeriodRow)));
+						var slidingRowWidth = slidingPeriodRow.clientWidth;
 
-						//}
+						if(offset >= self.options.edgeTreshold + (currentCellWidth * self.pointer)){
+							legalPosition = false;
+							console.log('troppo a destraaa');
+						}
+					}else{
+						self.pointer = startingPointer + tick;
 					}
-					//if(self.pointer + self.currentBreakpoint.cellBreakpoint[1] + 1 >= numberOfPeriods){
-
-					//}
-					
 				}
 			cachedPosition = position;
 		}
@@ -67,20 +80,10 @@ Tabella.prototype.attachEvents = function(){
 		e.preventDefault();
 		Toucher.onTouchEnd();
 		startingOffset = 0;
-
-		if(legalPosition && Math.abs(delta) >= (self.currentCellWidth / 2)){
-			offsetMultiplier++;
-		}
-
-		//if(!legalPosition){
-			var offset = parseInt(Animator.offset(slidingPeriodRow));
-			self.resetDragging(parseInt(offset + offsetMultiplier * self.currentCellWidth));
-			legalPosition = true;
-			//}else{
-				//Animator.stopDragging();
-			//}
-
-					
+		var offset = parseInt(Animator.offset(slidingPeriodRow));
+		self.resetDragging(parseInt(offset + self.pointer * currentCellWidth));
+		legalPosition = true;
+		self.updateArrows();					
 	});
 };
 
