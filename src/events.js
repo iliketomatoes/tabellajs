@@ -43,7 +43,7 @@ Tabella.prototype.attachEvents = function(){
 			//Let's drag the sliding rows around
 			Animator.drag(self.slidingRows, (delta + parseInt(startingOffset)));
 
-			tick = Math.abs(Math.floor(delta / self.swipeTreshold));
+			tick = Math.abs(Math.floor(delta / self.options.swipeTreshold));
 
 			//Swipe right
 			if(delta >= 0){ 
