@@ -99,3 +99,22 @@
         return Array.prototype.slice.call(nodeList,0);
     }
 
+   function setListener(elm, events, callback) {
+      var eventsArray = events.split(' '),
+        i = eventsArray.length;
+
+      while (i--) {
+        elm.addEventListener(eventsArray[i], callback, false);
+      }
+    }
+
+    function invokeCallback(cb, cbContext){
+    var context = cbContext || null,
+      params = Array.prototype.slice.call(arguments, 2);
+      return cb.apply(context, params);
+  } 
+
+  function getReboundTime(space, speed){
+    return Math.round((Math.abs(space) / speed) * 1000);
+  }
+
