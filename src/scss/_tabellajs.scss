@@ -16,7 +16,7 @@
 
 /*
 ===========================
-Common rules
+MAIN RULES
 ===========================*/
 .t-row{
 	position: relative;
@@ -53,6 +53,7 @@ Common rules
 .t-sliding-row{
 	position: relative;
 	overflow: auto;
+	@extend .t-no-select;
 }
 
 .t-row-values{
@@ -110,6 +111,8 @@ Common rules
 	float: left;
 	display: inline-block;
 	text-align: left;
+	@extend .t-no-select;
+	cursor: default;
 }
 
 .t-cell-desc-s{
@@ -164,16 +167,34 @@ Common rules
 
 .t-arr-right{
 	@extend .t-arrow;
+	@extend .t-no-select;
 	right: 0;
 	margin-right: -0.4rem;
 }
 
 .t-arr-left{
 	@extend .t-arrow;
+	@extend .t-no-select;
 	left: 0;
 	margin-left: -0.4rem;
 }
 
 .t-bold{
 	font-weight: bold;
+}
+
+/*
+=====================
+ COMMON RULES
+=====================
+*/
+
+.t-no-select {
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+
+  /* No support for these yet, use at own risk */
+  -o-user-select: none;
+  user-select: none;          
 }

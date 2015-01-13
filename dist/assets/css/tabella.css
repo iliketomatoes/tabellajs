@@ -12,7 +12,7 @@
 
 /*
 ===========================
-Common rules
+MAIN RULES
 ===========================*/
 .t-row {
   position: relative;
@@ -90,7 +90,8 @@ Common rules
 .t-cell-value {
   float: left;
   display: inline-block;
-  text-align: left; }
+  text-align: left;
+  cursor: default; }
 
 .t-cell-desc-s {
   float: left;
@@ -147,3 +148,19 @@ Common rules
 
 .t-bold {
   font-weight: bold; }
+
+/*
+=====================
+ COMMON RULES
+=====================
+*/
+.t-no-select, .t-sliding-row, .t-cell-value, .t-arr-right, .t-arr-left {
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  /* No support for these yet, use at own risk */
+  -o-user-select: none;
+  user-select: none; }
