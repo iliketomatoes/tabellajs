@@ -69,6 +69,9 @@
 			self.points.currX = pointer.pageX;
 			self.points.currY = pointer.pageY;
 
+			//We just want horizontal movements
+			if(Math.abs(self.points.cachedY - self.points.currY) >= Math.abs(self.points.cachedX - self.points.currX)) return false;
+		
 			return self.points;
 		}
 	};
