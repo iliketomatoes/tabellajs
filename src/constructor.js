@@ -16,7 +16,6 @@
 		self.slidingRows = null;
 		self.arrows = null;
 		self.pointer = 0;
-		self.animator = null;
 		//An object that has to hold the cellBreakpoint and descBreakpoint
 		self.currentBreakpoint = {};
 		self.currentCellWidth = 0;

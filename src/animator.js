@@ -84,8 +84,6 @@
 
 				var delta = animationCurve(progress).toFixed(2);
 
-				//console.log(delta);
-
 				self.step(el, delta, startingOffset, targetOffset);
 
 				if (progress === 1){
@@ -178,7 +176,6 @@
 
 		stopDragging : function(){
 			var self = this;
-			//self.animated = true;
 			cancelAnimationFrame(self.dragged);
 			}	
 

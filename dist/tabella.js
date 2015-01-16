@@ -1,4 +1,4 @@
-/*! tabella - v0.0.1 - 2015-01-13
+/*! tabella - v0.0.1 - 2015-01-16
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2015 ; Licensed  */
 ;(function(tabella) {
@@ -127,8 +127,8 @@
       }
     }
 
-    function invokeCallback(cb, cbContext){
-    var context = cbContext || null,
+  function invokeCallback(cb, cbContext){
+    	var context = cbContext || null,
       params = Array.prototype.slice.call(arguments, 2);
       return cb.apply(context, params);
   } 
@@ -233,8 +233,6 @@
 
 				var delta = animationCurve(progress).toFixed(2);
 
-				//console.log(delta);
-
 				self.step(el, delta, startingOffset, targetOffset);
 
 				if (progress === 1){
@@ -327,7 +325,6 @@
 
 		stopDragging : function(){
 			var self = this;
-			//self.animated = true;
 			cancelAnimationFrame(self.dragged);
 			}	
 
@@ -691,7 +688,6 @@ var TabellaBuilder = {
 		self.slidingRows = null;
 		self.arrows = null;
 		self.pointer = 0;
-		self.animator = null;
 		//An object that has to hold the cellBreakpoint and descBreakpoint
 		self.currentBreakpoint = {};
 		self.currentCellWidth = 0;
@@ -808,6 +804,8 @@ Tabella.prototype.attachEvents = function(){
 
 			tick = Math.abs(Math.floor(delta / self.options.swipeTreshold));
 
+			if(self.options.swipeSingleTick && tick >= 1) tick = 1;
+
 			//Swipe right
 			if(delta >= 0){ 
 
@@ -858,43 +856,45 @@ Tabella.prototype.resetDragging = function(offset){
 
 
 Tabella.prototype.defaults = {
-			periods : null,
-			rows : null,
-			/**
-			* BREAKPOINTS : 
-			* 1st element in array is the row width, 
-			* the 2nd is the number of cells to be shown
-			* Default breakpoint is from [0,1], just one element is shown
-			*/
-			cellBreakpoints : {
-				default : [0,1],
-				small : [360,2],
-				medium : [640,3],
-				large : [820,4],
-				xlarge : [1080,5]
-			},
-			/**
-			* DESCRIPTION BREAKPOINTS : 
-			* 1st element in array is the row width, 
-			* the 2nd is the description cell width,
-			* Default breakpoint is from [0,0]
-			*/
-			descBreakpoints : {
-				default : [0,0],
-				medium : [460, 160],
-				large : [900, 200]
-			},
-			from : 'from',
-			to : 'to',
-			currency : '&euro;',
-			arrowLeft : '\u2190',
-			arrowRight : '\u2192',
-			easing : 'easeInOutSine',
-			duration : 600,
-			reboundSpeed : 250,
-			edgeTreshold : 150,
-			swipeTreshold : 80
-		};
+	periods : null,
+	rows : null,
+	/**
+	* BREAKPOINTS : 
+	* 1st element in array is the row width, 
+	* the 2nd is the number of cells to be shown
+	* Default breakpoint is from [0,1], just one element is shown
+	*/
+	cellBreakpoints : {
+		default : [0,1],
+		small : [360,2],
+		medium : [640,3],
+		large : [820,4],
+		xlarge : [1080,5]
+	},
+	/**
+	* DESCRIPTION BREAKPOINTS : 
+	* 1st element in array is the row width, 
+	* the 2nd is the description cell width,
+	* Default breakpoint is from [0,0]
+	*/
+	descBreakpoints : {
+		default : [0,0],
+		medium : [460, 160],
+		large : [900, 200]
+	},
+	from : 'from',
+	to : 'to',
+	currency : '&euro;',
+	arrowLeft : '\u2190',
+	arrowRight : '\u2192',
+	easing : 'easeInOutSine',
+	duration : 600,
+	reboundSpeed : 250,
+	edgeTreshold : 150,
+	swipeTreshold : 60,
+	swipeSingleTick : true,
+	onRefreshSize : false
+};
 
 Tabella.prototype.refreshSize = function(){
 	var self = this,
@@ -971,72 +971,76 @@ Tabella.prototype.refreshSize = function(){
 		}
 	}
 
+	if(typeof self.options.onRefreshSize === 'function'){
+		invokeCallback(self.options.onRefreshSize, self);
+	}
+
 };
 
 Tabella.prototype.getCellWidth = function(breakpoint){
-			var self = this,
-				numberOfCells = self.options.periods.length,
-				cellBreakpoint = breakpoint.cellBreakpoint,
-				descBreakpoint = breakpoint.descBreakpoint,
-				cellWidth;
+	var self = this,
+		numberOfCells = self.options.periods.length,
+		cellBreakpoint = breakpoint.cellBreakpoint,
+		descBreakpoint = breakpoint.descBreakpoint,
+		cellWidth;
 
-			if(cellBreakpoint[1] > numberOfCells ){
-				cellWidth = (self.el.clientWidth - descBreakpoint[1]) / numberOfCells;
-			}else{
-				cellWidth = (self.el.clientWidth - descBreakpoint[1]) / cellBreakpoint[1];
-			}
+	if(cellBreakpoint[1] > numberOfCells ){
+		cellWidth = (self.el.clientWidth - descBreakpoint[1]) / numberOfCells;
+	}else{
+		cellWidth = (self.el.clientWidth - descBreakpoint[1]) / cellBreakpoint[1];
+	}
 
-			return Math.round(cellWidth);
-		};
+	return Math.round(cellWidth);
+};
 
 Tabella.prototype.getBreakpoint = function(){
 
-			var self = this,
-				minWidth = 0,
-				containerWidth = self.el.clientWidth,
-				cellBreakpoints = self.options.cellBreakpoints,
-				descBreakpoints = self.options.descBreakpoints;
+	var self = this,
+		minWidth = 0,
+		containerWidth = self.el.clientWidth,
+		cellBreakpoints = self.options.cellBreakpoints,
+		descBreakpoints = self.options.descBreakpoints;
 
-			var cellBreakpoint = [0,1], 
-				descBreakpoint = [0,0];
+	var cellBreakpoint = [0,1], 
+		descBreakpoint = [0,0];
 
-			for(var cbp in cellBreakpoints){
+	for(var cbp in cellBreakpoints){
 
-				var cbpWidth = cellBreakpoints[cbp][0];
+		var cbpWidth = cellBreakpoints[cbp][0];
 
-				if(typeof cbpWidth === 'number' &&  cbpWidth > 0 && cbpWidth <= containerWidth){
+		if(typeof cbpWidth === 'number' &&  cbpWidth > 0 && cbpWidth <= containerWidth){
 
-					if(Math.abs(containerWidth - cbpWidth) < Math.abs(containerWidth - minWidth)){
-						minWidth = cbpWidth;
-						cellBreakpoint = cellBreakpoints[cbp];
-					}
-
-				}
-
+			if(Math.abs(containerWidth - cbpWidth) < Math.abs(containerWidth - minWidth)){
+				minWidth = cbpWidth;
+				cellBreakpoint = cellBreakpoints[cbp];
 			}
 
-			minWidth = 0;
+		}
 
-			for(var dbp in descBreakpoints){
+	}
 
-				var dbpWidth = descBreakpoints[dbp][0];
+	minWidth = 0;
 
-				if(typeof dbpWidth === 'number' &&  dbpWidth > 0 && dbpWidth <= containerWidth){
+	for(var dbp in descBreakpoints){
 
-					if(Math.abs(containerWidth - dbpWidth) < Math.abs(containerWidth - minWidth)){
-						minWidth = dbpWidth;
-						descBreakpoint = descBreakpoints[dbp];
-					}
+		var dbpWidth = descBreakpoints[dbp][0];
 
-				}
+		if(typeof dbpWidth === 'number' &&  dbpWidth > 0 && dbpWidth <= containerWidth){
 
+			if(Math.abs(containerWidth - dbpWidth) < Math.abs(containerWidth - minWidth)){
+				minWidth = dbpWidth;
+				descBreakpoint = descBreakpoints[dbp];
 			}
 
-			return {
-					cellBreakpoint : cellBreakpoint,
-					descBreakpoint : descBreakpoint
-					};
-		};
+		}
+
+	}
+
+	return {
+			cellBreakpoint : cellBreakpoint,
+			descBreakpoint : descBreakpoint
+			};
+};
 
 Tabella.prototype.refreshArrowPosition = function(descriptionWidth){
 
@@ -1101,6 +1105,15 @@ Tabella.prototype.move = function(x){
 	}
 
 	self.updateArrows();
+};
+
+
+Tabella.prototype.setSingleTick = function(trueOrFalse){
+	this.options.swipeSingleTick = !!trueOrFalse;
+};
+
+Tabella.prototype.getCurrentBreakPoint = function(){
+	return this.currentBreakpoint;
 };
 
 

@@ -45,6 +45,8 @@ Tabella.prototype.attachEvents = function(){
 
 			tick = Math.abs(Math.floor(delta / self.options.swipeTreshold));
 
+			if(self.options.swipeSingleTick && tick >= 1) tick = 1;
+
 			//Swipe right
 			if(delta >= 0){ 
 
