@@ -785,7 +785,7 @@ Tabella.prototype.attachEvents = function(){
 
 		//setting the events listeners
 		setListener(el, Toucher.touchEvents.start, function(e){
-			e.preventDefault();
+			//e.preventDefault();
 			startingOffset = Animator.offset(slidingPeriodRow);
 			cachedPosition = Toucher.onTouchStart(e);
 			currentCellWidth = parseInt(self.currentCellWidth);
@@ -794,7 +794,7 @@ Tabella.prototype.attachEvents = function(){
 		});
 
 		setListener(el, Toucher.touchEvents.move, function(e){
-			e.preventDefault();
+			//e.preventDefault();
 			position = Toucher.onTouchMove(e);
 			
 			if(position && legalPosition){
@@ -838,8 +838,8 @@ Tabella.prototype.attachEvents = function(){
 			}
 		});
 
-		setListener(el, Toucher.touchEvents.end, function(e){
-			e.preventDefault();
+		setListener(el, Toucher.touchEvents.end, function(){
+			//e.preventDefault();
 			Toucher.onTouchEnd();
 			startingOffset = 0;
 			var offset = parseInt(Animator.offset(slidingPeriodRow));

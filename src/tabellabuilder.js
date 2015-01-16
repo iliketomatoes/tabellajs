@@ -221,9 +221,9 @@ SCHEMA:
 
 			var self = this;
 
-			var arrowRight = createHTMLEl('button','t-arr-right t-hide', periodRow, self.options.arrowRight);
+			var arrowRight = createHTMLEl('div','t-arr-right t-hide', periodRow, self.options.arrowRight);
 
-			var arrowLeft = createHTMLEl('button','t-arr-left t-hide', periodRow, self.options.arrowLeft);
+			var arrowLeft = createHTMLEl('div','t-arr-left t-hide', periodRow, self.options.arrowLeft);
 			
 			return {
 				arrowRight : arrowRight,

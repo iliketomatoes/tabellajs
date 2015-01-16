@@ -128,6 +128,7 @@ MAIN RULES
   background-color: #FF4081;
   color: #fff;
   cursor: pointer;
+  outline: none;
   -webkit-box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.75);
   -moz-box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.75);
   box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.75);

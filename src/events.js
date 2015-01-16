@@ -79,7 +79,7 @@ Tabella.prototype.attachEvents = function(){
 			}
 		});
 
-		setListener(el, Toucher.touchEvents.end, function(e){
+		setListener(el, Toucher.touchEvents.end, function(){
 			//e.preventDefault();
 			Toucher.onTouchEnd();
 			startingOffset = 0;
