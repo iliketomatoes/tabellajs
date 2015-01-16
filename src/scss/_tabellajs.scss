@@ -155,6 +155,7 @@ MAIN RULES
 	background-color: $accent-color;
 	color: #fff;
 	cursor: pointer;
+	outline: none;
 	@include box-shadow;
 	@include single-transition;
 
