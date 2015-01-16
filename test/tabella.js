@@ -781,70 +781,75 @@ Tabella.prototype.attachEvents = function(){
 		tick = 0,
 		startingPointer;
 
-	//setting the events listeners
-	setListener(slidingPeriodRow, Toucher.touchEvents.start, function(e){
-		e.preventDefault();
-		startingOffset = Animator.offset(slidingPeriodRow);
-		cachedPosition = Toucher.onTouchStart(e);
-		currentCellWidth = parseInt(self.currentCellWidth);
-		tick = 0;
-		startingPointer = self.pointer;
-	});
+	self.slidingRows.forEach(function(el){
 
-	setListener(slidingPeriodRow, Toucher.touchEvents.move, function(e){
-		e.preventDefault();
-		position = Toucher.onTouchMove(e);
-		
-		if(position && legalPosition){
+		//setting the events listeners
+		setListener(el, Toucher.touchEvents.start, function(e){
+			e.preventDefault();
+			startingOffset = Animator.offset(slidingPeriodRow);
+			cachedPosition = Toucher.onTouchStart(e);
+			currentCellWidth = parseInt(self.currentCellWidth);
+			tick = 0;
+			startingPointer = self.pointer;
+		});
 
-			delta = position.currX - cachedPosition.cachedX;
+		setListener(el, Toucher.touchEvents.move, function(e){
+			e.preventDefault();
+			position = Toucher.onTouchMove(e);
+			
+			if(position && legalPosition){
 
-			//Let's drag the sliding rows around
-			Animator.drag(self.slidingRows, (delta + parseInt(startingOffset)));
+				delta = position.currX - cachedPosition.cachedX;
 
-			tick = Math.abs(Math.floor(delta / self.options.swipeTreshold));
+				//Let's drag the sliding rows around
+				Animator.drag(self.slidingRows, (delta + parseInt(startingOffset)));
 
-			if(self.options.swipeSingleTick && tick >= 1) tick = 1;
+				tick = Math.abs(Math.floor(delta / self.options.swipeTreshold));
 
-			//Swipe right
-			if(delta >= 0){ 
+				if(self.options.swipeSingleTick && tick >= 1) tick = 1;
 
-				if(self.pointer === 0){                  
+				//Swipe right
+				if(delta >= 0){ 
 
-					if(Math.abs(parseInt(Animator.offset(slidingPeriodRow))) >= self.options.edgeTreshold) legalPosition = false;
-					
-				}else{
-					self.pointer = startingPointer - tick;
-				}
+					if(self.pointer === 0){                  
 
-				//Swipe left	
-				}else{
-					
-					if(self.pointer === numberOfPeriods - self.currentBreakpoint.cellBreakpoint[1]){
-	
-						var offset = Math.abs(parseInt(Animator.offset(slidingPeriodRow)));
-						var slidingRowWidth = slidingPeriodRow.clientWidth;
-
-						if(offset >= self.options.edgeTreshold + (currentCellWidth * self.pointer)){
-							legalPosition = false;
-						}
+						if(Math.abs(parseInt(Animator.offset(slidingPeriodRow))) >= self.options.edgeTreshold) legalPosition = false;
+						
 					}else{
-						self.pointer = startingPointer + tick;
+						self.pointer = startingPointer - tick;
 					}
-				}
-			cachedPosition = position;
-		}
-	});
 
-	setListener(slidingPeriodRow, Toucher.touchEvents.end, function(e){
-		e.preventDefault();
-		Toucher.onTouchEnd();
-		startingOffset = 0;
-		var offset = parseInt(Animator.offset(slidingPeriodRow));
-		self.resetDragging(parseInt(offset + self.pointer * currentCellWidth));
-		legalPosition = true;
-		self.updateArrows();					
-	});
+					//Swipe left	
+					}else{
+						
+						if(self.pointer === numberOfPeriods - self.currentBreakpoint.cellBreakpoint[1]){
+		
+							var offset = Math.abs(parseInt(Animator.offset(slidingPeriodRow)));
+							var slidingRowWidth = slidingPeriodRow.clientWidth;
+
+							if(offset >= self.options.edgeTreshold + (currentCellWidth * self.pointer)){
+								legalPosition = false;
+							}
+						}else{
+							self.pointer = startingPointer + tick;
+						}
+					}
+				cachedPosition = position;
+			}
+		});
+
+		setListener(el, Toucher.touchEvents.end, function(e){
+			e.preventDefault();
+			Toucher.onTouchEnd();
+			startingOffset = 0;
+			var offset = parseInt(Animator.offset(slidingPeriodRow));
+			self.resetDragging(parseInt(offset + self.pointer * currentCellWidth));
+			legalPosition = true;
+			self.updateArrows();					
+		});
+
+	});	
+
 };
 
 
@@ -889,7 +894,7 @@ Tabella.prototype.defaults = {
 	arrowRight : '\u2192',
 	easing : 'easeInOutSine',
 	duration : 600,
-	reboundSpeed : 250,
+	reboundSpeed : 300,
 	edgeTreshold : 150,
 	swipeTreshold : 60,
 	swipeSingleTick : true,

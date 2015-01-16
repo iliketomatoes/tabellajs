@@ -32,7 +32,7 @@ Tabella.prototype.defaults = {
 	arrowRight : '\u2192',
 	easing : 'easeInOutSine',
 	duration : 600,
-	reboundSpeed : 250,
+	reboundSpeed : 300,
 	edgeTreshold : 150,
 	swipeTreshold : 60,
 	swipeSingleTick : true,
