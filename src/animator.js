@@ -31,11 +31,6 @@
 
 	var lastTime = 0;
 
-	var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-		window.webkitRequestAnimationFrame || window.oRequestAnimationFrame;
-
-	var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
-
 	//rAF polyfill
 	if (!window.requestAnimationFrame)
         window.requestAnimationFrame = function(callback) {
@@ -51,6 +46,11 @@
         window.cancelAnimationFrame = function(id) {
             clearTimeout(id);
         };
+
+    var requestAnimationFrame =  window.mozRequestAnimationFrame ||
+		window.webkitRequestAnimationFrame || window.oRequestAnimationFrame || window.requestAnimationFrame; 
+		
+	var cancelAnimationFrame = window.mozCancelAnimationFrame || window.cancelAnimationFrame;	   
 
 	var Animator = {
 		easeing : 'easeInOutSine',
