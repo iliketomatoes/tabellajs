@@ -2,7 +2,7 @@ tabellajs
 =========
 
 
-This is a pure javascript pricing table, responsive, AMD ready.
+This is a pure javascript pricing table, responsive, AMD ready, touch enabled.
 
 ##INSTALL
 
@@ -27,13 +27,13 @@ Include the script into your page:
 
 Add the markup for your div meant to hold the table:
 <pre lang="html">
-&lt;div id="example" class="tabella-ctr"&gt;&lt;/div&gt;    	
+&lt;div id="example" class="tabella-ctr"&gt;&lt;/div&gt;        
 </pre> 
 
 
 Then activate the plugin: 
 <pre lang="javascript">
-	!(function(){
+    !(function(){
 
         var myTabella = new Tabella(
             document.getElementById('example'),
@@ -63,7 +63,7 @@ Then activate the plugin:
                     } 
                         
                 ]
-        	});
+            });
     })();
 </pre>
 
@@ -82,8 +82,8 @@ i.e. *desc* and *pricesDesc* are optional properties for the row.
 Since it doesn't have dependencies,if you are using Requirejs just write something like this:
 <pre lang="javascript">
 require(['tabella'], function(tabella){
-	//Put here the same thing as shown above
-})		
+    //Put here the same thing as shown above
+})      
 </pre> 
 
 ##OPTIONS
@@ -93,16 +93,22 @@ Available options:
 | Property         | Description                                                      | Type        | DEFAULT |
 | ---------------- |----------------------------------------------------------------  | ----------- | ------- |
 | cellBreakpoints | Here we declare the row breakpoints (referred to the table container's width). It is a literal object which contains an arbitrary number of properties. Each property must hold a 2 element-long array; the first element is the table container *min-width* expressed in px, the second element stands for the number of cells to be shown in each row | Object  |  { default : [0,1], small : [360,2], medium : [640,3], large : [820,4], xlarge : [1080,5]}  |
-| descBreakpoints | Here we declare the description-cell breakpoints (the cells on the left of the table which contains the row description). It is a literal object which contains an arbitrary number of properties. Each property must hold a 2 element-long array; the first element is the table container *min-width* expressed in px, the **second element is the description cell width expressed in px**. | Object  | { default : [0,0], medium : [460, 160], large: [900, 200] } |	
-| from  | Content shown in the period start row. |  String  |	'from' |
-| to  | Content shown in the period end row. |  String  |	'end' |	
+| descBreakpoints | Here we declare the description-cell breakpoints (the cells on the left of the table which contains the row description). It is a literal object which contains an arbitrary number of properties. Each property must hold a 2 element-long array; the first element is the table container *min-width* expressed in px, the **second element is the description cell width expressed in px**. | Object  | { default : [0,0], medium : [460, 160], large: [900, 200] } |    
+| from  | Content shown in the period start row. |  String  |   'from' |
+| to  | Content shown in the period end row. |  String  |   'to' |  
 | currency  | The currency shown in each cell. |  String | '&euro;' |
 | arrowLeft | HTML content to put inside the left arrow's container. | String | '\u2190' |
 | arrowRight | HTML content to put inside the right arrow's container. | String | '\u2192' |
-| duration | The duration of the sliding animation. Expressed in milliseconds.  | Number | 600	|
-| easing | The easing of the animation. You can pick among 24 pre-set easings. | String | 'easeInOutSine' |			
+| duration | The duration of the sliding animation. Expressed in milliseconds.  | Number | 600  |
+| easing | The easing of the animation. You can pick among 24 pre-set easings. | String | 'easeInOutSine' |
+| reboundSpeed | The speed of the animation once "touch end" event is fired, after you stopped swiping a table row. Expressed in px/seconds. | Number | 300 |
+| edgeTreshold | The amount of pixels you can swipe over the boundaries of the row. | Number | 150 |
+| swipeTreshold | The amount of pixels needed to fire the swipe event. | Number | 60 |
+| swipeSingleTick | Whether to swipe by a single-cell-length per time or not. If set to false, it'll swipe by a number of cells equal to the result given by this function: Math.abs(Math.floor(delta / swipeTreshold)) | Boolean | true |
+| onRefreshSize | A callback to invoke when the browser window has been resized. | Function | false |
 
- 	
+
+    
 
 ###List of predefined easings
 1. easeInSine
@@ -132,29 +138,54 @@ Available options:
 
 ##API
 <pre lang="javascript">
-	var example = new Tabella( document.getElementById('your-tabella'), 
-				{ 
-					//Whatever options 
-				});
+    var table = new Tabella( document.getElementById('your-tabella'), 
+                { 
+                    //Whatever options 
+                });
 
-	/**
-	* Goes to the next cell.
-	* @param {String}
-	*/			
-	example.move('right');
+    /**
+    * Goes to the next cell.
+    * @param {String}
+    */          
+    table.move('right');
 
-	/**
-	* Goes to the previous cell.
-	* @param {String}
-	*/			
-	example.move('left');
+    /**
+    * Goes to the previous cell.
+    * @param {String}
+    */          
+    table.move('left');
 
-	/**
-	* Size reflow.
-	*/			
-	example.refreshSize();
+    /**
+    * Move all the rows by the passed parameter amount.
+    * @param {Number}
+    */          
+    table.move(x);
 
-</pre>	
+    /**
+    * Reflow the table size.
+    */          
+    table.refreshSize();
+
+    /**
+    * @return {Number} The current width of each cell
+    */          
+    table.getCellWidth();
+
+    /**
+    * @return {Object} The current breakpoint. The first element of this object
+    * is the array picked from the options.cellBreakpoints which fits into the 
+    * current media query. The second element is another array picked among the 
+    * options.descBreakpoints, which is fit for the current media query as well.
+    */          
+    table.getCurrentBreakPoint();
+
+    /**
+    * Set single tick.
+    * @param {Boolean} Set table.options.swipeSingleTick to true or false. See the options * documentation.
+    */          
+    table.setSingleTick(trueOrFalse);    
+
+</pre>  
 
 ##BROWSER SUPPORT
 
@@ -162,7 +193,6 @@ Not tested yet, but working on all modern browser, IE9+.
 
 ##ROADMAP
 + Better API
-+ Better touch events
 + Better Tests
 
 ##LICENSE
