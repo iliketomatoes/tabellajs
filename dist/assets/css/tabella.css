@@ -44,7 +44,10 @@ MAIN RULES
 
 .t-sliding-row {
   position: relative;
-  overflow: auto; }
+  overflow: auto;
+  -webkit-backface-visibility: hidden;
+  /* Chrome, Safari, Opera */
+  backface-visibility: hidden; }
 
 .t-row-values {
   float: left;
