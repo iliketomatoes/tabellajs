@@ -97,8 +97,6 @@ Available options:
 | from  | Content shown in the period start row. |  String  |   'from' |
 | to  | Content shown in the period end row. |  String  |   'to' |  
 | currency  | The currency shown in each cell. |  String | '&euro;' |
-| arrowLeft | HTML content to put inside the left arrow's container. | String | '\u2190' |
-| arrowRight | HTML content to put inside the right arrow's container. | String | '\u2192' |
 | duration | The duration of the sliding animation. Expressed in milliseconds.  | Number | 600  |
 | easing | The easing of the animation. You can pick among 24 pre-set easings. | String | 'easeInOutSine' |
 | reboundSpeed | The speed of the animation once "touch end" event is fired, after you stopped swiping a table row. Expressed in px/seconds. | Number | 300 |

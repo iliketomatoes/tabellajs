@@ -28,8 +28,6 @@ Tabella.prototype.defaults = {
 	from : 'from',
 	to : 'to',
 	currency : '&euro;',
-	arrowLeft : '\u2190',
-	arrowRight : '\u2192',
 	easing : 'easeInOutSine',
 	duration : 600,
 	reboundSpeed : 300,

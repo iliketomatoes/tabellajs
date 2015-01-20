@@ -54,8 +54,9 @@ MAIN RULES
 	position: relative;
 	overflow: auto;
 	@extend .t-no-select;
-	-webkit-backface-visibility: hidden; /* Chrome, Safari, Opera */
+	-webkit-backface-visibility: hidden; 
    	backface-visibility: hidden;
+
 }
 
 .t-row-values{
@@ -165,6 +166,8 @@ MAIN RULES
 		@include box-shadow(none);
 		margin-top: 0.28rem;
 	}
+
+	
 }
 
 
@@ -173,6 +176,12 @@ MAIN RULES
 	@extend .t-no-select;
 	right: 0;
 	margin-right: -0.4rem;
+	svg{
+		position: relative;
+		width: 60%;
+		height: 60%;
+		top: 10%;
+	}
 }
 
 .t-arr-left{
@@ -180,6 +189,16 @@ MAIN RULES
 	@extend .t-no-select;
 	left: 0;
 	margin-left: -0.4rem;
+	svg{
+		position: relative;
+		width: 60%;
+		height: 60%;
+		top: 10%;
+	}
+}
+
+.t-svg-arrow{
+	fill: #fff;
 }
 
 .t-bold{

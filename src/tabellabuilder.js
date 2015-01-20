@@ -220,16 +220,44 @@ SCHEMA:
 		setUpArrows : function(periodRow){
 
 			var self = this;
+			// create svg
+			var svgURI = 'http://www.w3.org/2000/svg';
+			var svgLeft = document.createElementNS( svgURI, 'svg' );
+			// SVG attributes, like viewBox, are camelCased. That threw me for a loop
+			svgLeft.setAttribute( 'viewBox', '0 0 100 100' );
+			// create arrow
+			var pathLeft = document.createElementNS( svgURI, 'path' );
+			pathLeft.setAttribute( 'd', 'M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z' );
+			pathLeft.setAttribute( 'transform', 'translate(15,0)' );
+			// add class so it can be styled with CSS
+			pathLeft.setAttribute( 'class', 't-svg-arrow' );
+			svgLeft.appendChild( pathLeft );
+			// add svg to page
+			var svgRight = document.createElementNS( svgURI, 'svg' );
+			// SVG attributes, like viewBox, are camelCased. That threw me for a loop
+			svgRight.setAttribute( 'viewBox', '0 0 100 100' );
+			// create arrow
+			var pathRight = document.createElementNS( svgURI, 'path' );
+			pathRight.setAttribute( 'd', 'M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z' );
+			// add class so it can be styled with CSS
+			pathRight.setAttribute( 'class', 't-svg-arrow' );
+			pathRight.setAttribute( 'transform', 'translate(85,100) rotate(180)' );
+			svgRight.appendChild( pathRight );
 
-			var arrowRight = createHTMLEl('div','t-arr-right t-hide', periodRow, self.options.arrowRight);
+			var arrowRight = createHTMLEl('div','t-arr-right t-hide', periodRow);
 
-			var arrowLeft = createHTMLEl('div','t-arr-left t-hide', periodRow, self.options.arrowLeft);
+			var arrowLeft = createHTMLEl('div','t-arr-left t-hide', periodRow);
+
+			arrowRight.appendChild(svgRight);
+
+			arrowLeft.appendChild(svgLeft);
 			
 			return {
 				arrowRight : arrowRight,
 
 				arrowLeft : arrowLeft
 			};
+
 		}
 
 	};
