@@ -45,7 +45,7 @@ Tabella.prototype.attachEvents = function(){
 				//Let's drag the sliding rows around
 				Animator.drag(self.slidingRows, (delta + parseInt(startingOffset)));
 
-				tick = Math.abs(Math.floor(delta / self.options.swipeTreshold));
+				tick = Math.abs(Math.floor(delta / self.options.swipeThreshold));
 
 				if(self.options.swipeSingleTick && tick >= 1) tick = 1;
 
@@ -54,7 +54,7 @@ Tabella.prototype.attachEvents = function(){
 
 					if(self.pointer === 0){                  
 
-						if(Math.abs(parseInt(Animator.offset(slidingPeriodRow))) >= self.options.edgeTreshold) legalPosition = false;
+						if(Math.abs(parseInt(Animator.offset(slidingPeriodRow))) >= self.options.edgeThreshold) legalPosition = false;
 						
 					}else{
 						self.pointer = startingPointer - tick;
@@ -68,7 +68,7 @@ Tabella.prototype.attachEvents = function(){
 							var offset = Math.abs(parseInt(Animator.offset(slidingPeriodRow)));
 							var slidingRowWidth = slidingPeriodRow.clientWidth;
 
-							if(offset >= self.options.edgeTreshold + (currentCellWidth * self.pointer)){
+							if(offset >= self.options.edgeThreshold + (currentCellWidth * self.pointer)){
 								legalPosition = false;
 							}
 						}else{

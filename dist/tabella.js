@@ -1,4 +1,4 @@
-/*! tabella - v0.1.0 - 2015-01-20
+/*! tabella - v0.1.0 - 2015-02-03
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2015 ; Licensed  */
 ;(function(tabella) {
@@ -835,7 +835,7 @@ Tabella.prototype.attachEvents = function(){
 				//Let's drag the sliding rows around
 				Animator.drag(self.slidingRows, (delta + parseInt(startingOffset)));
 
-				tick = Math.abs(Math.floor(delta / self.options.swipeTreshold));
+				tick = Math.abs(Math.floor(delta / self.options.swipeThreshold));
 
 				if(self.options.swipeSingleTick && tick >= 1) tick = 1;
 
@@ -844,7 +844,7 @@ Tabella.prototype.attachEvents = function(){
 
 					if(self.pointer === 0){                  
 
-						if(Math.abs(parseInt(Animator.offset(slidingPeriodRow))) >= self.options.edgeTreshold) legalPosition = false;
+						if(Math.abs(parseInt(Animator.offset(slidingPeriodRow))) >= self.options.edgeThreshold) legalPosition = false;
 						
 					}else{
 						self.pointer = startingPointer - tick;
@@ -858,7 +858,7 @@ Tabella.prototype.attachEvents = function(){
 							var offset = Math.abs(parseInt(Animator.offset(slidingPeriodRow)));
 							var slidingRowWidth = slidingPeriodRow.clientWidth;
 
-							if(offset >= self.options.edgeTreshold + (currentCellWidth * self.pointer)){
+							if(offset >= self.options.edgeThreshold + (currentCellWidth * self.pointer)){
 								legalPosition = false;
 							}
 						}else{
@@ -921,13 +921,11 @@ Tabella.prototype.defaults = {
 	from : 'from',
 	to : 'to',
 	currency : '&euro;',
-	arrowLeft : '\u2190',
-	arrowRight : '\u2192',
 	easing : 'easeInOutSine',
 	duration : 600,
 	reboundSpeed : 300,
-	edgeTreshold : 150,
-	swipeTreshold : 60,
+	edgeThreshold : 150,
+	swipeThreshold : 60,
 	swipeSingleTick : true,
 	onRefreshSize : false
 };

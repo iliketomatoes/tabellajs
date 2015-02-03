@@ -31,8 +31,8 @@ Tabella.prototype.defaults = {
 	easing : 'easeInOutSine',
 	duration : 600,
 	reboundSpeed : 300,
-	edgeTreshold : 150,
-	swipeTreshold : 60,
+	edgeThreshold : 150,
+	swipeThreshold : 60,
 	swipeSingleTick : true,
 	onRefreshSize : false
 };

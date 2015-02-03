@@ -100,9 +100,9 @@ Available options:
 | duration | The duration of the sliding animation. Expressed in milliseconds.  | Number | 600  |
 | easing | The easing of the animation. You can pick among 24 pre-set easings. | String | 'easeInOutSine' |
 | reboundSpeed | The speed of the animation once "touch end" event is fired, after you stopped swiping a table row. Expressed in px/seconds. | Number | 300 |
-| edgeTreshold | The amount of pixels you can swipe over the boundaries of the row. | Number | 150 |
-| swipeTreshold | The amount of pixels needed to fire the swipe event. | Number | 60 |
-| swipeSingleTick | Whether to swipe by a single-cell-length per time or not. If set to false, it'll swipe by a number of cells equal to the result given by this function: Math.abs(Math.floor(delta / swipeTreshold)) | Boolean | true |
+| edgeThreshold | The amount of pixels you can swipe over the boundaries of the row. | Number | 150 |
+| swipeThreshold | The amount of pixels needed to fire the swipe event. | Number | 60 |
+| swipeSingleTick | Whether to swipe by a single-cell-length per time or not. If set to false, it'll swipe by a number of cells equal to the result given by this function: Math.abs(Math.floor(delta / swipeThreshold)) | Boolean | true |
 | onRefreshSize | A callback to invoke when the browser window has been resized. | Function | false |
 
 
