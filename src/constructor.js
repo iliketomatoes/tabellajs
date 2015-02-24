@@ -61,12 +61,15 @@
 					self.refreshSize();
 				};
 
-				window.addEventListener('load', debounce(firstSet, 50));
+				if (typeof define === 'function' && define.amd){
+					debounce(firstSet, 50);
+				}else{
+					window.addEventListener('load', debounce(firstSet, 50));
+				}
 
 				window.addEventListener('resize', debounce(self.refreshSize, 250));
 
 				self.attachEvents();
-				//attachEvents(context, el, self.options);
 
 			}else{
 				throw new TabellaException('There is a mismatch between periods and prices cells');

@@ -1,4 +1,4 @@
-/*! tabella - v0.1.0 - 2015-02-03
+/*! tabella - v0.1.0 - 2015-02-24
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2015 ; Licensed  */
 ;(function(tabella) {
@@ -614,12 +614,8 @@ var TabellaBuilder = {
 										//Cell description
 										if(!!rows[i].pricesDesc[j]){
 											cellHTML += '<div class="t-cell-desc-s">';
-											if(!!rows[i].pricesDesc[j][k]){
-												cellHTML += rows[i].pricesDesc[j][k];
-											}else{
-												if(!!rows[i].pricesDesc[j][0])
-													cellHTML += rows[i].pricesDesc[j][0];
-											}
+										
+											cellHTML += rows[i].pricesDesc[j];
 											
 											cellHTML += '</div>';
 										}	
@@ -764,12 +760,15 @@ var TabellaBuilder = {
 					self.refreshSize();
 				};
 
-				window.addEventListener('load', debounce(firstSet, 50));
+				if (typeof define === 'function' && define.amd){
+					debounce(firstSet, 50);
+				}else{
+					window.addEventListener('load', debounce(firstSet, 50));
+				}
 
 				window.addEventListener('resize', debounce(self.refreshSize, 250));
 
 				self.attachEvents();
-				//attachEvents(context, el, self.options);
 
 			}else{
 				throw new TabellaException('There is a mismatch between periods and prices cells');

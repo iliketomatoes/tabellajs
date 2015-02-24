@@ -49,17 +49,17 @@ Then activate the plugin:
                     {
                         desc: '<h2 class="table-h"><a href="#">Single bed room</a></h2>',
                         prices: [[190 , 210, 210, 204, 180],[190 , 210, 210, 204, 180]],
-                        pricesDesc : [['1 persona'], ['2 persone']]
+                        pricesDesc : ['1 persona', '2 persone']
                     },
                     {
                         desc: '<h2 class="table-h"><a href="#">Double bed room</a></h2>',
                         prices: [[190 , 210, 210, 204, 180]],
-                        pricesDesc : [['1 persona']]
+                        pricesDesc : ['1 persona']
                     },
                     {
                         desc: '<h2 class="table-h"><a href="#">Suite</a></h2>',
                         prices: [[190 , 210, 210, 204, 180]],
-                        pricesDesc : [['1 persona']]
+                        pricesDesc : ['1 persona']
                     } 
                         
                 ]

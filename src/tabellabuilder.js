@@ -175,12 +175,8 @@ SCHEMA:
 										//Cell description
 										if(!!rows[i].pricesDesc[j]){
 											cellHTML += '<div class="t-cell-desc-s">';
-											if(!!rows[i].pricesDesc[j][k]){
-												cellHTML += rows[i].pricesDesc[j][k];
-											}else{
-												if(!!rows[i].pricesDesc[j][0])
-													cellHTML += rows[i].pricesDesc[j][0];
-											}
+										
+											cellHTML += rows[i].pricesDesc[j];
 											
 											cellHTML += '</div>';
 										}	
