@@ -761,7 +761,7 @@ var TabellaBuilder = {
 				};
 
 				if (typeof define === 'function' && define.amd){
-					debounce(firstSet, 50);
+					firstSet();
 				}else{
 					window.addEventListener('load', debounce(firstSet, 50));
 				}
