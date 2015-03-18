@@ -13,7 +13,7 @@ SCHEMA:
 | | | .t-row-content-wrapper  /// Overflow : hidden                                       | | |
 | | | *---------------------------------------------------------------------------------* | | |
 | | | | .t-row-content                                                                  | | | |
-| | | | *------------------------* *--------------------------------------------------* | | | |								     *----------------------------------------------* | | | |
+| | | | *------------------------* *--------------------------------------------------* | | | |	
 | | | | | .t-row-desc            | | .t-row-values                                    | | | | | 
 | | | | | *--------------------* | | *----------------------------------------------* | | | | |
 | | | |	| | .t-element	       | | | |  .t-sliding-row   <<<<<< SLIDING PART >>>>>> | | | | | | 
@@ -36,16 +36,12 @@ SCHEMA:
 */
 
 	var TabellaBuilder = {
-		
-		options : null,
 
-		el : null,
-
-		setUpPeriods : function(){
+		setUpPeriods : function(el, options){
 
 			var self = this;
 			
-			var periods = self.options.periods;
+			var periods = options.periods;
 
 			var docfrag = document.createDocumentFragment();
 
@@ -61,9 +57,9 @@ SCHEMA:
 				
 				var tRowDescHTML = '<div class="t-element">';
 					tRowDescHTML +='<div class="t-cell-desc-l">';
-					tRowDescHTML += self.options.from;
+					tRowDescHTML += options.from;
 					tRowDescHTML += '<br>';
-					tRowDescHTML += self.options.to;
+					tRowDescHTML += options.to;
 					tRowDescHTML += '</div>';
 					tRowDescHTML += '</div>';  
 
@@ -80,10 +76,10 @@ SCHEMA:
 
 					//From - to Div	
 					var periodHTML = '<div class="t-cell-desc-s">';
-						periodHTML += self.options.from;
+						periodHTML += options.from;
 					if(typeof periods[i][1] !== 'undefined'){	
 						periodHTML += '<br>';
-						periodHTML += self.options.to;
+						periodHTML += options.to;
 					}	
 						periodHTML += '</div>'; 	
 
@@ -102,7 +98,7 @@ SCHEMA:
 
 				}
 
-				self.el.appendChild(docfrag);
+				el.appendChild(docfrag);
 
 				return tRow;
 
@@ -111,11 +107,11 @@ SCHEMA:
 			}
 		},
 
-		setUpRows : function (){
+		setUpRows : function (el, options){
 
 			var self = this,
-				periods = self.options.periods,
-				rows = self.options.rows,
+				periods = options.periods,
+				rows = options.rows,
 				numberOfPeriods = periods.length,
 				numberOfRows = rows.length;
 
@@ -184,7 +180,7 @@ SCHEMA:
 										//Item current price
 										cellHTML += '<div class="t-cell-value">';
 										cellHTML += typeof  rows[i].prices[j][k] !== 'undefined' ?  rows[i].prices[j][k] : 'not set';
-										cellHTML += ' ' + self.options.currency;
+										cellHTML += ' ' + options.currency;
 										cellHTML+= '</div>'; 
 
 
@@ -201,7 +197,7 @@ SCHEMA:
 						}
 					}
 
-				self.el.appendChild(docfrag);	
+				el.appendChild(docfrag);	
 
 				return matchingPeriodCells;	
 

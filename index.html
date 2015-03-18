@@ -29,6 +29,10 @@
                 <h3>Click on the arrows or swipe the blue rows.</h3>
                 <div id="tabella" class="tabella-ctr"></div>
             </section>
+            <section>
+                <h1>New tabella</h1>
+                 <div id="tabella-rooms" class="tabella-ctr"></div>
+            </section>
             <article class="explaination">
                 <p><b>This is a pure javascript , dependency free plugin.*</b></p>
             </article>
@@ -37,6 +41,18 @@
         <script src="dist/tabella.js"></script>
         <script type="text/javascript">
             !(function(){
+
+                var data2 = {};
+
+                data2.periods = [["03\/14\/2015","03\/20\/2015"],["03\/21\/2015","04\/12\/2015"],["04\/13\/2015","05\/08\/2015"]];
+
+                data2.rows = [{"pricesDesc":["1 person bed and breakfast"],"prices":[["39.00","38.00","35.00"]]}];
+
+                data2.cellBreakpoints = { default : [0,1], small : [460,2], medium : [640,3], large : [820,4], xlarge : [1080,5]};
+
+                data2.descBreakpoints = { default : [0,0], medium : [460, 200], large: [900, 270] };
+
+                var pricelist = new Tabella(document.getElementById('tabella-rooms'), data2);
 
                 var tabellaCtr = document.getElementById('tabella');
 
@@ -73,7 +89,8 @@
                 var test = new Tabella(
                     tabellaCtr, data);
                 
-                console.log(data);
+                
+
 
             })();
         </script>

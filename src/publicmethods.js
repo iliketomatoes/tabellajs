@@ -1,42 +1,3 @@
-Tabella.prototype.defaults = {
-	periods : null,
-	rows : null,
-	/**
-	* BREAKPOINTS : 
-	* 1st element in array is the row width, 
-	* the 2nd is the number of cells to be shown
-	* Default breakpoint is from [0,1], just one element is shown
-	*/
-	cellBreakpoints : {
-		default : [0,1],
-		small : [360,2],
-		medium : [640,3],
-		large : [820,4],
-		xlarge : [1080,5]
-	},
-	/**
-	* DESCRIPTION BREAKPOINTS : 
-	* 1st element in array is the row width, 
-	* the 2nd is the description cell width,
-	* Default breakpoint is from [0,0]
-	*/
-	descBreakpoints : {
-		default : [0,0],
-		medium : [460, 160],
-		large : [900, 200]
-	},
-	from : 'from',
-	to : 'to',
-	currency : '&euro;',
-	easing : 'easeInOutSine',
-	duration : 600,
-	reboundSpeed : 300,
-	edgeThreshold : 150,
-	swipeThreshold : 60,
-	swipeSingleTick : true,
-	onRefreshSize : false
-};
-
 Tabella.prototype.refreshSize = function(){
 	var self = this,
 		oldBreakpoint = self.currentBreakpoint,
@@ -98,8 +59,6 @@ Tabella.prototype.refreshSize = function(){
 			}
 
 	});
-
-	
 
 	if(self.pointer > 0){ 
 		if(oldBreakpoint.cellBreakpoint[0] != breakpoint.cellBreakpoint[0] || 

@@ -75,8 +75,3 @@
 			return self.points;
 		}
 	};
-
-
-
-
-
