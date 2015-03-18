@@ -63,7 +63,7 @@ Tabella.prototype.attachEvents = function(){
 					//Swipe left	
 					}else{
 						
-						if(self.pointer === numberOfPeriods - self.currentBreakpoint.cellBreakpoint[1]){
+						if(self.pointer === numberOfPeriods - self.currentBreakpoint.cellBreakpoint[1] || numberOfPeriods < self.currentBreakpoint.cellBreakpoint[1]){
 		
 							var offset = Math.abs(parseInt(Animator.offset(slidingPeriodRow)));
 							var slidingRowWidth = slidingPeriodRow.clientWidth;
