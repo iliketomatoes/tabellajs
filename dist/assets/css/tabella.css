@@ -117,34 +117,44 @@ MAIN RULES
   height: 0;
   z-index: -1; }
 
-.t-arrow, .t-arr-right, .t-arr-left {
+.t-arrow, .t-arr-right, .t-arr-left, .t-arr-right-small, .t-arr-left-small {
   position: absolute;
-  width: 3rem;
-  height: 3rem;
   z-index: 500;
-  top: 0;
-  line-height: 1.4;
-  font-size: 2rem;
   text-align: center;
-  margin-top: 0.25rem;
   border-radius: 50%;
   background-color: #FF4081;
   color: #fff;
   cursor: pointer;
   outline: none;
-  -webkit-box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.75);
-  -moz-box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.75);
-  box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.75);
+  -webkit-box-shadow: 1px 0px 2px 0px rgba(50, 50, 50, 0.75);
+  -moz-box-shadow: 1px 0px 2px 0px rgba(50, 50, 50, 0.75);
+  box-shadow: 1px 0px 2px 0px rgba(50, 50, 50, 0.75);
   transition: all 100ms ease-out; }
-  .t-arrow:active, .t-arr-right:active, .t-arr-left:active {
+  .t-arrow:active, .t-arr-right:active, .t-arr-left:active, .t-arr-right-small:active, .t-arr-left-small:active {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
     margin-top: 0.28rem; }
 
+.t-arrow-big, .t-arr-right, .t-arr-left {
+  width: 3rem;
+  height: 3rem;
+  top: 0;
+  margin-top: 0.25rem;
+  line-height: 1.4;
+  font-size: 2rem; }
+
+.t-arrow-small, .t-arr-right-small, .t-arr-left-small {
+  width: 2rem;
+  height: 2rem;
+  top: 0;
+  margin-top: 0.15rem;
+  line-height: 1.4;
+  font-size: 1rem; }
+
 .t-arr-right {
   right: 0;
-  margin-right: -0.4rem; }
+  margin-right: -0.7rem; }
   .t-arr-right svg {
     position: relative;
     width: 60%;
@@ -153,12 +163,30 @@ MAIN RULES
 
 .t-arr-left {
   left: 0;
-  margin-left: -0.4rem; }
+  margin-left: -0.7rem; }
   .t-arr-left svg {
     position: relative;
     width: 60%;
     height: 60%;
     top: 10%; }
+
+.t-arr-right-small {
+  right: 0;
+  margin-right: -0.7rem; }
+  .t-arr-right-small svg {
+    position: relative;
+    width: 60%;
+    height: 60%;
+    top: 20%; }
+
+.t-arr-left-small {
+  right: 0;
+  margin-left: -0.7rem; }
+  .t-arr-left-small svg {
+    position: relative;
+    width: 60%;
+    height: 60%;
+    top: 20%; }
 
 .t-svg-arrow {
   fill: #fff; }
@@ -171,7 +199,7 @@ MAIN RULES
  COMMON RULES
 =====================
 */
-.t-no-select, .t-sliding-row, .t-cell-value, .t-arr-right, .t-arr-left {
+.t-no-select, .t-sliding-row, .t-cell-value, .t-arr-right, .t-arr-left, .t-arr-right-small, .t-arr-left-small {
   -webkit-user-select: none;
   /* Chrome all / Safari all */
   -moz-user-select: none;

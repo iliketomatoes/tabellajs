@@ -58,8 +58,12 @@ SCHEMA:
 				var tRowDescHTML = '<div class="t-element">';
 					tRowDescHTML +='<div class="t-cell-desc-l">';
 					tRowDescHTML += options.from;
-					tRowDescHTML += '<br>';
-					tRowDescHTML += options.to;
+					
+					if(typeof periods[0][1] !== 'undefined'){	
+						tRowDescHTML += '<br>';
+						tRowDescHTML += options.to;
+					}
+
 					tRowDescHTML += '</div>';
 					tRowDescHTML += '</div>';  
 
@@ -209,7 +213,7 @@ SCHEMA:
 
 		},
 
-		setUpArrows : function(periodRow){
+		setUpArrows : function(periodRow, bigArrows){
 
 			var self = this;
 			// create svg
@@ -236,9 +240,19 @@ SCHEMA:
 			pathRight.setAttribute( 'transform', 'translate(85,100) rotate(180)' );
 			svgRight.appendChild( pathRight );
 
-			var arrowRight = createHTMLEl('div','t-arr-right t-hide', periodRow);
+			var rightArrowClasses, leftArrowClasses;
 
-			var arrowLeft = createHTMLEl('div','t-arr-left t-hide', periodRow);
+			if(bigArrows){
+				rightArrowClasses = 't-arr-right t-hide';
+				leftArrowClasses = 't-arr-left t-hide';
+			}else{
+				rightArrowClasses = 't-arr-right-small t-hide';
+				leftArrowClasses = 't-arr-left-small t-hide';
+			}
+
+			var arrowRight = createHTMLEl('div', rightArrowClasses, periodRow);
+
+			var arrowLeft = createHTMLEl('div', leftArrowClasses, periodRow);
 
 			arrowRight.appendChild(svgRight);
 

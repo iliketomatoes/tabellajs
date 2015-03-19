@@ -17,7 +17,7 @@
             transform: $transforms;
 }
 
-@mixin box-shadow($shadow : 1px 1px 3px 0px, $color: rgba(50, 50, 50, 0.75)) {
+@mixin box-shadow($shadow : 1px 0px 2px 0px, $color: rgba(50, 50, 50, 0.75)) {
 
 	@if $shadow == none{
 		-webkit-box-shadow: none;
