@@ -50,6 +50,20 @@ MAIN RULES
 	color: $primary-color;
 }
 
+.t-cell-desc-l, .t-cell-desc-s{
+	.t-header-devider{
+		text-align: left;
+	}
+}
+
+.t-header-devider{
+	display: block;
+	clear: both;
+	text-align: center;
+	line-height: 0.4rem;
+	margin-bottom: 0.2rem;
+}
+
 .t-sliding-row{
 	position: relative;
 	overflow: auto;
@@ -68,6 +82,7 @@ MAIN RULES
 
 .t-row-desc{
 	float: left;
+	display: table;
 	position: relative;
 	overflow: hidden;
 	padding: 0.4rem 0.1rem;
@@ -75,8 +90,17 @@ MAIN RULES
 	text-align: center;
 }
 
+/**
+* WATCH OUT! The height property given to a table displayed element, is equal to min-height.
+* Hence, it is going to expand when the content is higher than that height.
+*/
+.t-first-row .t-row-cell{
+	height: 3.4rem;
+}
+
 .t-row-cell{
 	float: left;
+	display: table;
 	position: relative;
 	text-align: center;
 	padding: 0.4rem 0.1rem;
@@ -103,7 +127,7 @@ MAIN RULES
 }
 
 .t-element{
-	display: inline-block;
+	display: table-cell;
 	margin: 0 auto;
 	overflow: hidden;
 	line-height: 1.4;
@@ -111,7 +135,7 @@ MAIN RULES
 }
 
 .t-cell-value{
-	float: left;
+	//float: left;
 	display: inline-block;
 	text-align: left;
 	@extend .t-no-select;
@@ -119,7 +143,7 @@ MAIN RULES
 }
 
 .t-cell-desc-s{
-	float: left;
+	//float: left;
 	display: inline-block;
 	margin-right: 0.4rem;
 	text-align: left;
@@ -146,6 +170,12 @@ MAIN RULES
 .t-arrow{
 	position: absolute;
 	z-index: 500;
+	width: 3rem;
+	height: 3rem;
+	top: 0;
+	margin-top: 0.25rem;
+	line-height: 1.4;
+	font-size: 2rem;
 	text-align: center;
 	border-radius: 50%;
 	background-color: $accent-color;
@@ -162,31 +192,9 @@ MAIN RULES
 	
 }
 
-.t-arrow-big{
-	width: 3rem;
-	height: 3rem;
-	top: 0;
-	margin-top: 0.25rem;
-	line-height: 1.4;
-	font-size: 2rem;
-
-	
-}
-
-.t-arrow-small{
-	width: 2rem;
-	height: 2rem;
-	top: 0;
-	margin-top: 0.15rem;
-	line-height: 1.4;
-	font-size: 1rem;
-
-}
-
 
 .t-arr-right{
 	@extend .t-arrow;
-	@extend .t-arrow-big;
 	@extend .t-no-select;
 	right: 0;
 	margin-right: -0.7rem;
@@ -202,7 +210,6 @@ MAIN RULES
 
 .t-arr-left{
 	@extend .t-arrow;
-	@extend .t-arrow-big;
 	@extend .t-no-select;
 	left: 0;
 	margin-left: -0.7rem;
@@ -212,39 +219,6 @@ MAIN RULES
 		width: 60%;
 		height: 60%;
 		top: 10%;
-	}
-
-}
-
-.t-arr-right-small{
-	@extend .t-arrow;
-	@extend .t-arrow-small;
-	@extend .t-no-select;
-	right: 0;
-	margin-right: -0.7rem;
-
-	svg{
-		position: relative;
-		width: 60%;
-		height: 60%;
-		top: 20%;
-	}
-	
-}
-
-
-.t-arr-left-small{
-	@extend .t-arrow;
-	@extend .t-arrow-small;
-	@extend .t-no-select;
-	right: 0;
-	margin-left: -0.7rem;
-
-	svg{
-		position: relative;
-		width: 60%;
-		height: 60%;
-		top: 20%;
 	}
 
 }

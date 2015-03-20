@@ -75,6 +75,11 @@ Tabella.prototype.refreshSize = function(){
 		invokeCallback(self.options.onRefreshSize, self);
 	}
 
+	/**
+	* Vertical centering the arrows
+	*/
+	self.arrowsCentering();
+
 };
 
 Tabella.prototype.getCellWidth = function(breakpoint){
@@ -214,4 +219,19 @@ Tabella.prototype.setSingleTick = function(trueOrFalse){
 
 Tabella.prototype.getCurrentBreakPoint = function(){
 	return this.currentBreakpoint;
+};
+
+Tabella.prototype.arrowsCentering = function(){
+	var self = this,
+		parentHeight = self.periodRow.offsetHeight,
+		arrowsHeight = self.arrows.arrowRight.offsetHeight;
+
+	if(arrowsHeight && parentHeight > arrowsHeight){
+
+		// -1 because of the box-shadow
+		var verticalMargin = parseInt(((parentHeight - arrowsHeight) / 2) - 1);
+
+		self.arrows.arrowRight.style.marginTop = verticalMargin + 'px';
+		self.arrows.arrowLeft.style.marginTop = verticalMargin + 'px';
+	}
 };

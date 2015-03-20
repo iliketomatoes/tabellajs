@@ -42,6 +42,16 @@ MAIN RULES
   overflow: auto;
   color: #3F51B5; }
 
+.t-cell-desc-l .t-header-devider, .t-cell-desc-s .t-header-devider {
+  text-align: left; }
+
+.t-header-devider {
+  display: block;
+  clear: both;
+  text-align: center;
+  line-height: 0.4rem;
+  margin-bottom: 0.2rem; }
+
 .t-sliding-row {
   position: relative;
   overflow: auto;
@@ -56,14 +66,23 @@ MAIN RULES
 
 .t-row-desc {
   float: left;
+  display: table;
   position: relative;
   overflow: hidden;
   padding: 0.4rem 0.1rem;
   font-size: 1rem;
   text-align: center; }
 
+/**
+* WATCH OUT! The height property given to a table displayed element, is equal to min-height.
+* Hence, it is going to expand when the content is higher than that height.
+*/
+.t-first-row .t-row-cell {
+  height: 3.4rem; }
+
 .t-row-cell {
   float: left;
+  display: table;
   position: relative;
   text-align: center;
   padding: 0.4rem 0.1rem;
@@ -83,20 +102,18 @@ MAIN RULES
   border-top: 1px dotted rgba(0, 0, 0, 0.12); }
 
 .t-element {
-  display: inline-block;
+  display: table-cell;
   margin: 0 auto;
   overflow: hidden;
   line-height: 1.4;
   vertical-align: middle; }
 
 .t-cell-value {
-  float: left;
   display: inline-block;
   text-align: left;
   cursor: default; }
 
 .t-cell-desc-s {
-  float: left;
   display: inline-block;
   margin-right: 0.4rem;
   text-align: left;
@@ -117,9 +134,15 @@ MAIN RULES
   height: 0;
   z-index: -1; }
 
-.t-arrow, .t-arr-right, .t-arr-left, .t-arr-right-small, .t-arr-left-small {
+.t-arrow, .t-arr-right, .t-arr-left {
   position: absolute;
   z-index: 500;
+  width: 3rem;
+  height: 3rem;
+  top: 0;
+  margin-top: 0.25rem;
+  line-height: 1.4;
+  font-size: 2rem;
   text-align: center;
   border-radius: 50%;
   background-color: #FF4081;
@@ -130,27 +153,11 @@ MAIN RULES
   -moz-box-shadow: 1px 0px 2px 0px rgba(50, 50, 50, 0.75);
   box-shadow: 1px 0px 2px 0px rgba(50, 50, 50, 0.75);
   transition: all 100ms ease-out; }
-  .t-arrow:active, .t-arr-right:active, .t-arr-left:active, .t-arr-right-small:active, .t-arr-left-small:active {
+  .t-arrow:active, .t-arr-right:active, .t-arr-left:active {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
     margin-top: 0.28rem; }
-
-.t-arrow-big, .t-arr-right, .t-arr-left {
-  width: 3rem;
-  height: 3rem;
-  top: 0;
-  margin-top: 0.25rem;
-  line-height: 1.4;
-  font-size: 2rem; }
-
-.t-arrow-small, .t-arr-right-small, .t-arr-left-small {
-  width: 2rem;
-  height: 2rem;
-  top: 0;
-  margin-top: 0.15rem;
-  line-height: 1.4;
-  font-size: 1rem; }
 
 .t-arr-right {
   right: 0;
@@ -170,24 +177,6 @@ MAIN RULES
     height: 60%;
     top: 10%; }
 
-.t-arr-right-small {
-  right: 0;
-  margin-right: -0.7rem; }
-  .t-arr-right-small svg {
-    position: relative;
-    width: 60%;
-    height: 60%;
-    top: 20%; }
-
-.t-arr-left-small {
-  right: 0;
-  margin-left: -0.7rem; }
-  .t-arr-left-small svg {
-    position: relative;
-    width: 60%;
-    height: 60%;
-    top: 20%; }
-
 .t-svg-arrow {
   fill: #fff; }
 
@@ -199,7 +188,7 @@ MAIN RULES
  COMMON RULES
 =====================
 */
-.t-no-select, .t-sliding-row, .t-cell-value, .t-arr-right, .t-arr-left, .t-arr-right-small, .t-arr-left-small {
+.t-no-select, .t-sliding-row, .t-cell-value, .t-arr-right, .t-arr-left {
   -webkit-user-select: none;
   /* Chrome all / Safari all */
   -moz-user-select: none;

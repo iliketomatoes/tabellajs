@@ -32,6 +32,7 @@
             <hr>
             <section>
                 <h1>Discounts</h1>
+                <p>Once it was just a responsive pricing table. With no efforts it can be even a multi purpose table.</p>
                  <div id="tabella-rooms" class="tabella-ctr"></div>
             </section>
             <article class="explaination">
@@ -48,49 +49,51 @@
                 var data = {};
 
                 data.periods = [
-                            ['2014-12-14', '2014-12-20']
-                            ,['2014-12-21', '2015-1-10']
-                            ,['2015-2-1', '2015-3-7']
-                            ,['2015-3-8', '2015-3-21']
-                            ,['2015-3-22', '2015-4-7']
-                            ,['2015-4-7', '2015-4-23']
-                        ];
+                    ['2014-12-14', '2014-12-20']
+                    ,['2014-12-21', '2015-1-10']
+                    ,['2015-2-1', '2015-3-7']
+                    ,['2015-3-8', '2015-3-21']
+                    ,['2015-3-22', '2015-4-7']
+                    ,['2015-4-7', '2015-4-23']
+                    ];
 
                 data.rows = [
-                            {
-                                desc: '<h2 class="table-h"><a href="#">Single bed room</a></h2>',
-                                prices: [[190 , 210, 210, 204, 180, 160]],
-                                pricesDesc : ['1 person B&B']
-                            },
-                            {
-                                desc: '<h2 class="table-h"><a href="#">Double bed room</a></h2>',
-                                prices: [[190 , 210, 210, 204, 180, 160],[190 , 210, 210, 204, 180, 140]],
-                                pricesDesc : ['1 person half board', '2 people half board']
-                            },
-                            {
-                                desc: '<h2 class="table-h"><a href="#">Suite</a></h2>',
-                                prices: [[250 , 280, 280, 260, 230, 210]],
-                                pricesDesc : ['2 people all inclusive']
-                            } 
-                                
-                        ];        
+                    {
+                        desc: '<h2 class="table-h"><a href="#">Single bed room</a></h2>',
+                        prices: [[190 , 210, 210, 204, 180, 160]],
+                        pricesDesc : ['1 person B&B']
+                    },
+                    {
+                        desc: '<h2 class="table-h"><a href="#">Double bed room</a></h2>',
+                        prices: [[190 , 210, 210, 204, 180, 160],[190 , 210, 210, 204, 180, 140]],
+                        pricesDesc : ['1 person half board', '2 people half board']
+                    },
+                    {
+                        desc: '<h2 class="table-h"><a href="#">Suite</a></h2>',
+                        prices: [[250 , 280, 280, 260, 230, 210]],
+                        pricesDesc : ['2 people all inclusive']
+                    }];        
 
                 var test = new Tabella(
                     tabellaCtr, data);
                 
-                var data2 = {};
+                var discountData = {};
 
-                data2.from = "";
+                discountData.from = "";
+                discountData.currency = "";
 
-                data2.periods = [["Adults"],["Kids 0-4 years"],["Kids 5-10 years"]];
+                discountData.periods = [["Adults"],["Kids 0-4 year-old"],["Kids 5-10 years-old"]];
 
-                data2.rows = [{"pricesDesc":["Discount per night in May"],"prices":[["39.00","38.00","35.00"]]}];
+                discountData.rows = [
+                    {"pricesDesc":["Discount per night in May"],"prices":[["10%","14%","12%"]]},
+                    {"pricesDesc":["Discount per night in June"],"prices":[["8%","12%","10%"]]}
+                    ];
 
-                data2.cellBreakpoints = { default : [0,1], small : [460,2], medium : [640,3], large : [820,4], xlarge : [1080,5]};
+                discountData.cellBreakpoints = { default : [0,1], small : [460,2], medium : [640,3], large : [820,4], xlarge : [1080,5]};
 
-                data2.descBreakpoints = { default : [0,0], medium : [660, 200], large: [900, 270] };
+                discountData.descBreakpoints = { default : [0,0], medium : [660, 200], large: [900, 270] };
 
-                var pricelist = new Tabella(document.getElementById('tabella-rooms'), data2);
+                var pricelist = new Tabella(document.getElementById('tabella-rooms'), discountData);
 
 
             })();

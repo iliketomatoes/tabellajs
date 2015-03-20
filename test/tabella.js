@@ -1,4 +1,4 @@
-/*! tabella - v0.1.0 - 2015-03-19
+/*! tabella - v0.1.0 - 2015-03-20
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2015 ; Licensed  */
 ;(function(tabella) {
@@ -483,7 +483,7 @@ var TabellaBuilder = {
 
 				var numberOfPeriods = periods.length;
 
-				var tRow = createHTMLEl('div', 't-row', docfrag);
+				var tRow = createHTMLEl('div', 't-row t-first-row', docfrag);
 
 				var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
 
@@ -494,7 +494,7 @@ var TabellaBuilder = {
 					tRowDescHTML += options.from;
 					
 					if(typeof periods[0][1] !== 'undefined'){	
-						tRowDescHTML += '<br>';
+						tRowDescHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
 						tRowDescHTML += options.to;
 					}
 
@@ -516,7 +516,7 @@ var TabellaBuilder = {
 					var periodHTML = '<div class="t-cell-desc-s">';
 						periodHTML += options.from;
 					if(typeof periods[i][1] !== 'undefined'){	
-						periodHTML += '<br>';
+						periodHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
 						periodHTML += options.to;
 					}	
 						periodHTML += '</div>'; 	
@@ -525,7 +525,7 @@ var TabellaBuilder = {
 					periodHTML += '<div class="t-cell-value t-bold">';
 					periodHTML += typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
 					if(typeof periods[i][1] !== 'undefined'){
-						periodHTML += '<br>';
+						periodHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
 						periodHTML += periods[i][1];
 					}
 					periodHTML += '</div>'; 
@@ -647,7 +647,7 @@ var TabellaBuilder = {
 
 		},
 
-		setUpArrows : function(periodRow, bigArrows){
+		setUpArrows : function(periodRow){
 
 			var self = this;
 			// create svg
@@ -676,17 +676,9 @@ var TabellaBuilder = {
 
 			var rightArrowClasses, leftArrowClasses;
 
-			if(bigArrows){
-				rightArrowClasses = 't-arr-right t-hide';
-				leftArrowClasses = 't-arr-left t-hide';
-			}else{
-				rightArrowClasses = 't-arr-right-small t-hide';
-				leftArrowClasses = 't-arr-left-small t-hide';
-			}
+			var arrowRight = createHTMLEl('div', 't-arr-right t-hide', periodRow);
 
-			var arrowRight = createHTMLEl('div', rightArrowClasses, periodRow);
-
-			var arrowLeft = createHTMLEl('div', leftArrowClasses, periodRow);
+			var arrowLeft = createHTMLEl('div', 't-arr-left t-hide', periodRow);
 
 			arrowRight.appendChild(svgRight);
 
@@ -742,7 +734,8 @@ var TabellaBuilder = {
 			edgeThreshold : 150,
 			swipeThreshold : 60,
 			swipeSingleTick : true,
-			onRefreshSize : false
+			onRefreshSize : false,
+			headerRowDevider : '-'
 		};
 
 		if(typeof el !== 'undefined'){
@@ -773,20 +766,7 @@ var TabellaBuilder = {
 		
 				if(TabellaBuilder.setUpRows(self.el, self.options)){
 
-
-					var twoStoreyHeader = true;
-					/**
-					* Since we can have a two-storey table header, we need different size for the arrows.
-					* If it's a one storey table header the following condition will be true.
-					*/
-
-					console.log(self.options.periods[0][1]);
-					if(typeof self.options.periods[0][1] === 'undefined'){	
-						console.log('twoStoreyHeader falseeeeeeeeeeeeeeeeeeee');
-						twoStoreyHeader = false;
-					}
-
-					self.arrows = TabellaBuilder.setUpArrows(self.periodRow, twoStoreyHeader);
+					self.arrows = TabellaBuilder.setUpArrows(self.periodRow);
 					self.slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
 					// Returns a function, that, as long as it continues to be invoked, will not
 					// be triggered. The function will be called after it stops being called for
@@ -1018,6 +998,11 @@ Tabella.prototype.refreshSize = function(){
 		invokeCallback(self.options.onRefreshSize, self);
 	}
 
+	/**
+	* Vertical centering the arrows
+	*/
+	self.arrowsCentering();
+
 };
 
 Tabella.prototype.getCellWidth = function(breakpoint){
@@ -1157,6 +1142,21 @@ Tabella.prototype.setSingleTick = function(trueOrFalse){
 
 Tabella.prototype.getCurrentBreakPoint = function(){
 	return this.currentBreakpoint;
+};
+
+Tabella.prototype.arrowsCentering = function(){
+	var self = this,
+		parentHeight = self.periodRow.offsetHeight,
+		arrowsHeight = self.arrows.arrowRight.offsetHeight;
+
+	if(arrowsHeight && parentHeight > arrowsHeight){
+
+		// -1 because of the box-shadow
+		var verticalMargin = parseInt(((parentHeight - arrowsHeight) / 2) - 1);
+
+		self.arrows.arrowRight.style.marginTop = verticalMargin + 'px';
+		self.arrows.arrowLeft.style.marginTop = verticalMargin + 'px';
+	}
 };
 
 	

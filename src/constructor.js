@@ -38,7 +38,8 @@
 			edgeThreshold : 150,
 			swipeThreshold : 60,
 			swipeSingleTick : true,
-			onRefreshSize : false
+			onRefreshSize : false,
+			headerRowDevider : '-'
 		};
 
 		if(typeof el !== 'undefined'){
@@ -69,20 +70,7 @@
 		
 				if(TabellaBuilder.setUpRows(self.el, self.options)){
 
-
-					var twoStoreyHeader = true;
-					/**
-					* Since we can have a two-storey table header, we need different size for the arrows.
-					* If it's a one storey table header the following condition will be true.
-					*/
-
-					console.log(self.options.periods[0][1]);
-					if(typeof self.options.periods[0][1] === 'undefined'){	
-						console.log('twoStoreyHeader falseeeeeeeeeeeeeeeeeeee');
-						twoStoreyHeader = false;
-					}
-
-					self.arrows = TabellaBuilder.setUpArrows(self.periodRow, twoStoreyHeader);
+					self.arrows = TabellaBuilder.setUpArrows(self.periodRow);
 					self.slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
 					// Returns a function, that, as long as it continues to be invoked, will not
 					// be triggered. The function will be called after it stops being called for

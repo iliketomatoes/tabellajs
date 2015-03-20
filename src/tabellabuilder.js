@@ -5,7 +5,7 @@ SCHEMA:
 *---------------------------------------------------------------------------------------------*
 | container                                                                                   |
 | *-----------------------------------------------------------------------------------------* |
-| | .t-row                                                                                  | |
+| | .t-row   /// first row has: .t-first-row                                                | |
 | | *-------------------------------------------------------------------------------------* | |
 | | | .t-row-header /// OPTIONAL                                                          | | |
 | | *-------------------------------------------------------------------------------------* | | 
@@ -49,7 +49,7 @@ SCHEMA:
 
 				var numberOfPeriods = periods.length;
 
-				var tRow = createHTMLEl('div', 't-row', docfrag);
+				var tRow = createHTMLEl('div', 't-row t-first-row', docfrag);
 
 				var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
 
@@ -60,7 +60,7 @@ SCHEMA:
 					tRowDescHTML += options.from;
 					
 					if(typeof periods[0][1] !== 'undefined'){	
-						tRowDescHTML += '<br>';
+						tRowDescHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
 						tRowDescHTML += options.to;
 					}
 
@@ -82,7 +82,7 @@ SCHEMA:
 					var periodHTML = '<div class="t-cell-desc-s">';
 						periodHTML += options.from;
 					if(typeof periods[i][1] !== 'undefined'){	
-						periodHTML += '<br>';
+						periodHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
 						periodHTML += options.to;
 					}	
 						periodHTML += '</div>'; 	
@@ -91,7 +91,7 @@ SCHEMA:
 					periodHTML += '<div class="t-cell-value t-bold">';
 					periodHTML += typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
 					if(typeof periods[i][1] !== 'undefined'){
-						periodHTML += '<br>';
+						periodHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
 						periodHTML += periods[i][1];
 					}
 					periodHTML += '</div>'; 
@@ -213,7 +213,7 @@ SCHEMA:
 
 		},
 
-		setUpArrows : function(periodRow, bigArrows){
+		setUpArrows : function(periodRow){
 
 			var self = this;
 			// create svg
@@ -242,17 +242,9 @@ SCHEMA:
 
 			var rightArrowClasses, leftArrowClasses;
 
-			if(bigArrows){
-				rightArrowClasses = 't-arr-right t-hide';
-				leftArrowClasses = 't-arr-left t-hide';
-			}else{
-				rightArrowClasses = 't-arr-right-small t-hide';
-				leftArrowClasses = 't-arr-left-small t-hide';
-			}
+			var arrowRight = createHTMLEl('div', 't-arr-right t-hide', periodRow);
 
-			var arrowRight = createHTMLEl('div', rightArrowClasses, periodRow);
-
-			var arrowLeft = createHTMLEl('div', leftArrowClasses, periodRow);
+			var arrowLeft = createHTMLEl('div', 't-arr-left t-hide', periodRow);
 
 			arrowRight.appendChild(svgRight);
 
