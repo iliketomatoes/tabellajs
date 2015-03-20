@@ -2,7 +2,7 @@ tabellajs
 =========
 
 
-This is a pure javascript pricing table, responsive, AMD ready, touch enabled.
+This is a pure javascript table plugin, responsive, AMD ready, touch enabled.
 
 ##INSTALL
 
