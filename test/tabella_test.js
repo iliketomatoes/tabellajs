@@ -20,7 +20,7 @@ describe("Tabella", function() {
 
       var data = {};
 
-      data.periods = [
+      data.tableHeader = [
           ['2014-12-14', '2014-12-20']
           ,['2014-12-21', '2015-1-10']
           ,['2015-2-1', '2015-3-7']
@@ -34,30 +34,30 @@ describe("Tabella", function() {
     	expect(test.slidingRows).to.not.exist;
     });
 
-    it("should not mount the table when both rows and periods are undefined", function() {
+    it("should not mount the table when both rows and tableHeader are undefined", function() {
 
       expect(new Tabella(tabella,{}).slidingRows).to.not.exist;
     });
 
-    it("should not mount the table when periods are undefined", function() {
+    it("should not mount the table when tableHeader are undefined", function() {
 
        var data = {};
 
       data.rows = [
         {
-            desc: '<h2 class="table-h"><a href="#">Single bed room</a></h2>',
-            prices: [[190 , 210, 210, 204, 180, 160]],
-            pricesDesc : ['1 person B&B']
+            rowHeader: '<h2 class="table-h"><a href="#">Single bed room</a></h2>',
+            rowVal: [[190 , 210, 210, 204, 180, 160]],
+            rowDesc : ['1 person B&B']
         },
         {
-            desc: '<h2 class="table-h"><a href="#">Double bed room</a></h2>',
-            prices: [[190 , 210, 210, 204, 180, 160],[190 , 210, 210, 204, 180, 140]],
-            pricesDesc : ['1 person half board', '2 people half board']
+            rowHeader: '<h2 class="table-h"><a href="#">Double bed room</a></h2>',
+            rowVal: [[190 , 210, 210, 204, 180, 160],[190 , 210, 210, 204, 180, 140]],
+            rowDesc : ['1 person half board', '2 people half board']
         },
         {
-            desc: '<h2 class="table-h"><a href="#">Suite</a></h2>',
-            prices: [[250 , 280, 280, 260, 230, 210]],
-            pricesDesc : ['2 people all inclusive']
+            rowHeader: '<h2 class="table-h"><a href="#">Suite</a></h2>',
+            rowVal: [[250 , 280, 280, 260, 230, 210]],
+            rowDesc : ['2 people all inclusive']
         }]; 
 
       var test = new Tabella(tabella, data);    
@@ -65,11 +65,11 @@ describe("Tabella", function() {
       expect(test.slidingRows).to.not.exist;
     });
 
-    it("should mount the table when pricesDesc are undefined", function() {
+    it("should mount the table when rowDesc are undefined", function() {
 
        var data = {};
 
-        data.periods = [
+        data.tableHeader = [
           ['2014-12-14', '2014-12-20']
           ,['2014-12-21', '2015-1-10']
           ,['2015-2-1', '2015-3-7']
@@ -80,17 +80,17 @@ describe("Tabella", function() {
 
       data.rows = [
         {
-            desc: '<h2 class="table-h"><a href="#">Single bed room</a></h2>',
-            prices: [[190 , 210, 210, 204, 180, 160]]
+            rowHeader: '<h2 class="table-h"><a href="#">Single bed room</a></h2>',
+            rowVal: [[190 , 210, 210, 204, 180, 160]]
         },
         {
-            desc: '<h2 class="table-h"><a href="#">Double bed room</a></h2>',
-            prices: [[190 , 210, 210, 204, 180, 160],[190 , 210, 210, 204, 180, 140]],
-            pricesDesc : ['', '2 people half board']
+            rowHeader: '<h2 class="table-h"><a href="#">Double bed room</a></h2>',
+            rowVal: [[190 , 210, 210, 204, 180, 160],[190 , 210, 210, 204, 180, 140]],
+            rowDesc : ['', '2 people half board']
         },
         {
-            desc: '<h2 class="table-h"><a href="#">Suite</a></h2>',
-            prices: [[250 , 280, 280, 260, 230, 210]]
+            rowHeader: '<h2 class="table-h"><a href="#">Suite</a></h2>',
+            rowVal: [[250 , 280, 280, 260, 230, 210]]
         }]; 
 
       var test = new Tabella(tabella, data);

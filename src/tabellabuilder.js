@@ -37,18 +37,16 @@ SCHEMA:
 
 	var TabellaBuilder = {
 
-		setUpPeriods : function(el, options){
+		setUpTableHeader : function(el, options){
 
 			var self = this,
-					periods = options.periods,
+					tableHeader = options.tableHeader,
 					docfrag = document.createDocumentFragment(),
 					tRow;
 
 			try{
 
-				if(periods instanceof Array && periods.length){
-
-					var numberOfPeriods = periods.length;
+				if(tableHeader instanceof Array && tableHeader.length){
 
 					tRow = createHTMLEl('div', 't-row t-first-row', docfrag);
 
@@ -60,7 +58,7 @@ SCHEMA:
 						tRowDescHTML +='<div class="t-cell-desc-l">';
 						tRowDescHTML += options.from;
 						
-						if(typeof periods[0][1] !== 'undefined'){	
+						if(typeof tableHeader[0][1] !== 'undefined'){	
 							tRowDescHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
 							tRowDescHTML += options.to;
 						}
@@ -74,30 +72,30 @@ SCHEMA:
 
 					var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
 
-					for(var i = 0; i < numberOfPeriods; i++){
+					for(var i = 0; i < tableHeader.length; i++){
 
 						var tRowCell = document.createElement('div');
 						tRowCell.className = 't-row-cell';
 
 						//From - to Div	
-						var periodHTML = '<div class="t-cell-desc-s">';
-							periodHTML += options.from;
-						if(typeof periods[i][1] !== 'undefined'){	
-							periodHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
-							periodHTML += options.to;
+						var tableHeaderCellHTML = '<div class="t-cell-desc-s">';
+							tableHeaderCellHTML += options.from;
+						if(typeof tableHeader[i][1] !== 'undefined'){	
+							tableHeaderCellHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
+							tableHeaderCellHTML += options.to;
 						}	
-							periodHTML += '</div>'; 	
+							tableHeaderCellHTML += '</div>'; 	
 
-						//Period actual dates
-						periodHTML += '<div class="t-cell-value t-bold">';
-						periodHTML += typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
-						if(typeof periods[i][1] !== 'undefined'){
-							periodHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
-							periodHTML += periods[i][1];
+						//Table headr cell actual value
+						tableHeaderCellHTML += '<div class="t-cell-value t-bold">';
+						tableHeaderCellHTML += typeof tableHeader[i][0] !== 'undefined' ? tableHeader[i][0] : 'not set';
+						if(typeof tableHeader[i][1] !== 'undefined'){
+							tableHeaderCellHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
+							tableHeaderCellHTML += tableHeader[i][1];
 						}
-						periodHTML += '</div>'; 
+						tableHeaderCellHTML += '</div>'; 
 
-						var tEl = createHTMLEl( 'div', 't-element', tRowCell, periodHTML);
+						var tEl = createHTMLEl( 'div', 't-element', tRowCell, tableHeaderCellHTML);
 
 						tSlidingRow.appendChild(tRowCell);
 
@@ -107,7 +105,7 @@ SCHEMA:
 
 					
 				}else{
-					throw new TabellaException('Periods is not an Array');
+					throw new TabellaException('tableHeader is not an Array');
 				}
 
 			}catch(err){
@@ -123,12 +121,9 @@ SCHEMA:
 		setUpRows : function (el, options){
 
 			var self = this,
-				periods = options.periods,
+				tableHeader = options.tableHeader,
 				rows = options.rows,
-				numberOfPeriods = periods.length,
 				numberOfRows = rows.length;
-
-				console.log(numberOfPeriods);
 
 			var docfrag = document.createDocumentFragment();
 
@@ -138,13 +133,13 @@ SCHEMA:
 
 						var tRow = createHTMLEl('div', 't-row', docfrag);
 					
-						if(!!rows[i].desc){
-							var tHeader = createHTMLEl('section','t-row-header', tRow, rows[i].desc);
+						if(!!rows[i].rowHeader){
+							var tHeader = createHTMLEl('section','t-row-header', tRow, rows[i].rowHeader);
 						}
 
-						if(!!rows[i].prices){
+						if(!!rows[i].rowVal){
 
-							for(var j = 0; j < rows[i].prices.length; j++){
+							for(var j = 0; j < rows[i].rowVal.length; j++){
 
 								var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
 
@@ -154,7 +149,7 @@ SCHEMA:
 
 								var tRowDescHTML = '<div class="t-element">';
 									tRowDescHTML +='<div class="t-cell-desc-l">';
-									tRowDescHTML += (typeof rows[i].pricesDesc !== 'undefined' && !!rows[i].pricesDesc[j]) ? rows[i].pricesDesc[j] : '';
+									tRowDescHTML += (typeof rows[i].rowDesc !== 'undefined' && !!rows[i].rowDesc[j]) ? rows[i].rowDesc[j] : '';
 									tRowDescHTML += '</div>';
 									tRowDescHTML += '</div>';
 
@@ -168,7 +163,7 @@ SCHEMA:
 
 								var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
 							
-								for(var k = 0; k < numberOfPeriods; k++){	
+								for(var k = 0; k < tableHeader.length; k++){	
 
 										var tRowCell = document.createElement('div');
 
@@ -180,24 +175,24 @@ SCHEMA:
 										var cellHTML = '';
 
 										//Cell description
-										if(typeof rows[i].pricesDesc !== 'undefined' && !!rows[i].pricesDesc[j]){
+										if(typeof rows[i].rowDesc !== 'undefined' && !!rows[i].rowDesc[j]){
 							
 											cellHTML += '<div class="t-cell-desc-s">';
 										
-											cellHTML += rows[i].pricesDesc[j];
+											cellHTML += rows[i].rowDesc[j];
 											
 											cellHTML += '</div>';
 										}	
 
-										//Item current price
+										//Item current value
 										cellHTML += '<div class="t-cell-value">';
 
-										if(typeof  rows[i].prices[j][k] !== 'undefined'){
+										if(typeof  rows[i].rowVal[j][k] !== 'undefined'){
 
-											cellHTML += rows[i].prices[j][k];
+											cellHTML += rows[i].rowVal[j][k];
 
 											//If it's a number we add the currency
-											if(!isNaN(rows[i].prices[j][k])){
+											if(!isNaN(rows[i].rowVal[j][k])){
 												cellHTML += ' ' + options.currency;
 											}
 											
@@ -227,7 +222,7 @@ SCHEMA:
 
 		},
 
-		setUpArrows : function(periodRow){
+		setUpArrows : function(tableHeaderRow){
 
 			var self = this;
 			// create svg
@@ -256,9 +251,9 @@ SCHEMA:
 
 			var rightArrowClasses, leftArrowClasses;
 
-			var arrowRight = createHTMLEl('div', 't-arr-right t-hide', periodRow);
+			var arrowRight = createHTMLEl('div', 't-arr-right t-hide', tableHeaderRow);
 
-			var arrowLeft = createHTMLEl('div', 't-arr-left t-hide', periodRow);
+			var arrowLeft = createHTMLEl('div', 't-arr-left t-hide', tableHeaderRow);
 
 			arrowRight.appendChild(svgRight);
 

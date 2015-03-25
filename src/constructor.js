@@ -3,7 +3,7 @@
 		var self = this;
 
 		var	defaults = {
-			periods : null,
+			tableHeader : null,
 			rows : null,
 			/**
 			* BREAKPOINTS : 
@@ -51,8 +51,8 @@
 
 					self.options = extend(defaults, options);
 
-					if(!self.options.periods || !self.options.rows){
-						throw new TabellaException('Periods or rows are undefined or null');
+					if(!self.options.tableHeader || !self.options.rows){
+						throw new TabellaException('tableHeader or rows are undefined or null');
 					}
 
 						}else{
@@ -69,7 +69,7 @@
 			return false;
 		}	
 
-		self.periodRow = null;
+		self.tableHeaderRow = null;
 		self.slidingRows = null;
 		self.arrows = null;
 		self.pointer = 0;
@@ -79,15 +79,15 @@
 
 		self.el = el;
 
-		self.periodRow = TabellaBuilder.setUpPeriods(self.el, self.options);
+		self.tableHeaderRow = TabellaBuilder.setUpTableHeader(self.el, self.options);
 
-		if(self.periodRow){
+		if(self.tableHeaderRow){
 			
 			try{
 
 				if(TabellaBuilder.setUpRows(self.el, self.options)){
 
-					self.arrows = TabellaBuilder.setUpArrows(self.periodRow);
+					self.arrows = TabellaBuilder.setUpArrows(self.tableHeaderRow);
 					self.slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
 					// Returns a function, that, as long as it continues to be invoked, will not
 					// be triggered. The function will be called after it stops being called for

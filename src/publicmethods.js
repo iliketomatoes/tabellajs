@@ -6,7 +6,7 @@ Tabella.prototype.refreshSize = function(){
 	var oldCellWidth = self.currentCellWidth,
 		cellWidth = self.currentCellWidth = self.getCellWidth(breakpoint),
 		descWidth = breakpoint.descBreakpoint[1],
-		numberOfPeriods = self.options.periods.length;
+		tableHeaderLength = self.options.tableHeader.length;
 
 		self.refreshArrowPosition(descWidth);
 
@@ -20,7 +20,7 @@ Tabella.prototype.refreshSize = function(){
 
 				tContent.forEach(function(el){
 
-					el.style.width = descWidth + (numberOfPeriods * cellWidth) + 'px';
+					el.style.width = descWidth + (tableHeaderLength * cellWidth) + 'px';
 
 					var tDescL = el.querySelector('.t-row-desc');
 
@@ -42,7 +42,7 @@ Tabella.prototype.refreshSize = function(){
 
 				tContent.forEach(function(el){
 
-					el.style.width = (numberOfPeriods * cellWidth) + 'px';
+					el.style.width = (tableHeaderLength * cellWidth) + 'px';
 
 					classie.add(el.querySelector('.t-row-desc'), 't-hide');
 
@@ -84,7 +84,7 @@ Tabella.prototype.refreshSize = function(){
 
 Tabella.prototype.getCellWidth = function(breakpoint){
 	var self = this,
-		numberOfCells = self.options.periods.length,
+		numberOfCells = self.options.tableHeader.length,
 		cellBreakpoint = breakpoint.cellBreakpoint,
 		descBreakpoint = breakpoint.descBreakpoint,
 		cellWidth;
@@ -160,15 +160,15 @@ Tabella.prototype.updateArrows = function(){
 
 	var self = this,
 		breakpoint = self.currentBreakpoint || self.getBreakpoint(),
-		numberOfPeriods = self.options.periods.length;
+		tableHeaderLength = self.options.tableHeader.length;
 
-		if(numberOfPeriods > breakpoint.cellBreakpoint[1]){
+		if(tableHeaderLength > breakpoint.cellBreakpoint[1]){
 
 			if(self.pointer === 0){
 				classie.add(self.arrows.arrowLeft, 't-hide');
 				classie.remove(self.arrows.arrowRight, 't-hide');
 			}else{
-				if(self.pointer === numberOfPeriods - breakpoint.cellBreakpoint[1]){
+				if(self.pointer === tableHeaderLength - breakpoint.cellBreakpoint[1]){
 					classie.remove(self.arrows.arrowLeft, 't-hide');
 					classie.add(self.arrows.arrowRight, 't-hide');
 				}else{
@@ -187,7 +187,7 @@ Tabella.prototype.move = function(x){
 
 	var self = this,
 		cellWidth = self.getCellWidth(self.currentBreakpoint),
-		numberOfPeriods = self.options.periods.length;
+		tableHeaderLength = self.options.tableHeader.length;
 		//slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
 
 	if(x === 'right'){
@@ -223,7 +223,7 @@ Tabella.prototype.getCurrentBreakPoint = function(){
 
 Tabella.prototype.arrowsCentering = function(){
 	var self = this,
-		parentHeight = self.periodRow.offsetHeight,
+		parentHeight = self.tableHeaderRow.offsetHeight,
 		arrowsHeight = self.arrows.arrowRight.offsetHeight;
 
 	if(arrowsHeight && parentHeight > arrowsHeight){

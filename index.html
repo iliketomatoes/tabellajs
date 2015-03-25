@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Tabella js</title>
-        <meta name="description" content="Responsive table">
+        <meta name="rowHeaderription" content="Responsive table">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="stylesheet" href="dist/assets/css/normalize.min.css">
@@ -29,12 +29,12 @@
                 <h3>Click on the arrows or swipe the blue rows.</h3>
                 <div id="tabella" class="tabella-ctr"></div>
             </section>
-            <hr>
+            <!--<hr>
             <section>
                 <h1>Test</h1>
                 <p>Test table</p>
                  <div id="tabella-test" class="tabella-ctr"></div>
-            </section>
+            </section>-->
             <hr>
             <section>
                 <h1>Discounts</h1>
@@ -54,7 +54,7 @@
 
                 var data = {};
 
-                data.periods = [
+                data.tableHeader = [
                     ['2014-12-14', '2014-12-20']
                     ,['2014-12-21', '2015-1-10']
                     ,['2015-2-1', '2015-3-7']
@@ -65,31 +65,31 @@
 
                 data.rows = [
                     {
-                        desc: '<h2 class="table-h"><a href="#">Single bed room</a></h2>',
-                        prices: [[190 , 210, 210, 204, 180, 160]],
-                        pricesDesc : ['1 person B&B']
+                        rowHeader: '<h2 class="table-h"><a href="#">Single bed room</a></h2>',
+                        rowVal: [[190 , 210, 210, 204, 180, 160]],
+                        rowDesc : ['1 person B&B']
                     },
                     {
-                        desc: '<h2 class="table-h"><a href="#">Double bed room</a></h2>',
-                        prices: [[190 , 210, 210, 204, 180, 160],[190 , 210, 210, 204, 180, 140]],
-                        pricesDesc : ['1 person half board', '2 people half board']
+                        rowHeader: '<h2 class="table-h"><a href="#">Double bed room</a></h2>',
+                        rowVal: [[190 , 210, 210, 204, 180, 160],[190 , 210, 210, 204, 180, 140]],
+                        rowDesc : ['1 person half board', '2 people half board']
                     },
                     {
-                        desc: '<h2 class="table-h"><a href="#">Suite</a></h2>',
-                        prices: [[250 , 280, 280, 260, 230, 210]],
-                        pricesDesc : ['2 people all inclusive']
+                        rowHeader: '<h2 class="table-h"><a href="#">Suite</a></h2>',
+                        rowVal: [[250 , 280, 280, 260, 230, 210]],
+                        rowDesc : ['2 people all inclusive']
                     }];        
 
-                var hotelPrices = new Tabella(
+                var hotelrowVal = new Tabella(
                     tabellaCtr, data);
 
                 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
                 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
                 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
 
-                var dataTest = {};
+               /* var dataTest = {};
 
-               dataTest.periods = [
+               dataTest.tableHeader = [
                     ['2014-12-14', '2014-12-20']
                     ,['2014-12-21', '2015-1-10']
                     ,['2015-2-1', '2015-3-7']
@@ -98,24 +98,26 @@
                     ,['2015-4-7', '2015-4-23']
                     ];
 
+                dataTest.from = 'Periods';
+                dataTest.to = '';
+                dataTest.headerRowDevider = '';    
+
                 dataTest.rows = [
                     {
-                        desc: '<h2 class="table-h"><a href="#">Single bed room</a></h2>',
-                        prices: [[190 , 210, 210, 204, 180]],
-                        //pricesDesc : ['1 person B&B']
+                        rowHeader: '<h2 class="table-h"><a href="#">Single bed room</a></h2>',
+                        rowVal: [[190 , 210, 210, 204, 180]],
                     },
                     {
-                        desc: '<h2 class="table-h"><a href="#">Double bed room</a></h2>',
-                        prices: [[190 , 210, 210, 204, 180, 160],[190 , 210, 210, 204, 180, 140]],
-                        pricesDesc : [ null, '2 people half board']
+                        rowHeader: '<h2 class="table-h"><a href="#">Double bed room</a></h2>',
+                        rowVal: [[190 , 210, 210, 204, 180, 160],[190 , 210, 210, 204, 180, 140]],
+                        rowDesc : [ null, '2 people half board']
                     },
                     {
-                        desc: '<h2 class="table-h"><a href="#">Suite</a></h2>',
-                        prices: [[250 , 280, 280, 260, 230, 210, 227]],
-                        //pricesDesc : ['2 people all inclusive']
+                        rowHeader: '<h2 class="table-h"><a href="#">Suite</a></h2>',
+                        rowVal: [[250 , 280, 280, 260, 230, 210, 227]],
                     }];  
 
-                var tabellaTest = new Tabella(document.getElementById('tabella-test'), dataTest);
+                var tabellaTest = new Tabella(document.getElementById('tabella-test'), dataTest);*/
 
                 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
                 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
@@ -125,16 +127,16 @@
 
                 discountData.from = "";
 
-                discountData.periods = [["Adults"],["Kids 0-4 year-old"],["Kids 5-10 years-old"]];
+                discountData.tableHeader = [["Adults"],["Kids 0-4 year-old"],["Kids 5-10 years-old"]];
 
                 discountData.rows = [
-                    {"pricesDesc":["Discount per night in May"],"prices":[["10%","14%","12%"]]},
-                    {"pricesDesc":["Discount per night in June"],"prices":[["8%","12%","10%"]]}
+                    {"rowDesc":["Discount per night in May"],"rowVal":[["10%","14%","12%"]]},
+                    {"rowDesc":["Discount per night in June"],"rowVal":[["8%","12%","10%"]]}
                     ];
 
                 discountData.cellBreakpoints = { default : [0,1], small : [460,2], medium : [640,3], large : [820,4], xlarge : [1080,5]};
 
-                discountData.descBreakpoints = { default : [0,0], medium : [660, 200], large: [900, 270] };
+                discountData.rowHeaderBreakpoints = { default : [0,0], medium : [660, 200], large: [900, 270] };
 
                 var pricelist = new Tabella(document.getElementById('tabella-rooms'), discountData);
 

@@ -38,7 +38,7 @@ Then activate the plugin:
         var myTabella = new Tabella(
             document.getElementById('example'),
             {   
-                periods: [
+                tableHeader: [
                     ['2014-12-14', '2014-12-20']
                     ,['2014-12-21', '2015-1-10']
                     ,['2015-2-1', '2015-3-7']
@@ -47,19 +47,19 @@ Then activate the plugin:
                 ],
                 rows : [
                     {
-                        desc: '<h2 class="table-h"><a href="#">Single bed room</a></h2>',
-                        prices: [[190 , 210, 210, 204, 180],[190 , 210, 210, 204, 180]],
-                        pricesDesc : ['1 persona', '2 persone']
+                        rowHeader: '<h2 class="table-h"><a href="#">Single bed room</a></h2>',
+                        rowVal: [[190 , 210, 210, 204, 180],[190 , 210, 210, 204, 180]],
+                        rowDesc : ['1 persona', '2 persone']
                     },
                     {
-                        desc: '<h2 class="table-h"><a href="#">Double bed room</a></h2>',
-                        prices: [[190 , 210, 210, 204, 180]],
-                        pricesDesc : ['1 persona']
+                        rowHeader: '<h2 class="table-h"><a href="#">Double bed room</a></h2>',
+                        rowVal: [[190 , 210, 210, 204, 180]],
+                        rowDesc : ['1 persona']
                     },
                     {
-                        desc: '<h2 class="table-h"><a href="#">Suite</a></h2>',
-                        prices: [[190 , 210, 210, 204, 180]],
-                        pricesDesc : ['1 persona']
+                        rowHeader: '<h2 class="table-h"><a href="#">Suite</a></h2>',
+                        rowVal: [[190 , 210, 210, 204, 180]],
+                        rowDesc : ['1 persona']
                     } 
                         
                 ]
@@ -67,14 +67,15 @@ Then activate the plugin:
     })();
 </pre>
 
-You **have to** pass to the constructor the HTML element which holds the table as first argument, then an object which imperatively define the content of the table as second argument.
+You **have to** pass to the constructor 2 parameters. The first one is the HTML element where we are going to mount the table.
+The second one is an objects containing the data of the table.
 
-####IMPORTANT:
-It's compulsory to define the *periods* property, which is an array containing arrays(nested array) with the syntax shown above.
-Then it's compulsory to define the rows of the table. The *rows* property is an array of objects. Each object must contain the *prices* field, which is an array of array. The length of each array hold by "prices" must be equal to the number of the periods.
+####Data:
+It's compulsory to define the **tableHeader** property (which is a nested array with the syntax shown above) into the object passed as second argument to the Tabella's constructor.
+Together with *tableHeader* you have to define the table rows with the syntax shown above. The **rows** property is an array of objects. Each object (i.e. row) must contain the **rowVal** field, which is an array of arrays. The length of each array hold by *rowVal* should be equal to the *tableHeader* length.
 
 ####Everything else is optional  
-i.e. *desc* and *pricesDesc* are optional properties for the row.
+i.e. **rowHeader** and **rowDesc** are optional properties for the row.
 
 * * * 
 
@@ -94,8 +95,8 @@ Available options:
 | ---------------- |----------------------------------------------------------------  | ----------- | ------- |
 | cellBreakpoints | Here we declare the row breakpoints (referred to the table container's width). It is a literal object which contains an arbitrary number of properties. Each property must hold a 2 element-long array; the first element is the table container *min-width* expressed in px, the second element stands for the number of cells to be shown in each row | Object  |  { default : [0,1], small : [360,2], medium : [640,3], large : [820,4], xlarge : [1080,5]}  |
 | descBreakpoints | Here we declare the description-cell breakpoints (the cells on the left of the table which contains the row description). It is a literal object which contains an arbitrary number of properties. Each property must hold a 2 element-long array; the first element is the table container *min-width* expressed in px, the **second element is the description cell width expressed in px**. | Object  | { default : [0,0], medium : [460, 160], large: [900, 200] } |    
-| from  | Content shown in the period start row. |  String  |   'from' |
-| to  | Content shown in the period end row. |  String  |   'to' |  
+| from  | Content shown in the period start row. If the header doesn't contain periods just change this property value to something else. |  String  |   'from' |
+| to  | Content shown in the period end row. If the header doesn't contain periods just change this property value to an empty string: ''.|  String  |   'to' |  
 | currency  | The currency shown in each cell. |  String | '&euro;' |
 | duration | The duration of the sliding animation. Expressed in milliseconds.  | Number | 600  |
 | easing | The easing of the animation. You can pick among 24 pre-set easings. | String | 'easeInOutSine' |

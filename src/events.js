@@ -14,8 +14,8 @@ Tabella.prototype.attachEvents = function(){
 	var position,
 		cachedPosition,
 		startingOffset,
-		numberOfPeriods = self.options.periods.length,
-		slidingPeriodRow = self.periodRow.querySelector('.t-sliding-row'),
+		tableHeaderLength = self.options.tableHeader.length,
+		slidingTableHeader = self.tableHeaderRow.querySelector('.t-sliding-row'),
 		legalPosition = true,
 		delta,
 		currentCellWidth,
@@ -27,7 +27,7 @@ Tabella.prototype.attachEvents = function(){
 		//setting the events listeners
 		setListener(el, Toucher.touchEvents.start, function(e){
 			//e.preventDefault();
-			startingOffset = Animator.offset(slidingPeriodRow);
+			startingOffset = Animator.offset(slidingTableHeader);
 			cachedPosition = Toucher.onTouchStart(e);
 			currentCellWidth = parseInt(self.currentCellWidth);
 			tick = 0;
@@ -54,7 +54,7 @@ Tabella.prototype.attachEvents = function(){
 
 					if(self.pointer === 0){                  
 
-						if(Math.abs(parseInt(Animator.offset(slidingPeriodRow))) >= self.options.edgeThreshold) legalPosition = false;
+						if(Math.abs(parseInt(Animator.offset(slidingTableHeader))) >= self.options.edgeThreshold) legalPosition = false;
 						
 					}else{
 						self.pointer = startingPointer - tick;
@@ -63,10 +63,10 @@ Tabella.prototype.attachEvents = function(){
 					//Swipe left	
 					}else{
 						
-						if(self.pointer === numberOfPeriods - self.currentBreakpoint.cellBreakpoint[1] || numberOfPeriods < self.currentBreakpoint.cellBreakpoint[1]){
+						if(self.pointer === tableHeaderLength - self.currentBreakpoint.cellBreakpoint[1] || tableHeaderLength < self.currentBreakpoint.cellBreakpoint[1]){
 		
-							var offset = Math.abs(parseInt(Animator.offset(slidingPeriodRow)));
-							var slidingRowWidth = slidingPeriodRow.clientWidth;
+							var offset = Math.abs(parseInt(Animator.offset(slidingTableHeader)));
+							var slidingRowWidth = slidingTableHeader.clientWidth;
 
 							if(offset >= self.options.edgeThreshold + (currentCellWidth * self.pointer)){
 								legalPosition = false;
@@ -83,7 +83,7 @@ Tabella.prototype.attachEvents = function(){
 			//e.preventDefault();
 			Toucher.onTouchEnd();
 			startingOffset = 0;
-			var offset = parseInt(Animator.offset(slidingPeriodRow));
+			var offset = parseInt(Animator.offset(slidingTableHeader));
 			self.resetDragging(parseInt(offset + self.pointer * currentCellWidth));
 			legalPosition = true;
 			self.updateArrows();					

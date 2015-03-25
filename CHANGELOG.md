@@ -1,14 +1,12 @@
 # Changelog
 
 TODO
-
-change names (periodRow is not consistent anymore), fix double click during animation, fixed header;
-
-?? add reflow option;
+fix double click during animation, fixed header;
 
 ##v 0.3.0 - March 2015, 25th
 - Fix empty rows and empty row description behavior
-- Don't add currency if the cell value is not a number
+- Fix - don't add currency if the cell value is not a number
+- Update namespace to meet the new multipurpose nature of the tables
 
 
 ##v 0.2.0 - March 2015, 20th

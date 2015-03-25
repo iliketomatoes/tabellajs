@@ -471,18 +471,16 @@
 
 var TabellaBuilder = {
 
-		setUpPeriods : function(el, options){
+		setUpTableHeader : function(el, options){
 
 			var self = this,
-					periods = options.periods,
+					tableHeader = options.tableHeader,
 					docfrag = document.createDocumentFragment(),
 					tRow;
 
 			try{
 
-				if(periods instanceof Array && periods.length){
-
-					var numberOfPeriods = periods.length;
+				if(tableHeader instanceof Array && tableHeader.length){
 
 					tRow = createHTMLEl('div', 't-row t-first-row', docfrag);
 
@@ -494,7 +492,7 @@ var TabellaBuilder = {
 						tRowDescHTML +='<div class="t-cell-desc-l">';
 						tRowDescHTML += options.from;
 						
-						if(typeof periods[0][1] !== 'undefined'){	
+						if(typeof tableHeader[0][1] !== 'undefined'){	
 							tRowDescHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
 							tRowDescHTML += options.to;
 						}
@@ -508,30 +506,30 @@ var TabellaBuilder = {
 
 					var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
 
-					for(var i = 0; i < numberOfPeriods; i++){
+					for(var i = 0; i < tableHeader.length; i++){
 
 						var tRowCell = document.createElement('div');
 						tRowCell.className = 't-row-cell';
 
 						//From - to Div	
-						var periodHTML = '<div class="t-cell-desc-s">';
-							periodHTML += options.from;
-						if(typeof periods[i][1] !== 'undefined'){	
-							periodHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
-							periodHTML += options.to;
+						var tableHeaderCellHTML = '<div class="t-cell-desc-s">';
+							tableHeaderCellHTML += options.from;
+						if(typeof tableHeader[i][1] !== 'undefined'){	
+							tableHeaderCellHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
+							tableHeaderCellHTML += options.to;
 						}	
-							periodHTML += '</div>'; 	
+							tableHeaderCellHTML += '</div>'; 	
 
-						//Period actual dates
-						periodHTML += '<div class="t-cell-value t-bold">';
-						periodHTML += typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
-						if(typeof periods[i][1] !== 'undefined'){
-							periodHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
-							periodHTML += periods[i][1];
+						//Table headr cell actual value
+						tableHeaderCellHTML += '<div class="t-cell-value t-bold">';
+						tableHeaderCellHTML += typeof tableHeader[i][0] !== 'undefined' ? tableHeader[i][0] : 'not set';
+						if(typeof tableHeader[i][1] !== 'undefined'){
+							tableHeaderCellHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
+							tableHeaderCellHTML += tableHeader[i][1];
 						}
-						periodHTML += '</div>'; 
+						tableHeaderCellHTML += '</div>'; 
 
-						var tEl = createHTMLEl( 'div', 't-element', tRowCell, periodHTML);
+						var tEl = createHTMLEl( 'div', 't-element', tRowCell, tableHeaderCellHTML);
 
 						tSlidingRow.appendChild(tRowCell);
 
@@ -541,7 +539,7 @@ var TabellaBuilder = {
 
 					
 				}else{
-					throw new TabellaException('Periods is not an Array');
+					throw new TabellaException('tableHeader is not an Array');
 				}
 
 			}catch(err){
@@ -557,12 +555,9 @@ var TabellaBuilder = {
 		setUpRows : function (el, options){
 
 			var self = this,
-				periods = options.periods,
+				tableHeader = options.tableHeader,
 				rows = options.rows,
-				numberOfPeriods = periods.length,
 				numberOfRows = rows.length;
-
-				console.log(numberOfPeriods);
 
 			var docfrag = document.createDocumentFragment();
 
@@ -572,13 +567,13 @@ var TabellaBuilder = {
 
 						var tRow = createHTMLEl('div', 't-row', docfrag);
 					
-						if(!!rows[i].desc){
-							var tHeader = createHTMLEl('section','t-row-header', tRow, rows[i].desc);
+						if(!!rows[i].rowHeader){
+							var tHeader = createHTMLEl('section','t-row-header', tRow, rows[i].rowHeader);
 						}
 
-						if(!!rows[i].prices){
+						if(!!rows[i].rowVal){
 
-							for(var j = 0; j < rows[i].prices.length; j++){
+							for(var j = 0; j < rows[i].rowVal.length; j++){
 
 								var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
 
@@ -588,7 +583,7 @@ var TabellaBuilder = {
 
 								var tRowDescHTML = '<div class="t-element">';
 									tRowDescHTML +='<div class="t-cell-desc-l">';
-									tRowDescHTML += (typeof rows[i].pricesDesc !== 'undefined' && !!rows[i].pricesDesc[j]) ? rows[i].pricesDesc[j] : '';
+									tRowDescHTML += (typeof rows[i].rowDesc !== 'undefined' && !!rows[i].rowDesc[j]) ? rows[i].rowDesc[j] : '';
 									tRowDescHTML += '</div>';
 									tRowDescHTML += '</div>';
 
@@ -602,7 +597,7 @@ var TabellaBuilder = {
 
 								var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
 							
-								for(var k = 0; k < numberOfPeriods; k++){	
+								for(var k = 0; k < tableHeader.length; k++){	
 
 										var tRowCell = document.createElement('div');
 
@@ -614,24 +609,24 @@ var TabellaBuilder = {
 										var cellHTML = '';
 
 										//Cell description
-										if(typeof rows[i].pricesDesc !== 'undefined' && !!rows[i].pricesDesc[j]){
+										if(typeof rows[i].rowDesc !== 'undefined' && !!rows[i].rowDesc[j]){
 							
 											cellHTML += '<div class="t-cell-desc-s">';
 										
-											cellHTML += rows[i].pricesDesc[j];
+											cellHTML += rows[i].rowDesc[j];
 											
 											cellHTML += '</div>';
 										}	
 
-										//Item current price
+										//Item current value
 										cellHTML += '<div class="t-cell-value">';
 
-										if(typeof  rows[i].prices[j][k] !== 'undefined'){
+										if(typeof  rows[i].rowVal[j][k] !== 'undefined'){
 
-											cellHTML += rows[i].prices[j][k];
+											cellHTML += rows[i].rowVal[j][k];
 
 											//If it's a number we add the currency
-											if(!isNaN(rows[i].prices[j][k])){
+											if(!isNaN(rows[i].rowVal[j][k])){
 												cellHTML += ' ' + options.currency;
 											}
 											
@@ -661,7 +656,7 @@ var TabellaBuilder = {
 
 		},
 
-		setUpArrows : function(periodRow){
+		setUpArrows : function(tableHeaderRow){
 
 			var self = this;
 			// create svg
@@ -690,9 +685,9 @@ var TabellaBuilder = {
 
 			var rightArrowClasses, leftArrowClasses;
 
-			var arrowRight = createHTMLEl('div', 't-arr-right t-hide', periodRow);
+			var arrowRight = createHTMLEl('div', 't-arr-right t-hide', tableHeaderRow);
 
-			var arrowLeft = createHTMLEl('div', 't-arr-left t-hide', periodRow);
+			var arrowLeft = createHTMLEl('div', 't-arr-left t-hide', tableHeaderRow);
 
 			arrowRight.appendChild(svgRight);
 
@@ -713,7 +708,7 @@ var TabellaBuilder = {
 		var self = this;
 
 		var	defaults = {
-			periods : null,
+			tableHeader : null,
 			rows : null,
 			/**
 			* BREAKPOINTS : 
@@ -761,8 +756,8 @@ var TabellaBuilder = {
 
 					self.options = extend(defaults, options);
 
-					if(!self.options.periods || !self.options.rows){
-						throw new TabellaException('Periods or rows are undefined or null');
+					if(!self.options.tableHeader || !self.options.rows){
+						throw new TabellaException('tableHeader or rows are undefined or null');
 					}
 
 						}else{
@@ -779,7 +774,7 @@ var TabellaBuilder = {
 			return false;
 		}	
 
-		self.periodRow = null;
+		self.tableHeaderRow = null;
 		self.slidingRows = null;
 		self.arrows = null;
 		self.pointer = 0;
@@ -789,15 +784,15 @@ var TabellaBuilder = {
 
 		self.el = el;
 
-		self.periodRow = TabellaBuilder.setUpPeriods(self.el, self.options);
+		self.tableHeaderRow = TabellaBuilder.setUpTableHeader(self.el, self.options);
 
-		if(self.periodRow){
+		if(self.tableHeaderRow){
 			
 			try{
 
 				if(TabellaBuilder.setUpRows(self.el, self.options)){
 
-					self.arrows = TabellaBuilder.setUpArrows(self.periodRow);
+					self.arrows = TabellaBuilder.setUpArrows(self.tableHeaderRow);
 					self.slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
 					// Returns a function, that, as long as it continues to be invoked, will not
 					// be triggered. The function will be called after it stops being called for
@@ -865,8 +860,8 @@ Tabella.prototype.attachEvents = function(){
 	var position,
 		cachedPosition,
 		startingOffset,
-		numberOfPeriods = self.options.periods.length,
-		slidingPeriodRow = self.periodRow.querySelector('.t-sliding-row'),
+		tableHeaderLength = self.options.tableHeader.length,
+		slidingTableHeader = self.tableHeaderRow.querySelector('.t-sliding-row'),
 		legalPosition = true,
 		delta,
 		currentCellWidth,
@@ -878,7 +873,7 @@ Tabella.prototype.attachEvents = function(){
 		//setting the events listeners
 		setListener(el, Toucher.touchEvents.start, function(e){
 			//e.preventDefault();
-			startingOffset = Animator.offset(slidingPeriodRow);
+			startingOffset = Animator.offset(slidingTableHeader);
 			cachedPosition = Toucher.onTouchStart(e);
 			currentCellWidth = parseInt(self.currentCellWidth);
 			tick = 0;
@@ -905,7 +900,7 @@ Tabella.prototype.attachEvents = function(){
 
 					if(self.pointer === 0){                  
 
-						if(Math.abs(parseInt(Animator.offset(slidingPeriodRow))) >= self.options.edgeThreshold) legalPosition = false;
+						if(Math.abs(parseInt(Animator.offset(slidingTableHeader))) >= self.options.edgeThreshold) legalPosition = false;
 						
 					}else{
 						self.pointer = startingPointer - tick;
@@ -914,10 +909,10 @@ Tabella.prototype.attachEvents = function(){
 					//Swipe left	
 					}else{
 						
-						if(self.pointer === numberOfPeriods - self.currentBreakpoint.cellBreakpoint[1] || numberOfPeriods < self.currentBreakpoint.cellBreakpoint[1]){
+						if(self.pointer === tableHeaderLength - self.currentBreakpoint.cellBreakpoint[1] || tableHeaderLength < self.currentBreakpoint.cellBreakpoint[1]){
 		
-							var offset = Math.abs(parseInt(Animator.offset(slidingPeriodRow)));
-							var slidingRowWidth = slidingPeriodRow.clientWidth;
+							var offset = Math.abs(parseInt(Animator.offset(slidingTableHeader)));
+							var slidingRowWidth = slidingTableHeader.clientWidth;
 
 							if(offset >= self.options.edgeThreshold + (currentCellWidth * self.pointer)){
 								legalPosition = false;
@@ -934,7 +929,7 @@ Tabella.prototype.attachEvents = function(){
 			//e.preventDefault();
 			Toucher.onTouchEnd();
 			startingOffset = 0;
-			var offset = parseInt(Animator.offset(slidingPeriodRow));
+			var offset = parseInt(Animator.offset(slidingTableHeader));
 			self.resetDragging(parseInt(offset + self.pointer * currentCellWidth));
 			legalPosition = true;
 			self.updateArrows();					
@@ -960,7 +955,7 @@ Tabella.prototype.refreshSize = function(){
 	var oldCellWidth = self.currentCellWidth,
 		cellWidth = self.currentCellWidth = self.getCellWidth(breakpoint),
 		descWidth = breakpoint.descBreakpoint[1],
-		numberOfPeriods = self.options.periods.length;
+		tableHeaderLength = self.options.tableHeader.length;
 
 		self.refreshArrowPosition(descWidth);
 
@@ -974,7 +969,7 @@ Tabella.prototype.refreshSize = function(){
 
 				tContent.forEach(function(el){
 
-					el.style.width = descWidth + (numberOfPeriods * cellWidth) + 'px';
+					el.style.width = descWidth + (tableHeaderLength * cellWidth) + 'px';
 
 					var tDescL = el.querySelector('.t-row-desc');
 
@@ -996,7 +991,7 @@ Tabella.prototype.refreshSize = function(){
 
 				tContent.forEach(function(el){
 
-					el.style.width = (numberOfPeriods * cellWidth) + 'px';
+					el.style.width = (tableHeaderLength * cellWidth) + 'px';
 
 					classie.add(el.querySelector('.t-row-desc'), 't-hide');
 
@@ -1038,7 +1033,7 @@ Tabella.prototype.refreshSize = function(){
 
 Tabella.prototype.getCellWidth = function(breakpoint){
 	var self = this,
-		numberOfCells = self.options.periods.length,
+		numberOfCells = self.options.tableHeader.length,
 		cellBreakpoint = breakpoint.cellBreakpoint,
 		descBreakpoint = breakpoint.descBreakpoint,
 		cellWidth;
@@ -1114,15 +1109,15 @@ Tabella.prototype.updateArrows = function(){
 
 	var self = this,
 		breakpoint = self.currentBreakpoint || self.getBreakpoint(),
-		numberOfPeriods = self.options.periods.length;
+		tableHeaderLength = self.options.tableHeader.length;
 
-		if(numberOfPeriods > breakpoint.cellBreakpoint[1]){
+		if(tableHeaderLength > breakpoint.cellBreakpoint[1]){
 
 			if(self.pointer === 0){
 				classie.add(self.arrows.arrowLeft, 't-hide');
 				classie.remove(self.arrows.arrowRight, 't-hide');
 			}else{
-				if(self.pointer === numberOfPeriods - breakpoint.cellBreakpoint[1]){
+				if(self.pointer === tableHeaderLength - breakpoint.cellBreakpoint[1]){
 					classie.remove(self.arrows.arrowLeft, 't-hide');
 					classie.add(self.arrows.arrowRight, 't-hide');
 				}else{
@@ -1141,7 +1136,7 @@ Tabella.prototype.move = function(x){
 
 	var self = this,
 		cellWidth = self.getCellWidth(self.currentBreakpoint),
-		numberOfPeriods = self.options.periods.length;
+		tableHeaderLength = self.options.tableHeader.length;
 		//slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
 
 	if(x === 'right'){
@@ -1177,7 +1172,7 @@ Tabella.prototype.getCurrentBreakPoint = function(){
 
 Tabella.prototype.arrowsCentering = function(){
 	var self = this,
-		parentHeight = self.periodRow.offsetHeight,
+		parentHeight = self.tableHeaderRow.offsetHeight,
 		arrowsHeight = self.arrows.arrowRight.offsetHeight;
 
 	if(arrowsHeight && parentHeight > arrowsHeight){
