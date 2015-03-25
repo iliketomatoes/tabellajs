@@ -42,15 +42,31 @@
 			headerRowDevider : '-'
 		};
 
-		if(typeof el !== 'undefined'){
-			if(typeof options !== 'undefined'){
-				self.options = extend(defaults, options);
+		try{
+
+			if(typeof el !== 'undefined'){
+
+				if(typeof options !== 'undefined'){
+
+					self.options = extend(defaults, options);
+
+					if(!self.options.periods || !self.options.rows){
+						throw new TabellaException('Periods or rows are undefined or null');
+					}
+
+						}else{
+
+						throw new TabellaException('You did not pass any options to the constructor');
+					}
+
 				}else{
-				throw new TabellaException('You did not pass any options to the constructor');
-			}
-		}else{
-				throw new TabellaException('You did not pass a valid target element to the constructor');
-			}
+						throw new TabellaException('You did not pass a valid target element to the constructor');
+					}
+
+		}catch(err){
+			console.error(err.toString());
+			return false;
+		}	
 
 		self.periodRow = null;
 		self.slidingRows = null;
@@ -62,61 +78,54 @@
 
 		self.el = el;
 
-		if(self.options.periods !== null && self.options.rows !== null){
+		self.periodRow = TabellaBuilder.setUpPeriods(self.el, self.options);
+
+		if(self.periodRow){
 	
-			self.periodRow = TabellaBuilder.setUpPeriods(self.el, self.options);
+			if(TabellaBuilder.setUpRows(self.el, self.options)){
 
-			if(self.periodRow){
-		
-				if(TabellaBuilder.setUpRows(self.el, self.options)){
+				self.arrows = TabellaBuilder.setUpArrows(self.periodRow);
+				self.slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
+				// Returns a function, that, as long as it continues to be invoked, will not
+				// be triggered. The function will be called after it stops being called for
+				// N milliseconds. If `immediate` is passed, trigger the function on the
+				// leading edge, instead of the trailing.
+				var debounce = function(func, wait, immediate) {
+					var timeout;
 
-					self.arrows = TabellaBuilder.setUpArrows(self.periodRow);
-					self.slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
-					// Returns a function, that, as long as it continues to be invoked, will not
-					// be triggered. The function will be called after it stops being called for
-					// N milliseconds. If `immediate` is passed, trigger the function on the
-					// leading edge, instead of the trailing.
-					var debounce = function(func, wait, immediate) {
-						var timeout;
-
-						return function() {
-							var args = arguments;
-							var later = function() {
-								timeout = null;
-								if (!immediate) func.apply(self, args);
-							};
-							var callNow = immediate && !timeout;
-							clearTimeout(timeout);
-							timeout = setTimeout(later, wait);
-							if (callNow) func.apply(self, args);
+					return function() {
+						var args = arguments;
+						var later = function() {
+							timeout = null;
+							if (!immediate) func.apply(self, args);
 						};
+						var callNow = immediate && !timeout;
+						clearTimeout(timeout);
+						timeout = setTimeout(later, wait);
+						if (callNow) func.apply(self, args);
 					};
+				};
 
-					var firstSet = function(){
-						self.currentBreakpoint = self.getBreakpoint();
-						self.currentCellWidth = self.getCellWidth(self.currentBreakpoint);
-						self.refreshSize();
-					};
+				var firstSet = function(){
+					self.currentBreakpoint = self.getBreakpoint();
+					self.currentCellWidth = self.getCellWidth(self.currentBreakpoint);
+					self.refreshSize();
+				};
 
-					if (typeof define === 'function' && define.amd){
-						firstSet();
-					}else{
-						window.addEventListener('load', debounce(firstSet, 50));
-					}
-
-					window.addEventListener('resize', debounce(self.refreshSize, 250));
-
-					self.attachEvents();
-
+				if (typeof define === 'function' && define.amd){
+					firstSet();
 				}else{
-					throw new TabellaException('There is a mismatch between periods and cells');
+					window.addEventListener('load', debounce(firstSet, 50));
 				}
+
+				window.addEventListener('resize', debounce(self.refreshSize, 250));
+
+				self.attachEvents();
+
 			}else{
-				throw new TabellaException('Periods is not an Array');
+				throw new TabellaException('There is a mismatch between periods and cells');
 			}
-			
-		}else{
-			throw new TabellaException('Periods or rows are null');
+
 		}
 				
 	}

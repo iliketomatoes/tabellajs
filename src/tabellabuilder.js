@@ -39,75 +39,84 @@ SCHEMA:
 
 		setUpPeriods : function(el, options){
 
-			var self = this;
-			
-			var periods = options.periods;
+			var self = this,
+					periods = options.periods,
+					docfrag = document.createDocumentFragment(),
+					tRow;
 
-			var docfrag = document.createDocumentFragment();
+			try{
 
-			if(periods instanceof Array && periods.length){
+				if(periods instanceof Array && periods.length){
 
-				var numberOfPeriods = periods.length;
+					var numberOfPeriods = periods.length;
 
-				var tRow = createHTMLEl('div', 't-row t-first-row', docfrag);
+					tRow = createHTMLEl('div', 't-row t-first-row', docfrag);
 
-				var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
+					var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
 
-				var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);
-				
-				var tRowDescHTML = '<div class="t-element">';
-					tRowDescHTML +='<div class="t-cell-desc-l">';
-					tRowDescHTML += options.from;
+					var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);
 					
-					if(typeof periods[0][1] !== 'undefined'){	
-						tRowDescHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
-						tRowDescHTML += options.to;
+					var tRowDescHTML = '<div class="t-element">';
+						tRowDescHTML +='<div class="t-cell-desc-l">';
+						tRowDescHTML += options.from;
+						
+						if(typeof periods[0][1] !== 'undefined'){	
+							tRowDescHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
+							tRowDescHTML += options.to;
+						}
+
+						tRowDescHTML += '</div>';
+						tRowDescHTML += '</div>';  
+
+					var tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
+
+					var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
+
+					var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
+
+					for(var i = 0; i < numberOfPeriods; i++){
+
+						var tRowCell = document.createElement('div');
+						tRowCell.className = 't-row-cell';
+
+						//From - to Div	
+						var periodHTML = '<div class="t-cell-desc-s">';
+							periodHTML += options.from;
+						if(typeof periods[i][1] !== 'undefined'){	
+							periodHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
+							periodHTML += options.to;
+						}	
+							periodHTML += '</div>'; 	
+
+						//Period actual dates
+						periodHTML += '<div class="t-cell-value t-bold">';
+						periodHTML += typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
+						if(typeof periods[i][1] !== 'undefined'){
+							periodHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
+							periodHTML += periods[i][1];
+						}
+						periodHTML += '</div>'; 
+
+						var tEl = createHTMLEl( 'div', 't-element', tRowCell, periodHTML);
+
+						tSlidingRow.appendChild(tRowCell);
+
 					}
 
-					tRowDescHTML += '</div>';
-					tRowDescHTML += '</div>';  
+					el.appendChild(docfrag);
 
-				var tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
-
-				var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
-
-				var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
-
-				for(var i = 0; i < numberOfPeriods; i++){
-
-					var tRowCell = document.createElement('div');
-					tRowCell.className = 't-row-cell';
-
-					//From - to Div	
-					var periodHTML = '<div class="t-cell-desc-s">';
-						periodHTML += options.from;
-					if(typeof periods[i][1] !== 'undefined'){	
-						periodHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
-						periodHTML += options.to;
-					}	
-						periodHTML += '</div>'; 	
-
-					//Period actual dates
-					periodHTML += '<div class="t-cell-value t-bold">';
-					periodHTML += typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
-					if(typeof periods[i][1] !== 'undefined'){
-						periodHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
-						periodHTML += periods[i][1];
-					}
-					periodHTML += '</div>'; 
-
-					var tEl = createHTMLEl( 'div', 't-element', tRowCell, periodHTML);
-
-					tSlidingRow.appendChild(tRowCell);
-
+					
+				}else{
+					throw new TabellaException('Periods is not an Array');
 				}
 
-				el.appendChild(docfrag);
+			}catch(err){
 
+				tRow = false;
+				console.error(err.toString());
+
+			}finally{
 				return tRow;
-
-			}else{
-				return false;
 			}
 		},
 
@@ -139,15 +148,20 @@ SCHEMA:
 
 							for(var j = 0; j < rows[i].prices.length; j++){
 
-							var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
+								console.log(rows[i]);
+								console.log(typeof rows[i].pricesDesc);
 
-							var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);	
+								var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
+
+								var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);	
 
 								if(!matchingPeriodCells) break;
 
+								var cellDescription;
+
 								var tRowDescHTML = '<div class="t-element">';
 									tRowDescHTML +='<div class="t-cell-desc-l">';
-									tRowDescHTML += rows[i].pricesDesc[j];
+									tRowDescHTML += (typeof rows[i].pricesDesc !== 'undefined' && !!rows[i].pricesDesc[j]) ? rows[i].pricesDesc[j] : '';
 									tRowDescHTML += '</div>';
 									tRowDescHTML += '</div>';
 
@@ -155,7 +169,8 @@ SCHEMA:
 								if(j >= 1) descClass += ' t-cell-border-top';	  
 
 								var tRowDesc = createHTMLEl('div', descClass, tRowContent, tRowDescHTML);
-
+			
+								
 								var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
 
 								var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
@@ -173,7 +188,8 @@ SCHEMA:
 										var cellHTML = '';
 
 										//Cell description
-										if(!!rows[i].pricesDesc[j]){
+										if(typeof rows[i].pricesDesc !== 'undefined' && !!rows[i].pricesDesc[j]){
+							
 											cellHTML += '<div class="t-cell-desc-s">';
 										
 											cellHTML += rows[i].pricesDesc[j];

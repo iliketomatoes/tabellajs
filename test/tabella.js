@@ -1,4 +1,4 @@
-/*! tabella - v0.1.0 - 2015-03-20
+/*! tabella - v0.2.0 - 2015-03-25
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2015 ; Licensed  */
 ;(function(tabella) {
@@ -473,75 +473,84 @@ var TabellaBuilder = {
 
 		setUpPeriods : function(el, options){
 
-			var self = this;
-			
-			var periods = options.periods;
+			var self = this,
+					periods = options.periods,
+					docfrag = document.createDocumentFragment(),
+					tRow;
 
-			var docfrag = document.createDocumentFragment();
+			try{
 
-			if(periods instanceof Array && periods.length){
+				if(periods instanceof Array && periods.length){
 
-				var numberOfPeriods = periods.length;
+					var numberOfPeriods = periods.length;
 
-				var tRow = createHTMLEl('div', 't-row t-first-row', docfrag);
+					tRow = createHTMLEl('div', 't-row t-first-row', docfrag);
 
-				var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
+					var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
 
-				var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);
-				
-				var tRowDescHTML = '<div class="t-element">';
-					tRowDescHTML +='<div class="t-cell-desc-l">';
-					tRowDescHTML += options.from;
+					var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);
 					
-					if(typeof periods[0][1] !== 'undefined'){	
-						tRowDescHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
-						tRowDescHTML += options.to;
+					var tRowDescHTML = '<div class="t-element">';
+						tRowDescHTML +='<div class="t-cell-desc-l">';
+						tRowDescHTML += options.from;
+						
+						if(typeof periods[0][1] !== 'undefined'){	
+							tRowDescHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
+							tRowDescHTML += options.to;
+						}
+
+						tRowDescHTML += '</div>';
+						tRowDescHTML += '</div>';  
+
+					var tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
+
+					var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
+
+					var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
+
+					for(var i = 0; i < numberOfPeriods; i++){
+
+						var tRowCell = document.createElement('div');
+						tRowCell.className = 't-row-cell';
+
+						//From - to Div	
+						var periodHTML = '<div class="t-cell-desc-s">';
+							periodHTML += options.from;
+						if(typeof periods[i][1] !== 'undefined'){	
+							periodHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
+							periodHTML += options.to;
+						}	
+							periodHTML += '</div>'; 	
+
+						//Period actual dates
+						periodHTML += '<div class="t-cell-value t-bold">';
+						periodHTML += typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
+						if(typeof periods[i][1] !== 'undefined'){
+							periodHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
+							periodHTML += periods[i][1];
+						}
+						periodHTML += '</div>'; 
+
+						var tEl = createHTMLEl( 'div', 't-element', tRowCell, periodHTML);
+
+						tSlidingRow.appendChild(tRowCell);
+
 					}
 
-					tRowDescHTML += '</div>';
-					tRowDescHTML += '</div>';  
+					el.appendChild(docfrag);
 
-				var tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
-
-				var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
-
-				var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
-
-				for(var i = 0; i < numberOfPeriods; i++){
-
-					var tRowCell = document.createElement('div');
-					tRowCell.className = 't-row-cell';
-
-					//From - to Div	
-					var periodHTML = '<div class="t-cell-desc-s">';
-						periodHTML += options.from;
-					if(typeof periods[i][1] !== 'undefined'){	
-						periodHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
-						periodHTML += options.to;
-					}	
-						periodHTML += '</div>'; 	
-
-					//Period actual dates
-					periodHTML += '<div class="t-cell-value t-bold">';
-					periodHTML += typeof periods[i][0] !== 'undefined' ? periods[i][0] : 'not set';
-					if(typeof periods[i][1] !== 'undefined'){
-						periodHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
-						periodHTML += periods[i][1];
-					}
-					periodHTML += '</div>'; 
-
-					var tEl = createHTMLEl( 'div', 't-element', tRowCell, periodHTML);
-
-					tSlidingRow.appendChild(tRowCell);
-
+					
+				}else{
+					throw new TabellaException('Periods is not an Array');
 				}
 
-				el.appendChild(docfrag);
+			}catch(err){
 
+				tRow = false;
+				console.error(err.toString());
+
+			}finally{
 				return tRow;
-
-			}else{
-				return false;
 			}
 		},
 
@@ -573,15 +582,20 @@ var TabellaBuilder = {
 
 							for(var j = 0; j < rows[i].prices.length; j++){
 
-							var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
+								console.log(rows[i]);
+								console.log(typeof rows[i].pricesDesc);
 
-							var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);	
+								var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
+
+								var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);	
 
 								if(!matchingPeriodCells) break;
 
+								var cellDescription;
+
 								var tRowDescHTML = '<div class="t-element">';
 									tRowDescHTML +='<div class="t-cell-desc-l">';
-									tRowDescHTML += rows[i].pricesDesc[j];
+									tRowDescHTML += (typeof rows[i].pricesDesc !== 'undefined' && !!rows[i].pricesDesc[j]) ? rows[i].pricesDesc[j] : '';
 									tRowDescHTML += '</div>';
 									tRowDescHTML += '</div>';
 
@@ -589,7 +603,8 @@ var TabellaBuilder = {
 								if(j >= 1) descClass += ' t-cell-border-top';	  
 
 								var tRowDesc = createHTMLEl('div', descClass, tRowContent, tRowDescHTML);
-
+			
+								
 								var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
 
 								var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
@@ -607,7 +622,8 @@ var TabellaBuilder = {
 										var cellHTML = '';
 
 										//Cell description
-										if(!!rows[i].pricesDesc[j]){
+										if(typeof rows[i].pricesDesc !== 'undefined' && !!rows[i].pricesDesc[j]){
+							
 											cellHTML += '<div class="t-cell-desc-s">';
 										
 											cellHTML += rows[i].pricesDesc[j];
@@ -738,15 +754,31 @@ var TabellaBuilder = {
 			headerRowDevider : '-'
 		};
 
-		if(typeof el !== 'undefined'){
-			if(typeof options !== 'undefined'){
-				self.options = extend(defaults, options);
+		try{
+
+			if(typeof el !== 'undefined'){
+
+				if(typeof options !== 'undefined'){
+
+					self.options = extend(defaults, options);
+
+					if(!self.options.periods || !self.options.rows){
+						throw new TabellaException('Periods or rows are undefined or null');
+					}
+
+						}else{
+
+						throw new TabellaException('You did not pass any options to the constructor');
+					}
+
 				}else{
-				throw new TabellaException('You did not pass any options to the constructor');
-			}
-		}else{
-				throw new TabellaException('You did not pass a valid target element to the constructor');
-			}
+						throw new TabellaException('You did not pass a valid target element to the constructor');
+					}
+
+		}catch(err){
+			console.error(err.toString());
+			return false;
+		}	
 
 		self.periodRow = null;
 		self.slidingRows = null;
@@ -758,61 +790,54 @@ var TabellaBuilder = {
 
 		self.el = el;
 
-		if(self.options.periods !== null && self.options.rows !== null){
+		self.periodRow = TabellaBuilder.setUpPeriods(self.el, self.options);
+
+		if(self.periodRow){
 	
-			self.periodRow = TabellaBuilder.setUpPeriods(self.el, self.options);
+			if(TabellaBuilder.setUpRows(self.el, self.options)){
 
-			if(self.periodRow){
-		
-				if(TabellaBuilder.setUpRows(self.el, self.options)){
+				self.arrows = TabellaBuilder.setUpArrows(self.periodRow);
+				self.slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
+				// Returns a function, that, as long as it continues to be invoked, will not
+				// be triggered. The function will be called after it stops being called for
+				// N milliseconds. If `immediate` is passed, trigger the function on the
+				// leading edge, instead of the trailing.
+				var debounce = function(func, wait, immediate) {
+					var timeout;
 
-					self.arrows = TabellaBuilder.setUpArrows(self.periodRow);
-					self.slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
-					// Returns a function, that, as long as it continues to be invoked, will not
-					// be triggered. The function will be called after it stops being called for
-					// N milliseconds. If `immediate` is passed, trigger the function on the
-					// leading edge, instead of the trailing.
-					var debounce = function(func, wait, immediate) {
-						var timeout;
-
-						return function() {
-							var args = arguments;
-							var later = function() {
-								timeout = null;
-								if (!immediate) func.apply(self, args);
-							};
-							var callNow = immediate && !timeout;
-							clearTimeout(timeout);
-							timeout = setTimeout(later, wait);
-							if (callNow) func.apply(self, args);
+					return function() {
+						var args = arguments;
+						var later = function() {
+							timeout = null;
+							if (!immediate) func.apply(self, args);
 						};
+						var callNow = immediate && !timeout;
+						clearTimeout(timeout);
+						timeout = setTimeout(later, wait);
+						if (callNow) func.apply(self, args);
 					};
+				};
 
-					var firstSet = function(){
-						self.currentBreakpoint = self.getBreakpoint();
-						self.currentCellWidth = self.getCellWidth(self.currentBreakpoint);
-						self.refreshSize();
-					};
+				var firstSet = function(){
+					self.currentBreakpoint = self.getBreakpoint();
+					self.currentCellWidth = self.getCellWidth(self.currentBreakpoint);
+					self.refreshSize();
+				};
 
-					if (typeof define === 'function' && define.amd){
-						firstSet();
-					}else{
-						window.addEventListener('load', debounce(firstSet, 50));
-					}
-
-					window.addEventListener('resize', debounce(self.refreshSize, 250));
-
-					self.attachEvents();
-
+				if (typeof define === 'function' && define.amd){
+					firstSet();
 				}else{
-					throw new TabellaException('There is a mismatch between periods and cells');
+					window.addEventListener('load', debounce(firstSet, 50));
 				}
+
+				window.addEventListener('resize', debounce(self.refreshSize, 250));
+
+				self.attachEvents();
+
 			}else{
-				throw new TabellaException('Periods is not an Array');
+				throw new TabellaException('There is a mismatch between periods and cells');
 			}
-			
-		}else{
-			throw new TabellaException('Periods or rows are null');
+
 		}
 				
 	}
