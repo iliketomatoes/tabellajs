@@ -39,7 +39,8 @@
 			swipeThreshold : 60,
 			swipeSingleTick : true,
 			onRefreshSize : false,
-			headerRowDevider : '-'
+			headerRowDevider : '-',
+			emptyCell : 'not set'
 		};
 
 		try{
@@ -81,49 +82,56 @@
 		self.periodRow = TabellaBuilder.setUpPeriods(self.el, self.options);
 
 		if(self.periodRow){
-	
-			if(TabellaBuilder.setUpRows(self.el, self.options)){
+			
+			try{
 
-				self.arrows = TabellaBuilder.setUpArrows(self.periodRow);
-				self.slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
-				// Returns a function, that, as long as it continues to be invoked, will not
-				// be triggered. The function will be called after it stops being called for
-				// N milliseconds. If `immediate` is passed, trigger the function on the
-				// leading edge, instead of the trailing.
-				var debounce = function(func, wait, immediate) {
-					var timeout;
+				if(TabellaBuilder.setUpRows(self.el, self.options)){
 
-					return function() {
-						var args = arguments;
-						var later = function() {
-							timeout = null;
-							if (!immediate) func.apply(self, args);
+					self.arrows = TabellaBuilder.setUpArrows(self.periodRow);
+					self.slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
+					// Returns a function, that, as long as it continues to be invoked, will not
+					// be triggered. The function will be called after it stops being called for
+					// N milliseconds. If `immediate` is passed, trigger the function on the
+					// leading edge, instead of the trailing.
+					var debounce = function(func, wait, immediate) {
+						var timeout;
+
+						return function() {
+							var args = arguments;
+							var later = function() {
+								timeout = null;
+								if (!immediate) func.apply(self, args);
+							};
+							var callNow = immediate && !timeout;
+							clearTimeout(timeout);
+							timeout = setTimeout(later, wait);
+							if (callNow) func.apply(self, args);
 						};
-						var callNow = immediate && !timeout;
-						clearTimeout(timeout);
-						timeout = setTimeout(later, wait);
-						if (callNow) func.apply(self, args);
 					};
-				};
 
-				var firstSet = function(){
-					self.currentBreakpoint = self.getBreakpoint();
-					self.currentCellWidth = self.getCellWidth(self.currentBreakpoint);
-					self.refreshSize();
-				};
+					var firstSet = function(){
+						self.currentBreakpoint = self.getBreakpoint();
+						self.currentCellWidth = self.getCellWidth(self.currentBreakpoint);
+						self.refreshSize();
+					};
 
-				if (typeof define === 'function' && define.amd){
-					firstSet();
+					if (typeof define === 'function' && define.amd){
+						firstSet();
+					}else{
+						window.addEventListener('load', debounce(firstSet, 50));
+					}
+
+					window.addEventListener('resize', debounce(self.refreshSize, 250));
+
+					self.attachEvents();
+
 				}else{
-					window.addEventListener('load', debounce(firstSet, 50));
+					throw new TabellaException('Number of rows is zero');
 				}
 
-				window.addEventListener('resize', debounce(self.refreshSize, 250));
-
-				self.attachEvents();
-
-			}else{
-				throw new TabellaException('There is a mismatch between periods and cells');
+			}catch(err){
+				console.error(err.toString());
+				return false;
 			}
 
 		}

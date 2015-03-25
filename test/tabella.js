@@ -562,15 +562,13 @@ var TabellaBuilder = {
 				numberOfPeriods = periods.length,
 				numberOfRows = rows.length;
 
+				console.log(numberOfPeriods);
+
 			var docfrag = document.createDocumentFragment();
 
 			if(numberOfRows > 0){
 
-					var matchingPeriodCells = true;
-
 					for(var i = 0; i < numberOfRows; i++){
-
-						if(!matchingPeriodCells) break;
 
 						var tRow = createHTMLEl('div', 't-row', docfrag);
 					
@@ -582,14 +580,9 @@ var TabellaBuilder = {
 
 							for(var j = 0; j < rows[i].prices.length; j++){
 
-								console.log(rows[i]);
-								console.log(typeof rows[i].pricesDesc);
-
 								var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
 
 								var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);	
-
-								if(!matchingPeriodCells) break;
 
 								var cellDescription;
 
@@ -609,9 +602,8 @@ var TabellaBuilder = {
 
 								var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
 							
-								for(var k = 0; k < rows[i].prices[j].length; k++){
+								for(var k = 0; k < numberOfPeriods; k++){	
 
-									if(rows[i].prices[j].length === numberOfPeriods){
 										var tRowCell = document.createElement('div');
 
 										var cellClass = 't-row-cell';
@@ -633,19 +625,25 @@ var TabellaBuilder = {
 
 										//Item current price
 										cellHTML += '<div class="t-cell-value">';
-										cellHTML += typeof  rows[i].prices[j][k] !== 'undefined' ?  rows[i].prices[j][k] : 'not set';
-										cellHTML += ' ' + options.currency;
+
+										if(typeof  rows[i].prices[j][k] !== 'undefined'){
+
+											cellHTML += rows[i].prices[j][k];
+
+											//If it's a number we add the currency
+											if(!isNaN(rows[i].prices[j][k])){
+												cellHTML += ' ' + options.currency;
+											}
+											
+										}else{
+											cellHTML +=  options.emptyCell;
+										}
 										cellHTML+= '</div>'; 
 
 
 										var tEl = createHTMLEl('div', 't-element', tRowCell, cellHTML);
 
 										tSlidingRow.appendChild(tRowCell);
-									
-									}else{
-										matchingPeriodCells = false;
-										break;
-									}
 								}
 							}
 						}
@@ -653,7 +651,7 @@ var TabellaBuilder = {
 
 				el.appendChild(docfrag);	
 
-				return matchingPeriodCells;	
+				return numberOfRows;	
 
 			}else{
 
@@ -751,7 +749,8 @@ var TabellaBuilder = {
 			swipeThreshold : 60,
 			swipeSingleTick : true,
 			onRefreshSize : false,
-			headerRowDevider : '-'
+			headerRowDevider : '-',
+			emptyCell : 'not set'
 		};
 
 		try{
@@ -793,49 +792,56 @@ var TabellaBuilder = {
 		self.periodRow = TabellaBuilder.setUpPeriods(self.el, self.options);
 
 		if(self.periodRow){
-	
-			if(TabellaBuilder.setUpRows(self.el, self.options)){
+			
+			try{
 
-				self.arrows = TabellaBuilder.setUpArrows(self.periodRow);
-				self.slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
-				// Returns a function, that, as long as it continues to be invoked, will not
-				// be triggered. The function will be called after it stops being called for
-				// N milliseconds. If `immediate` is passed, trigger the function on the
-				// leading edge, instead of the trailing.
-				var debounce = function(func, wait, immediate) {
-					var timeout;
+				if(TabellaBuilder.setUpRows(self.el, self.options)){
 
-					return function() {
-						var args = arguments;
-						var later = function() {
-							timeout = null;
-							if (!immediate) func.apply(self, args);
+					self.arrows = TabellaBuilder.setUpArrows(self.periodRow);
+					self.slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
+					// Returns a function, that, as long as it continues to be invoked, will not
+					// be triggered. The function will be called after it stops being called for
+					// N milliseconds. If `immediate` is passed, trigger the function on the
+					// leading edge, instead of the trailing.
+					var debounce = function(func, wait, immediate) {
+						var timeout;
+
+						return function() {
+							var args = arguments;
+							var later = function() {
+								timeout = null;
+								if (!immediate) func.apply(self, args);
+							};
+							var callNow = immediate && !timeout;
+							clearTimeout(timeout);
+							timeout = setTimeout(later, wait);
+							if (callNow) func.apply(self, args);
 						};
-						var callNow = immediate && !timeout;
-						clearTimeout(timeout);
-						timeout = setTimeout(later, wait);
-						if (callNow) func.apply(self, args);
 					};
-				};
 
-				var firstSet = function(){
-					self.currentBreakpoint = self.getBreakpoint();
-					self.currentCellWidth = self.getCellWidth(self.currentBreakpoint);
-					self.refreshSize();
-				};
+					var firstSet = function(){
+						self.currentBreakpoint = self.getBreakpoint();
+						self.currentCellWidth = self.getCellWidth(self.currentBreakpoint);
+						self.refreshSize();
+					};
 
-				if (typeof define === 'function' && define.amd){
-					firstSet();
+					if (typeof define === 'function' && define.amd){
+						firstSet();
+					}else{
+						window.addEventListener('load', debounce(firstSet, 50));
+					}
+
+					window.addEventListener('resize', debounce(self.refreshSize, 250));
+
+					self.attachEvents();
+
 				}else{
-					window.addEventListener('load', debounce(firstSet, 50));
+					throw new TabellaException('Number of rows is zero');
 				}
 
-				window.addEventListener('resize', debounce(self.refreshSize, 250));
-
-				self.attachEvents();
-
-			}else{
-				throw new TabellaException('There is a mismatch between periods and cells');
+			}catch(err){
+				console.error(err.toString());
+				return false;
 			}
 
 		}

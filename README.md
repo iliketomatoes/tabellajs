@@ -105,6 +105,7 @@ Available options:
 | swipeSingleTick | Whether to swipe by a single-cell-length per time or not. If set to false, it'll swipe by a number of cells equal to the result given by this function: Math.abs(Math.floor(delta / swipeThreshold)) | Boolean | true |
 | onRefreshSize | A callback to invoke when the browser window has been resized. | Function | false |
 | headerRowDevider | When you have a two-storey table header, here you can put any HTML entity you want | String | '-' |
+| emptyCell | When a row contains less cells than the number of the table header cells, it will just add an empty cell with this value | String | 'not set' |
 
 
     

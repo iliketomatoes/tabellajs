@@ -128,15 +128,13 @@ SCHEMA:
 				numberOfPeriods = periods.length,
 				numberOfRows = rows.length;
 
+				console.log(numberOfPeriods);
+
 			var docfrag = document.createDocumentFragment();
 
 			if(numberOfRows > 0){
 
-					var matchingPeriodCells = true;
-
 					for(var i = 0; i < numberOfRows; i++){
-
-						if(!matchingPeriodCells) break;
 
 						var tRow = createHTMLEl('div', 't-row', docfrag);
 					
@@ -148,14 +146,9 @@ SCHEMA:
 
 							for(var j = 0; j < rows[i].prices.length; j++){
 
-								console.log(rows[i]);
-								console.log(typeof rows[i].pricesDesc);
-
 								var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
 
 								var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);	
-
-								if(!matchingPeriodCells) break;
 
 								var cellDescription;
 
@@ -175,9 +168,8 @@ SCHEMA:
 
 								var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
 							
-								for(var k = 0; k < rows[i].prices[j].length; k++){
+								for(var k = 0; k < numberOfPeriods; k++){	
 
-									if(rows[i].prices[j].length === numberOfPeriods){
 										var tRowCell = document.createElement('div');
 
 										var cellClass = 't-row-cell';
@@ -199,19 +191,25 @@ SCHEMA:
 
 										//Item current price
 										cellHTML += '<div class="t-cell-value">';
-										cellHTML += typeof  rows[i].prices[j][k] !== 'undefined' ?  rows[i].prices[j][k] : 'not set';
-										cellHTML += ' ' + options.currency;
+
+										if(typeof  rows[i].prices[j][k] !== 'undefined'){
+
+											cellHTML += rows[i].prices[j][k];
+
+											//If it's a number we add the currency
+											if(!isNaN(rows[i].prices[j][k])){
+												cellHTML += ' ' + options.currency;
+											}
+											
+										}else{
+											cellHTML +=  options.emptyCell;
+										}
 										cellHTML+= '</div>'; 
 
 
 										var tEl = createHTMLEl('div', 't-element', tRowCell, cellHTML);
 
 										tSlidingRow.appendChild(tRowCell);
-									
-									}else{
-										matchingPeriodCells = false;
-										break;
-									}
 								}
 							}
 						}
@@ -219,7 +217,7 @@ SCHEMA:
 
 				el.appendChild(docfrag);	
 
-				return matchingPeriodCells;	
+				return numberOfRows;	
 
 			}else{
 
