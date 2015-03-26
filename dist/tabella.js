@@ -1,4 +1,4 @@
-/*! tabella - v0.2.0 - 2015-03-25
+/*! tabella - v0.3.1 - 2015-03-26
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2015 ; Licensed  */
 ;(function(tabella) {
@@ -215,7 +215,7 @@
 			return getBezier(easeing, epsilon);
 			},
 
-		actualAnimation : function(el, offset, duration, animationCurve, startingOffset){
+		actualAnimation : function(el, offset, duration, animationCurve, startingOffset, lastElement){
 
 			var self = this,
 				targetOffset = startingOffset - offset,
@@ -238,6 +238,7 @@
 				if (progress === 1){
 					cancelAnimationFrame(myReq);
 					start = null;
+					if(lastElement) self.animated = false;
 					}else{
 					requestAnimationFrame(animationStep);
 				}
@@ -288,11 +289,18 @@
 
 			var animationCurve = self.getAnimationCurve(duration, actualEaseing);
 
-			target.forEach(function(el){
-				self.actualAnimation(el, offset, duration, animationCurve, self.offset(el));
+			target.forEach(function(el, index, array){
+				
+				if(index + 1 === array.length){
+					self.actualAnimation(el, offset, duration, animationCurve, self.offset(el), true);
+				}else{
+					self.actualAnimation(el, offset, duration, animationCurve, self.offset(el));
+				}
+				
 			});
 
-			self.animated = false;
+			return true;
+			
 			},
 
 		resetRows : function(target, duration, easeing){
@@ -303,11 +311,17 @@
 
 			var animationCurve = self.getAnimationCurve(duration, easeing || getEaseing(self.easeing));
 
-			target.forEach(function(el){
+			target.forEach(function(el, index, array){
 				self.actualAnimation(el, 0, duration, animationCurve, 0);
+
+				if(index + 1 === array.length){
+					self.actualAnimation(el, 0, duration, animationCurve, 0, true);
+				}else{
+					self.actualAnimation(el, 0, duration, animationCurve, 0);
+				}
 			});
 
-			self.animated = false;
+			return true;
 			},
 
 		drag : function(target, length){
@@ -463,7 +477,7 @@
 			self.points.currY = pointer.pageY;
 
 			//We just want horizontal movements
-			if(Math.abs(self.points.cachedY - self.points.currY) >= Math.abs(self.points.cachedX - self.points.currX)) return false;
+			if( Math.abs(self.points.cachedY - self.points.currY) >= ( Math.abs(self.points.cachedX - self.points.currX) / 2 ) ) return false;
 		
 			return self.points;
 		}
@@ -1137,19 +1151,16 @@ Tabella.prototype.move = function(x){
 	var self = this,
 		cellWidth = self.getCellWidth(self.currentBreakpoint),
 		tableHeaderLength = self.options.tableHeader.length;
-		//slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
 
 	if(x === 'right'){
-		Animator.animate(self.slidingRows, cellWidth, self.options.duration);
-		self.pointer++;
+		if(Animator.animate(self.slidingRows, cellWidth, self.options.duration)) self.pointer++;
 	}else{
 		if(x === 'left'){
-			Animator.animate(self.slidingRows, -cellWidth, self.options.duration);
-			self.pointer--;
+			if(Animator.animate(self.slidingRows, -cellWidth, self.options.duration)) self.pointer--;
 		}else{
 
 			if(typeof x === 'number'){
-				Animator.animate(self.slidingRows, x, getReboundTime(x, self.options.reboundSpeed));
+				if(Animator.animate(self.slidingRows, x, getReboundTime(x, self.options.reboundSpeed))) self.pointer = x;
 			}else{
 				Animator.resetRows(self.slidingRows, 200);
 				self.pointer = 0;

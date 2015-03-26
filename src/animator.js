@@ -66,7 +66,7 @@
 			return getBezier(easeing, epsilon);
 			},
 
-		actualAnimation : function(el, offset, duration, animationCurve, startingOffset){
+		actualAnimation : function(el, offset, duration, animationCurve, startingOffset, lastElement){
 
 			var self = this,
 				targetOffset = startingOffset - offset,
@@ -89,6 +89,7 @@
 				if (progress === 1){
 					cancelAnimationFrame(myReq);
 					start = null;
+					if(lastElement) self.animated = false;
 					}else{
 					requestAnimationFrame(animationStep);
 				}
@@ -139,11 +140,18 @@
 
 			var animationCurve = self.getAnimationCurve(duration, actualEaseing);
 
-			target.forEach(function(el){
-				self.actualAnimation(el, offset, duration, animationCurve, self.offset(el));
+			target.forEach(function(el, index, array){
+				
+				if(index + 1 === array.length){
+					self.actualAnimation(el, offset, duration, animationCurve, self.offset(el), true);
+				}else{
+					self.actualAnimation(el, offset, duration, animationCurve, self.offset(el));
+				}
+				
 			});
 
-			self.animated = false;
+			return true;
+			
 			},
 
 		resetRows : function(target, duration, easeing){
@@ -154,11 +162,17 @@
 
 			var animationCurve = self.getAnimationCurve(duration, easeing || getEaseing(self.easeing));
 
-			target.forEach(function(el){
+			target.forEach(function(el, index, array){
 				self.actualAnimation(el, 0, duration, animationCurve, 0);
+
+				if(index + 1 === array.length){
+					self.actualAnimation(el, 0, duration, animationCurve, 0, true);
+				}else{
+					self.actualAnimation(el, 0, duration, animationCurve, 0);
+				}
 			});
 
-			self.animated = false;
+			return true;
 			},
 
 		drag : function(target, length){

@@ -188,19 +188,16 @@ Tabella.prototype.move = function(x){
 	var self = this,
 		cellWidth = self.getCellWidth(self.currentBreakpoint),
 		tableHeaderLength = self.options.tableHeader.length;
-		//slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
 
 	if(x === 'right'){
-		Animator.animate(self.slidingRows, cellWidth, self.options.duration);
-		self.pointer++;
+		if(Animator.animate(self.slidingRows, cellWidth, self.options.duration)) self.pointer++;
 	}else{
 		if(x === 'left'){
-			Animator.animate(self.slidingRows, -cellWidth, self.options.duration);
-			self.pointer--;
+			if(Animator.animate(self.slidingRows, -cellWidth, self.options.duration)) self.pointer--;
 		}else{
 
 			if(typeof x === 'number'){
-				Animator.animate(self.slidingRows, x, getReboundTime(x, self.options.reboundSpeed));
+				if(Animator.animate(self.slidingRows, x, getReboundTime(x, self.options.reboundSpeed))) self.pointer = x;
 			}else{
 				Animator.resetRows(self.slidingRows, 200);
 				self.pointer = 0;

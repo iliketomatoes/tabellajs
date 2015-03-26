@@ -1,7 +1,11 @@
 # Changelog
 
 TODO
-fix double click during animation, fixed header;
+fix second to last element on the left dragging behavior, fixed header;
+
+##v 0.3.1 - March 2015, 26th
+- Fix arrows' click during animation
+- Fix scroll & swipe conflict
 
 ##v 0.3.0 - March 2015, 25th
 - Fix empty rows and empty row description behavior
