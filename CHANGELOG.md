@@ -1,11 +1,12 @@
 # Changelog
 
 TODO
-fix second to last element on the left dragging behavior, fixed header;
+Fixed header;
 
 ##v 0.3.1 - March 2015, 26th
 - Fix arrows' click during animation
 - Fix scroll & swipe conflict
+- Fix second to last element on swipe right behavior
 
 ##v 0.3.0 - March 2015, 25th
 - Fix empty rows and empty row description behavior

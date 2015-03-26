@@ -52,9 +52,11 @@ Tabella.prototype.attachEvents = function(){
 				//Swipe right
 				if(delta >= 0){ 
 
-					if(self.pointer === 0){                  
+					if(self.pointer === 0){   
 
-						if(Math.abs(parseInt(Animator.offset(slidingTableHeader))) >= self.options.edgeThreshold) legalPosition = false;
+						if(parseInt(Animator.offset(slidingTableHeader)) >= self.options.edgeThreshold){	
+							legalPosition = false;
+						} 	         	
 						
 					}else{
 						self.pointer = startingPointer - tick;
