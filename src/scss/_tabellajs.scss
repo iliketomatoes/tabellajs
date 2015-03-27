@@ -13,6 +13,33 @@
     @include single-transition();
 }
 
+/*
+===========================
+TABLE HEADER
+===========================*/
+
+.t-fixed-header{
+	display: block;
+	z-index: -1;
+}
+
+.t-first-row{
+	z-index: 100;
+}
+
+.t-shadow{
+	//background-color: #eee;
+	-webkit-box-shadow: 0px 4px 7px 0px rgba(0,0,0,0.1);
+  	box-shadow: 0px 4px 7px 0px rgba(0,0,0,0.1);
+}
+
+/**
+* WATCH OUT! The height property given to a table displayed element, is equal to min-height.
+* Hence, it is going to expand when the content is higher than that height.
+*/
+.t-first-row .t-row-cell{
+	height: 3.4rem;
+}
 
 /*
 ===========================
@@ -38,6 +65,7 @@ MAIN RULES
 	display: block;
 	height: 100%;
 	overflow: hidden;
+	background-color: #fff;
 }
 
 .t-row-header{
@@ -87,16 +115,11 @@ MAIN RULES
 	overflow: hidden;
 	padding: 0.4rem 0.1rem;
 	font-size: 1rem;
+	background-color: #fff;
 	text-align: center;
 }
 
-/**
-* WATCH OUT! The height property given to a table displayed element, is equal to min-height.
-* Hence, it is going to expand when the content is higher than that height.
-*/
-.t-first-row .t-row-cell{
-	height: 3.4rem;
-}
+
 
 .t-row-cell{
 	float: left;

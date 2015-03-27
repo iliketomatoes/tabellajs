@@ -93,7 +93,7 @@ Available options:
 
 | Property         | Description                                                      | Type        | DEFAULT |
 | ---------------- |----------------------------------------------------------------  | ----------- | ------- |
-| cellBreakpoints | Here we declare the row breakpoints (referred to the table container's width). It is a literal object which contains an arbitrary number of properties. Each property must hold a 2 element-long array; the first element is the table container *min-width* expressed in px, the second element stands for the number of cells to be shown in each row | Object  |  { default : [0,1], small : [360,2], medium : [640,3], large : [820,4], xlarge : [1080,5]}  |
+| cellBreakpoints | Here we declare the row breakpoints (referred to the table container's width). It is a literal object which contains an arbitrary number of properties. Each property must hold a 2 element-long array; the first element is the table container *min-width* expressed in px, the second element stands for the number of cells to be shown in each row. | Object  |  { default : [0,1], small : [360,2], medium : [640,3], large : [820,4], xlarge : [1080,5]}  |
 | descBreakpoints | Here we declare the description-cell breakpoints (the cells on the left of the table which contains the row description). It is a literal object which contains an arbitrary number of properties. Each property must hold a 2 element-long array; the first element is the table container *min-width* expressed in px, the **second element is the description cell width expressed in px**. | Object  | { default : [0,0], medium : [460, 160], large: [900, 200] } |    
 | from  | Content shown in the period start row. If the header doesn't contain periods just change this property value to something else. |  String  |   'from' |
 | to  | Content shown in the period end row. If the header doesn't contain periods just change this property value to an empty string: ''.|  String  |   'to' |  
@@ -103,10 +103,13 @@ Available options:
 | reboundSpeed | The speed of the animation once "touch end" event is fired, after you stopped swiping a table row. Expressed in px/seconds. | Number | 300 |
 | edgeThreshold | The amount of pixels you can swipe over the boundaries of the row. | Number | 150 |
 | swipeThreshold | The amount of pixels needed to fire the swipe event. | Number | 60 |
-| swipeSingleTick | Whether to swipe by a single-cell-length per time or not. If set to false, it'll swipe by a number of cells equal to the result given by this function: Math.abs(Math.floor(delta / swipeThreshold)) | Boolean | true |
+| swipeSingleTick | Whether to swipe by a single-cell-length per time or not. If set to false, it'll swipe by a number of cells equal to the result given by this function: Math.abs(Math.floor(delta / swipeThreshold)). | Boolean | true |
 | onRefreshSize | A callback to invoke when the browser window has been resized. | Function | false |
-| headerRowDevider | When you have a two-storey table header, here you can put any HTML entity you want | String | '-' |
-| emptyCell | When a row contains less cells than the number of the table header cells, it will just add an empty cell with this value | String | 'not set' |
+| headerRowDevider | When you have a two-storey table header, here you can put any HTML entity you want. | String | '-' |
+| emptyCell | When a row contains less cells than the number of the table header cells, it will just add an empty cell with this value. | String | 'not set' |
+| fixedHeader | Enable or disable the table header fixed position when scrolling down the page (i.e. when the top of the table isn't visible anymore but the rest of the table is still in the viewport). | Boolean | true |
+| fixedHeaderBottomThreshold  | The distance between the fixed table header and the bottom of the table ( expressed in px ) below which the fixed table header will disappear.  | Number | 80 |
+| fixedHeaderTop | This option will set the CSS *top* rule for the table header when it's in fixed position. | String | '0' |
 
 
     

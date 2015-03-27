@@ -1,7 +1,7 @@
 # Changelog
 
-TODO
-Fixed header;
+##v 0.3.2 - March 2015, 27th
+- Fixed header option, enabled by default
 
 ##v 0.3.1 - March 2015, 26th
 - Fix arrows' click during animation

@@ -118,3 +118,35 @@
     return Math.round((Math.abs(space) / speed) * 1000);
   }
 
+/**
+* Determine if an element is partially in the viewport
+* 
+* @param {HTMLElement} el
+*/
+function isElementPartiallyInViewport(el, bottomThreshold) {
+
+    var rect = el.getBoundingClientRect(),
+    	threshold = bottomThreshold || 0;
+
+    return (
+        rect.top <= 0 &&
+        rect.bottom >= threshold &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) 
+    );
+}
+
+/**
+* Determine if an element is completely in the viewport
+* 
+* @param {HTMLElement} el
+*/
+function isElementCompletelyInViewport(el) {
+
+    var rect = el.getBoundingClientRect();
+
+    return ( rect.top >= 0 &&
+        rect.top <= (window.innerHeight || document.documentElement.clientHeight) && 
+        rect.bottom >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight )
+        );
+}

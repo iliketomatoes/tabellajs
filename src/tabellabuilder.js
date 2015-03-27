@@ -48,7 +48,10 @@ SCHEMA:
 
 				if(tableHeader instanceof Array && tableHeader.length){
 
-					tRow = createHTMLEl('div', 't-row t-first-row', docfrag);
+					//Table header row's container
+					var fixedHeader = createHTMLEl('div', 't-fixed-header', docfrag);
+
+					tRow = createHTMLEl('div', 't-row t-first-row', fixedHeader);
 
 					var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
 

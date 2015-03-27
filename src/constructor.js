@@ -40,7 +40,10 @@
 			swipeSingleTick : true,
 			onRefreshSize : false,
 			headerRowDevider : '-',
-			emptyCell : 'not set'
+			emptyCell : 'not set',
+			fixedHeader: true,
+			fixedHeaderBottomThreshold : 80,
+			fixedHeaderTop : '0'
 		};
 
 		try{

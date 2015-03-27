@@ -26,7 +26,7 @@ Tabella.prototype.attachEvents = function(){
 
 		//setting the events listeners
 		setListener(el, Toucher.touchEvents.start, function(e){
-			//e.preventDefault();
+	
 			startingOffset = Animator.offset(slidingTableHeader);
 			cachedPosition = Toucher.onTouchStart(e);
 			currentCellWidth = parseInt(self.currentCellWidth);
@@ -35,7 +35,7 @@ Tabella.prototype.attachEvents = function(){
 		});
 
 		setListener(el, Toucher.touchEvents.move, function(e){
-			//e.preventDefault();
+		
 			position = Toucher.onTouchMove(e);
 			
 			if(position && legalPosition){
@@ -82,7 +82,7 @@ Tabella.prototype.attachEvents = function(){
 		});
 
 		setListener(el, Toucher.touchEvents.end, function(){
-			//e.preventDefault();
+		
 			Toucher.onTouchEnd();
 			startingOffset = 0;
 			var offset = parseInt(Animator.offset(slidingTableHeader));
@@ -93,6 +93,42 @@ Tabella.prototype.attachEvents = function(){
 
 	});	
 
+
+	/**
+	* Handling scroll event for fixed header
+	*/
+
+	if(self.options.fixedHeader)
+	{
+		setListener(window, 'scroll', function(){
+
+			if(isElementCompletelyInViewport(self.el) && self.tableHeaderRow.getAttribute('data-position') === 'relative') return false;
+
+			if(isElementCompletelyInViewport(self.el)){
+					self.unsetFixedHeader();
+					return false;
+				}
+
+			if(isElementPartiallyInViewport(self.el, self.options.fixedHeaderBottomThreshold)){
+
+				//If the table is partially in the viewport we set the tableHeaderRow to fixed position
+				self.setFixedHeader(); 
+
+			}else{
+
+				/**
+				* If table is out of viewport and tableHeaderRow isn't in fixed position we don't do anything.
+				* Otherwise we unset the tableHeaderRow
+				*/
+				if(self.tableHeaderRow.getAttribute('data-position') === 'relative') return false;
+
+				self.unsetFixedHeader();
+			}
+
+		});
+	}
+	
+
 };
 
 
@@ -102,3 +138,52 @@ Tabella.prototype.resetDragging = function(offset){
 	Animator.animate(self.slidingRows, offset, getReboundTime(offset, self.options.reboundSpeed), 'easeOutBack');
 };
 
+
+/**
+* Setting fixed header
+*/
+
+Tabella.prototype.setFixedHeader = function(){
+
+	var self = this;
+	
+	var fixedHeaderCtr = self.tableHeaderRow.parentElement;
+	
+	fixedHeaderCtr.style.width = fixedHeaderCtr.clientWidth + 'px';
+	fixedHeaderCtr.style.height = fixedHeaderCtr.clientHeight + 'px';
+
+	self.tableHeaderRow.style.top = self.options.fixedHeaderTop;
+	self.tableHeaderRow.style.marginTop = 0;
+	self.tableHeaderRow.style.width = fixedHeaderCtr.clientWidth + 'px';
+	self.tableHeaderRow.style.height = fixedHeaderCtr.clientHeight + 'px';
+
+	classie.add(self.tableHeaderRow, 't-shadow');
+
+	self.tableHeaderRow.style.position = 'fixed';
+	self.tableHeaderRow.setAttribute('data-position', 'fixed');
+};
+
+
+/**
+* Setting fixed header
+*/
+
+Tabella.prototype.unsetFixedHeader = function(){
+	var self = this;
+
+	self.tableHeaderRow.style.position = 'relative';
+	self.tableHeaderRow.setAttribute('data-position', 'relative');
+
+	classie.remove(self.tableHeaderRow, 't-shadow');
+	
+	var fixedHeaderCtr = self.tableHeaderRow.parentElement;
+	
+	fixedHeaderCtr.style.width = 'auto';
+	fixedHeaderCtr.style.height = 'auto';
+
+	self.tableHeaderRow.style.top = '';
+	self.tableHeaderRow.style.marginTop = '';
+	self.tableHeaderRow.style.width = 'auto';
+	self.tableHeaderRow.style.height = 'auto';
+
+};

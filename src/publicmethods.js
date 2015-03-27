@@ -10,6 +10,9 @@ Tabella.prototype.refreshSize = function(){
 
 		self.refreshArrowPosition(descWidth);
 
+		//Unset fixed header before resizing everything
+		if (self.options.fixedHeader) self.unsetFixedHeader();
+
 	var rows = getArray(self.el.querySelectorAll('.t-row'));
 
 	rows.forEach(function(el){
@@ -232,3 +235,5 @@ Tabella.prototype.arrowsCentering = function(){
 		self.arrows.arrowLeft.style.marginTop = verticalMargin + 'px';
 	}
 };
+
+

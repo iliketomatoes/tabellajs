@@ -1,4 +1,4 @@
-/*! tabella - v0.3.1 - 2015-03-26
+/*! tabella - v0.3.2 - 2015-03-27
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2015 ; Licensed  */
 ;(function(tabella) {
@@ -137,6 +137,38 @@
     return Math.round((Math.abs(space) / speed) * 1000);
   }
 
+/**
+* Determine if an element is partially in the viewport
+* 
+* @param {HTMLElement} el
+*/
+function isElementPartiallyInViewport(el, bottomThreshold) {
+
+    var rect = el.getBoundingClientRect(),
+    	threshold = bottomThreshold || 0;
+
+    return (
+        rect.top <= 0 &&
+        rect.bottom >= threshold &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) 
+    );
+}
+
+/**
+* Determine if an element is completely in the viewport
+* 
+* @param {HTMLElement} el
+*/
+function isElementCompletelyInViewport(el) {
+
+    var rect = el.getBoundingClientRect();
+
+    return ( rect.top >= 0 &&
+        rect.top <= (window.innerHeight || document.documentElement.clientHeight) && 
+        rect.bottom >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight )
+        );
+}
 
 	
 	function TabellaException(value) {			
@@ -496,7 +528,10 @@ var TabellaBuilder = {
 
 				if(tableHeader instanceof Array && tableHeader.length){
 
-					tRow = createHTMLEl('div', 't-row t-first-row', docfrag);
+					//Table header row's container
+					var fixedHeader = createHTMLEl('div', 't-fixed-header', docfrag);
+
+					tRow = createHTMLEl('div', 't-row t-first-row', fixedHeader);
 
 					var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
 
@@ -759,7 +794,10 @@ var TabellaBuilder = {
 			swipeSingleTick : true,
 			onRefreshSize : false,
 			headerRowDevider : '-',
-			emptyCell : 'not set'
+			emptyCell : 'not set',
+			fixedHeader: true,
+			fixedHeaderBottomThreshold : 80,
+			fixedHeaderTop : '0'
 		};
 
 		try{
@@ -886,7 +924,7 @@ Tabella.prototype.attachEvents = function(){
 
 		//setting the events listeners
 		setListener(el, Toucher.touchEvents.start, function(e){
-			//e.preventDefault();
+	
 			startingOffset = Animator.offset(slidingTableHeader);
 			cachedPosition = Toucher.onTouchStart(e);
 			currentCellWidth = parseInt(self.currentCellWidth);
@@ -895,7 +933,7 @@ Tabella.prototype.attachEvents = function(){
 		});
 
 		setListener(el, Toucher.touchEvents.move, function(e){
-			//e.preventDefault();
+		
 			position = Toucher.onTouchMove(e);
 			
 			if(position && legalPosition){
@@ -942,7 +980,7 @@ Tabella.prototype.attachEvents = function(){
 		});
 
 		setListener(el, Toucher.touchEvents.end, function(){
-			//e.preventDefault();
+		
 			Toucher.onTouchEnd();
 			startingOffset = 0;
 			var offset = parseInt(Animator.offset(slidingTableHeader));
@@ -953,6 +991,42 @@ Tabella.prototype.attachEvents = function(){
 
 	});	
 
+
+	/**
+	* Handling scroll event for fixed header
+	*/
+
+	if(self.options.fixedHeader)
+	{
+		setListener(window, 'scroll', function(){
+
+			if(isElementCompletelyInViewport(self.el) && self.tableHeaderRow.getAttribute('data-position') === 'relative') return false;
+
+			if(isElementCompletelyInViewport(self.el)){
+					self.unsetFixedHeader();
+					return false;
+				}
+
+			if(isElementPartiallyInViewport(self.el, self.options.fixedHeaderBottomThreshold)){
+
+				//If the table is partially in the viewport we set the tableHeaderRow to fixed position
+				self.setFixedHeader(); 
+
+			}else{
+
+				/**
+				* If table is out of viewport and tableHeaderRow isn't in fixed position we don't do anything.
+				* Otherwise we unset the tableHeaderRow
+				*/
+				if(self.tableHeaderRow.getAttribute('data-position') === 'relative') return false;
+
+				self.unsetFixedHeader();
+			}
+
+		});
+	}
+	
+
 };
 
 
@@ -962,6 +1036,55 @@ Tabella.prototype.resetDragging = function(offset){
 	Animator.animate(self.slidingRows, offset, getReboundTime(offset, self.options.reboundSpeed), 'easeOutBack');
 };
 
+
+/**
+* Setting fixed header
+*/
+
+Tabella.prototype.setFixedHeader = function(){
+
+	var self = this;
+	
+	var fixedHeaderCtr = self.tableHeaderRow.parentElement;
+	
+	fixedHeaderCtr.style.width = fixedHeaderCtr.clientWidth + 'px';
+	fixedHeaderCtr.style.height = fixedHeaderCtr.clientHeight + 'px';
+
+	self.tableHeaderRow.style.top = self.options.fixedHeaderTop;
+	self.tableHeaderRow.style.marginTop = 0;
+	self.tableHeaderRow.style.width = fixedHeaderCtr.clientWidth + 'px';
+	self.tableHeaderRow.style.height = fixedHeaderCtr.clientHeight + 'px';
+
+	classie.add(self.tableHeaderRow, 't-shadow');
+
+	self.tableHeaderRow.style.position = 'fixed';
+	self.tableHeaderRow.setAttribute('data-position', 'fixed');
+};
+
+
+/**
+* Setting fixed header
+*/
+
+Tabella.prototype.unsetFixedHeader = function(){
+	var self = this;
+
+	self.tableHeaderRow.style.position = 'relative';
+	self.tableHeaderRow.setAttribute('data-position', 'relative');
+
+	classie.remove(self.tableHeaderRow, 't-shadow');
+	
+	var fixedHeaderCtr = self.tableHeaderRow.parentElement;
+	
+	fixedHeaderCtr.style.width = 'auto';
+	fixedHeaderCtr.style.height = 'auto';
+
+	self.tableHeaderRow.style.top = '';
+	self.tableHeaderRow.style.marginTop = '';
+	self.tableHeaderRow.style.width = 'auto';
+	self.tableHeaderRow.style.height = 'auto';
+
+};
 
 Tabella.prototype.refreshSize = function(){
 	var self = this,
@@ -974,6 +1097,9 @@ Tabella.prototype.refreshSize = function(){
 		tableHeaderLength = self.options.tableHeader.length;
 
 		self.refreshArrowPosition(descWidth);
+
+		//Unset fixed header before resizing everything
+		if (self.options.fixedHeader) self.unsetFixedHeader();
 
 	var rows = getArray(self.el.querySelectorAll('.t-row'));
 
@@ -1197,6 +1323,8 @@ Tabella.prototype.arrowsCentering = function(){
 		self.arrows.arrowLeft.style.marginTop = verticalMargin + 'px';
 	}
 };
+
+
 
 	
 	// Register TabellaException on window
