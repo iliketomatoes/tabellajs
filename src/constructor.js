@@ -79,6 +79,7 @@
 		//An object that has to hold the cellBreakpoint and descBreakpoint
 		self.currentBreakpoint = {};
 		self.currentCellWidth = 0;
+		self.currentWindowWidth = window.innerWidth;
 
 		self.el = el;
 

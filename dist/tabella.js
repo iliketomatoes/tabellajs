@@ -1,7 +1,7 @@
-/*! tabella - v0.3.2 - 2015-03-27
+/*! tabella - v0.3.3 - 2015-03-30
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2015 ; Licensed  */
-;(function(tabella) {
+;(function( tabella, window, document) {
 
 	'use strict';
 	
@@ -833,6 +833,7 @@ var TabellaBuilder = {
 		//An object that has to hold the cellBreakpoint and descBreakpoint
 		self.currentBreakpoint = {};
 		self.currentCellWidth = 0;
+		self.currentWindowWidth = window.innerWidth;
 
 		self.el = el;
 
@@ -1091,15 +1092,18 @@ Tabella.prototype.refreshSize = function(){
 		oldBreakpoint = self.currentBreakpoint,
 		breakpoint = self.currentBreakpoint = self.getBreakpoint();
 
+	var oldWindowdWidth = self.currentWindowWidth;
+	self.currentWindowWidth = window.innerWidth;
+
 	var oldCellWidth = self.currentCellWidth,
 		cellWidth = self.currentCellWidth = self.getCellWidth(breakpoint),
 		descWidth = breakpoint.descBreakpoint[1],
 		tableHeaderLength = self.options.tableHeader.length;
 
-		self.refreshArrowPosition(descWidth);
+	self.refreshArrowPosition(descWidth);
 
-		//Unset fixed header before resizing everything
-		if (self.options.fixedHeader) self.unsetFixedHeader();
+	//Unset fixed header before resizing everything
+	if (self.options.fixedHeader && oldWindowdWidth !== self.currentWindowWidth) self.unsetFixedHeader();
 
 	var rows = getArray(self.el.querySelectorAll('.t-row'));
 
@@ -1324,8 +1328,6 @@ Tabella.prototype.arrowsCentering = function(){
 	}
 };
 
-
-
-
 	return Tabella;
-});
+	
+}, window, document);

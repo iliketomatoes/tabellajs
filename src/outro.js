@@ -1,3 +1,4 @@
 
 	return Tabella;
-});
+	
+}, window, document);

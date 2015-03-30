@@ -3,15 +3,18 @@ Tabella.prototype.refreshSize = function(){
 		oldBreakpoint = self.currentBreakpoint,
 		breakpoint = self.currentBreakpoint = self.getBreakpoint();
 
+	var oldWindowdWidth = self.currentWindowWidth;
+	self.currentWindowWidth = window.innerWidth;
+
 	var oldCellWidth = self.currentCellWidth,
 		cellWidth = self.currentCellWidth = self.getCellWidth(breakpoint),
 		descWidth = breakpoint.descBreakpoint[1],
 		tableHeaderLength = self.options.tableHeader.length;
 
-		self.refreshArrowPosition(descWidth);
+	self.refreshArrowPosition(descWidth);
 
-		//Unset fixed header before resizing everything
-		if (self.options.fixedHeader) self.unsetFixedHeader();
+	//Unset fixed header before resizing everything
+	if (self.options.fixedHeader && oldWindowdWidth !== self.currentWindowWidth) self.unsetFixedHeader();
 
 	var rows = getArray(self.el.querySelectorAll('.t-row'));
 
@@ -235,5 +238,3 @@ Tabella.prototype.arrowsCentering = function(){
 		self.arrows.arrowLeft.style.marginTop = verticalMargin + 'px';
 	}
 };
-
-

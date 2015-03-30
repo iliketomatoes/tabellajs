@@ -1,7 +1,10 @@
 # Changelog
 
+##v 0.3.3 - March 2015, 30th
+- Fix fixed-header behavior on resize event for mobile browsers
+
 ##v 0.3.2 - March 2015, 27th
-- Fixed header option, enabled by default
+- Add fixed-header option, enabled by default
 
 ##v 0.3.1 - March 2015, 26th
 - Fix arrows' click during animation

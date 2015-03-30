@@ -1,4 +1,4 @@
-;(function(tabella) {
+;(function( tabella, window, document) {
 
 	'use strict';
 	
