@@ -1,4 +1,4 @@
-/*! tabella - v0.3.3 - 2015-03-30
+/*! tabella - v0.3.4 - 2015-03-30
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2015 ; Licensed  */
 ;(function( tabella, window, document) {

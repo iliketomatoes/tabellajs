@@ -1,7 +1,8 @@
 # Changelog
 
-##v 0.3.3 - March 2015, 30th
+##v 0.3.4 - March 2015, 30th
 - Fix fixed-header behavior on resize event for mobile browsers
+- Fix fixed-header beackground flickering
 
 ##v 0.3.2 - March 2015, 27th
 - Add fixed-header option, enabled by default
