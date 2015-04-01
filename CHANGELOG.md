@@ -1,5 +1,9 @@
 # Changelog
 
+##v 0.3.5 - March 2015, 30th
+- Fix fixed-header behavior for really long tables
+- Fix .t-element class CSS, update to 100% width
+
 ##v 0.3.4 - March 2015, 30th
 - Fix fixed-header behavior on resize event for mobile browsers
 - Fix fixed-header beackground flickering

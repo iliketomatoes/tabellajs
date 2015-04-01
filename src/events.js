@@ -102,12 +102,14 @@ Tabella.prototype.attachEvents = function(){
 	{
 		setListener(window, 'scroll', function(){
 
-			if(isElementCompletelyInViewport(self.el) && self.tableHeaderRow.getAttribute('data-position') === 'relative') return false;
+			if(isElementCompletelyInViewport(self.el) && self.tableHeaderRow.getAttribute('data-position') === 'relative'){
+			  return false;	
+			} 
 
 			if(isElementCompletelyInViewport(self.el)){
-					self.unsetFixedHeader();
-					return false;
-				}
+				self.unsetFixedHeader();
+				return false;
+			}
 
 			if(isElementPartiallyInViewport(self.el, self.options.fixedHeaderBottomThreshold)){
 

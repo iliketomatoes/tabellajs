@@ -102,38 +102,19 @@
                 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
                 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
 
-                /*var dataTest = {};
 
-               dataTest.tableHeader = [
-                    ['2014-12-14', '2014-12-20']
-                    ,['2014-12-21', '2015-1-10']
-                    ,['2015-2-1', '2015-3-7']
-                    ,['2015-3-8', '2015-3-21']
-                    ,['2015-3-22', '2015-4-7']
-                    ,['2015-4-7', '2015-4-23']
-                    ];
+               /* var dataTest = {};
 
-                dataTest.from = 'Periods';
-                dataTest.to = '';
-                dataTest.headerRowDevider = '-';
-                //dataTest.fixedHeader = false;    
+    dataTest.tableHeader = [["12\/01\/2014","12\/22\/2014"],["12\/23\/2014","01\/05\/2015"],["01\/06\/2015","01\/16\/2015"],["01\/17\/2015","02\/06\/2015"],["02\/07\/2015","03\/06\/2015"],["03\/07\/2015","03\/13\/2015"],["03\/14\/2015","03\/20\/2015"],["03\/21\/2015","04\/12\/2015"],["04\/13\/2015","05\/08\/2015"]];
 
-                dataTest.rows = [
-                    {
-                        rowHeader: '<h2 class="table-h"><a href="#">Single bed room</a></h2>',
-                        rowVal: [[190 , 210, 210, 204, 180]],
-                    },
-                    {
-                        rowHeader: '<h2 class="table-h"><a href="#">Double bed room</a></h2>',
-                        rowVal: [[190 , 210, 210, 204, 180, 160],[190 , 210, 210, 204, 180, 140]],
-                        rowDesc : [ null, '2 people half board']
-                    },
-                    {
-                        rowHeader: '<h2 class="table-h"><a href="#">Suite</a></h2>',
-                        rowVal: [[250 , 280, 280, 260, 230, 210, 227]],
-                    }];  
+    dataTest.rows = [{"rowHeader":"<h5 class=\"bold\"><a href=\"http:\/\/localhost\/ion+\/en\/camere\/details\/singola\">Single room<\/a><\/h5>","rowDesc":["1 person bed and breakfast"],"rowVal":[["42.00","57.00","45.00","48.00","52.00","47.00","39.00","38.00","35.00"]]},{"rowHeader":"<h5 class=\"bold\"><a href=\"http:\/\/localhost\/ion+\/en\/camere\/details\/doppiaStandard\">Double room Standard<\/a><\/h5>","rowDesc":["1 person bed and breakfast","2 people bed and breakfast"],"rowVal":[["38.00","50.00","39.00","41.00","45.00","40.00","34.00","33.00","29.00"],["-","-","-","-","-","-","-","-","-"]]},{"rowHeader":"<h5 class=\"bold\"><a href=\"http:\/\/localhost\/ion+\/en\/camere\/details\/doppiaSuperior\">Double room Superior<\/a><\/h5>","rowDesc":["1 person bed and breakfast","2 people ","3 people "],"rowVal":[["38.00","53.00","41.00","44.00","48.00","43.00","37.00","36.00","32.00"],["-","-","-","-","-","-","-","-","-"],["-","-","-","-","-","-","-","-","-"]]},{"rowHeader":"<h5 class=\"bold\"><a href=\"http:\/\/localhost\/ion+\/en\/camere\/details\/doppiaMansarda\">Attic room<\/a><\/h5>","rowDesc":["1 person bed and breakfast","2 people "],"rowVal":[["1,000.00","1,000.00","1,000.00","1,000.00","1,000.00","1,000.00","1,000.00","1,000.00","1,000.00"],["-","-","-","-","-","-","-","-","-"]]},{"rowHeader":"<h5 class=\"bold\"><a href=\"http:\/\/localhost\/ion+\/en\/camere\/details\/tripla\">Triple room<\/a><\/h5>","rowDesc":["1 person bed and breakfast"],"rowVal":[["36.00","48.00","37.00","39.00","43.00","38.00","32.00","30.00","26.00"]]}];
 
-                var tabellaTest = new Tabella(document.getElementById('tabella-test'), dataTest);*/
+    dataTest.cellBreakpoints = { default : [0,1], small : [460,2], medium : [640,3], large : [820,4], xlarge : [1080,5]};
+
+    dataTest.descBreakpoints = { default : [0,0], medium : [460, 200], large: [900, 270] };
+
+    var tabellaTest = new Tabella(document.getElementById('tabella-test'), dataTest);*/
+
 
                 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
                 /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/

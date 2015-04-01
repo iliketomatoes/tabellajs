@@ -128,11 +128,7 @@ function isElementPartiallyInViewport(el, bottomThreshold) {
     var rect = el.getBoundingClientRect(),
     	threshold = bottomThreshold || 0;
 
-    return (
-        rect.top <= 0 &&
-        rect.bottom >= threshold &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) 
-    );
+    return ( rect.top <= 0 && rect.bottom >= threshold );
 }
 
 /**
@@ -144,9 +140,5 @@ function isElementCompletelyInViewport(el) {
 
     var rect = el.getBoundingClientRect();
 
-    return ( rect.top >= 0 &&
-        rect.top <= (window.innerHeight || document.documentElement.clientHeight) && 
-        rect.bottom >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight )
-        );
+    return ( rect.top >= 0 && rect.top <= (window.innerHeight || document.documentElement.clientHeight) && rect.bottom >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight ));
 }

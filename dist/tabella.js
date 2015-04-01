@@ -1,4 +1,4 @@
-/*! tabella - v0.3.4 - 2015-03-30
+/*! tabella - v0.3.5 - 2015-04-01
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2015 ; Licensed  */
 ;(function( tabella, window, document) {
@@ -147,11 +147,7 @@ function isElementPartiallyInViewport(el, bottomThreshold) {
     var rect = el.getBoundingClientRect(),
     	threshold = bottomThreshold || 0;
 
-    return (
-        rect.top <= 0 &&
-        rect.bottom >= threshold &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) 
-    );
+    return ( rect.top <= 0 && rect.bottom >= threshold );
 }
 
 /**
@@ -163,11 +159,7 @@ function isElementCompletelyInViewport(el) {
 
     var rect = el.getBoundingClientRect();
 
-    return ( rect.top >= 0 &&
-        rect.top <= (window.innerHeight || document.documentElement.clientHeight) && 
-        rect.bottom >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight )
-        );
+    return ( rect.top >= 0 && rect.top <= (window.innerHeight || document.documentElement.clientHeight) && rect.bottom >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight ));
 }
 
 	
@@ -1001,12 +993,14 @@ Tabella.prototype.attachEvents = function(){
 	{
 		setListener(window, 'scroll', function(){
 
-			if(isElementCompletelyInViewport(self.el) && self.tableHeaderRow.getAttribute('data-position') === 'relative') return false;
+			if(isElementCompletelyInViewport(self.el) && self.tableHeaderRow.getAttribute('data-position') === 'relative'){
+			  return false;	
+			} 
 
 			if(isElementCompletelyInViewport(self.el)){
-					self.unsetFixedHeader();
-					return false;
-				}
+				self.unsetFixedHeader();
+				return false;
+			}
 
 			if(isElementPartiallyInViewport(self.el, self.options.fixedHeaderBottomThreshold)){
 
