@@ -1,154 +1,275 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Tabella js</title>
-        <meta name="rowHeaderription" content="Responsive table">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="stylesheet" href="dist/assets/css/normalize.min.css">
-        <link rel="stylesheet" href="dist/assets/css/home.css">
-        <link rel="stylesheet" href="dist/assets/css/tabella.css">
-
-        <!--[if lt IE 9]>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Tabella js</title>
+    <meta name="rowHeaderription" content="Responsive table">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="dist/assets/css/normalize.min.css">
+    <link rel="stylesheet" href="dist/assets/css/home.css">
+    <link rel="stylesheet" href="dist/assets/css/tabella.css">
+    <!--[if lt IE 9]>
             <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
             <script>window.html5 || document.write('<script src="dist/assets/js/html5shiv.js"><\/script>')</script>
         <![endif]-->
-    </head>
-    <body>
-        <header id="main-header">
-            <div class="header-content">
-                <h1>Tabella.js</h1>
-                <h2>Responsive table.</h2>
+</head>
+
+<body>
+    <header id="main-header">
+        <div class="header-content">
+            <h1>Tabella.js</h1>
+            <h2>Responsive table.</h2>
+        </div>
+    </header>
+    <main role="main">
+        <section class="waikiki">
+            <h1><i>Your wonderful</i> Hotel</h1>
+            <h3>Click on the arrows or swipe the blue rows.</h3>
+            <div id="tabella" class="tabella-ctr"></div>
+        </section>
+        <hr>
+        <section>
+            <h1>You can scroll down the page</h1>
+            <h2>To see the fixed table header in action &uarr;</h2>
+            <p>Just some text to make this page longer. Love them ipsum.</p>
+            <p>Just some text to make this page longer. Love them ipsum.</p>
+            <p>Just some text to make this page longer. Love them ipsum.</p>
+            <p>Just some text to make this page longer. Love them ipsum.</p>
+            <p>Just some text to make this page longer. Love them ipsum.</p>
+            <p>Just some text to make this page longer. Love them ipsum.</p>
+            <p>Just some text to make this page longer. Love them ipsum.</p>
+            <p>Just some text to make this page longer. Love them ipsum.</p>
+            <p>Just some text to make this page longer. Love them ipsum.</p>
+            <h2>One cool thing is that the table header is fixed only when at least some part of the table is in the viewport.</h2>
+        </section>
+        <hr>
+        <section>
+            <div class="container-40pc">
+                <h1>Hidden table</h1>
+                <h2>
+                        <a href="#" id="toggle-btn">
+                        Show Table 
+                        <span class="hide-for-small"> &#8680;</span>
+                        <span class="show-for-small"> &#8681;</span>
+                        </a>
+                    </h2>
+                <p>
+                    This snippet shows two useful methods to use when you show tables inside containers that were previusoly styled with <i>display: none</i> (e.g. tables inside tabs).
+                </p>
+                <pre><code>table.refreshSize();<br>table.move();</code></pre>
             </div>
-        </header>
-        <main role="main">
-            <section class="waikiki">
-                <h1><i>Your wonderful</i> Hotel</h1>
-                <h3>Click on the arrows or swipe the blue rows.</h3>
-                <div id="tabella" class="tabella-ctr"></div>
-            </section>
-            <hr>
-            <section>
-                <h1>You can scroll down the page</h1>
-                <h2>To see the fixed table header in action &uarr;</h2>
-                <p>Just some text to make this page longer. Love them ipsum.</p>
-                <p>Just some text to make this page longer. Love them ipsum.</p>
-                <p>Just some text to make this page longer. Love them ipsum.</p>
-                <p>Just some text to make this page longer. Love them ipsum.</p>
-                <p>Just some text to make this page longer. Love them ipsum.</p>
-                <p>Just some text to make this page longer. Love them ipsum.</p>
-                <p>Just some text to make this page longer. Love them ipsum.</p>
-                <p>Just some text to make this page longer. Love them ipsum.</p>
-                <p>Just some text to make this page longer. Love them ipsum.</p>
-                <h2>One cool thing is that the table header is fixed only when at least some part of the table is in the viewport.</h2>
-            </section>
-            <!--<hr>
-            <section>
-                <h1></h1>    
-                <p>Test table</p>
-                 <div id="tabella-test" class="tabella-ctr"></div>
-            </section>-->
-            <hr>
-            <section>
-                <h1>You can put a lot of tables in the same page</h1>
-                <p>Once it was just a responsive pricing table. With no efforts it can be even a multi purpose table.</p>
-                 <div id="tabella-rooms" class="tabella-ctr"></div>
-            </section>
-            <article class="explaination">
-                <p><b>This is a pure javascript, dependency free plugin.*</b></p>
-            </article>
-        </main>
-        <a href="https://github.com/iliketomatoes/tabellajs"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a>
-        <script src="dist/tabella.js"></script>
-        <script type="text/javascript">
-            !(function(){
+            <div class="container-60pc">
+                <div id="show-hide-container" style="display: none;">
+                    <div id="tabella-test" class="tabella-ctr"></div>
+                </div>
+            </div>
+        </section>
+        <div class="clearfix"></div>
+        <hr>
+        <section>
+            <h1>You can put a lot of tables in the same page</h1>
+            <p>Once it was just a responsive pricing table. With no efforts it can be even a multi purpose table.</p>
+            <div id="tabella-rooms" class="tabella-ctr"></div>
+        </section>
+        <article class="explaination">
+            <p><b>This is a pure javascript, dependency free plugin.*</b></p>
+        </article>
+    </main>
+    <a href="https://github.com/iliketomatoes/tabellajs"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a>
+    <script src="dist/tabella.js"></script>
+    <script type="text/javascript">
+    !(function() {
 
-                var tabellaCtr = document.getElementById('tabella');
+        var tabellaCtr = document.getElementById('tabella');
 
-                var data = {};
+        var data = {};
 
-                data.tableHeader = [
-                    ['2014-12-14', '2014-12-20']
-                    ,['2014-12-21', '2015-1-10']
-                    ,['2015-2-1', '2015-3-7']
-                    ,['2015-3-8', '2015-3-21']
-                    ,['2015-3-22', '2015-4-7']
-                    ,['2015-4-7', '2015-4-23']
-                    ];
+        data.tableHeader = [
+            ['2014-12-14', '2014-12-20'],
+            ['2014-12-21', '2015-1-10'],
+            ['2015-2-1', '2015-3-7'],
+            ['2015-3-8', '2015-3-21'],
+            ['2015-3-22', '2015-4-7'],
+            ['2015-4-7', '2015-4-23']
+        ];
 
-                data.rows = [
-                    {
-                        rowHeader: '<h2 class="table-h"><a href="#">Single bed room</a></h2>',
-                        rowVal: [[190 , 210, 210, 204, 180, 160]],
-                        rowDesc : ['1 person B&B']
-                    },
-                    {
-                        rowHeader: '<h2 class="table-h"><a href="#">Double bed room</a></h2>',
-                        rowVal: [[190 , 210, 210, 204, 180, 160],[190 , 210, 210, 204, 180, 140]],
-                        rowDesc : ['1 person half board', '2 people half board']
-                    },
-                    {
-                        rowHeader: '<h2 class="table-h"><a href="#">Suite</a></h2>',
-                        rowVal: [[250 , 280, 280, 260, 230, 210]],
-                        rowDesc : ['2 people all inclusive']
-                    }];        
-
-                var hotelrowVal = new Tabella(
-                    tabellaCtr, data);
-
-                /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
-                /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
-                /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
+        data.rows = [{
+            rowHeader: '<h2 class="table-h"><a href="#">Single bed room</a></h2>',
+            rowVal: [
+                [190, 210, 210, 204, 180, 160]
+            ],
+            rowDesc: ['1 person B&B']
+        }, {
+            rowHeader: '<h2 class="table-h"><a href="#">Double bed room</a></h2>',
+            rowVal: [
+                [190, 210, 210, 204, 180, 160],
+                [190, 210, 210, 204, 180, 140]
+            ],
+            rowDesc: ['1 person half board', '2 people half board']
+        }, {
+            rowHeader: '<h2 class="table-h"><a href="#">Suite</a></h2>',
+            rowVal: [
+                [250, 280, 280, 260, 230, 210]
+            ],
+            rowDesc: ['2 people all inclusive']
+        }];
 
 
-               /* var dataTest = {};
+        var hotelrowVal = new Tabella(
+            tabellaCtr, data);
 
-    dataTest.tableHeader = [["12\/01\/2014","12\/22\/2014"],["12\/23\/2014","01\/05\/2015"],["01\/06\/2015","01\/16\/2015"],["01\/17\/2015","02\/06\/2015"],["02\/07\/2015","03\/06\/2015"],["03\/07\/2015","03\/13\/2015"],["03\/14\/2015","03\/20\/2015"],["03\/21\/2015","04\/12\/2015"],["04\/13\/2015","05\/08\/2015"]];
-
-    dataTest.rows = [{"rowHeader":"<h5 class=\"bold\"><a href=\"http:\/\/localhost\/ion+\/en\/camere\/details\/singola\">Single room<\/a><\/h5>","rowDesc":["1 person bed and breakfast"],"rowVal":[["42.00","57.00","45.00","48.00","52.00","47.00","39.00","38.00","35.00"]]},{"rowHeader":"<h5 class=\"bold\"><a href=\"http:\/\/localhost\/ion+\/en\/camere\/details\/doppiaStandard\">Double room Standard<\/a><\/h5>","rowDesc":["1 person bed and breakfast","2 people bed and breakfast"],"rowVal":[["38.00","50.00","39.00","41.00","45.00","40.00","34.00","33.00","29.00"],["-","-","-","-","-","-","-","-","-"]]},{"rowHeader":"<h5 class=\"bold\"><a href=\"http:\/\/localhost\/ion+\/en\/camere\/details\/doppiaSuperior\">Double room Superior<\/a><\/h5>","rowDesc":["1 person bed and breakfast","2 people ","3 people "],"rowVal":[["38.00","53.00","41.00","44.00","48.00","43.00","37.00","36.00","32.00"],["-","-","-","-","-","-","-","-","-"],["-","-","-","-","-","-","-","-","-"]]},{"rowHeader":"<h5 class=\"bold\"><a href=\"http:\/\/localhost\/ion+\/en\/camere\/details\/doppiaMansarda\">Attic room<\/a><\/h5>","rowDesc":["1 person bed and breakfast","2 people "],"rowVal":[["1,000.00","1,000.00","1,000.00","1,000.00","1,000.00","1,000.00","1,000.00","1,000.00","1,000.00"],["-","-","-","-","-","-","-","-","-"]]},{"rowHeader":"<h5 class=\"bold\"><a href=\"http:\/\/localhost\/ion+\/en\/camere\/details\/tripla\">Triple room<\/a><\/h5>","rowDesc":["1 person bed and breakfast"],"rowVal":[["36.00","48.00","37.00","39.00","43.00","38.00","32.00","30.00","26.00"]]}];
-
-    dataTest.cellBreakpoints = { default : [0,1], small : [460,2], medium : [640,3], large : [820,4], xlarge : [1080,5]};
-
-    dataTest.descBreakpoints = { default : [0,0], medium : [460, 200], large: [900, 270] };
-
-    var tabellaTest = new Tabella(document.getElementById('tabella-test'), dataTest);*/
+        /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
+        /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
+        /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
 
 
-                /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
-                /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
-                /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
+        var dataTest = {};
 
-                var discountData = {};
+        dataTest.tableHeader = [
+            ["12\/01\/2014", "12\/22\/2014"],
+            ["12\/23\/2014", "01\/05\/2015"],
+            ["01\/06\/2015", "01\/16\/2015"],
+            ["01\/17\/2015", "02\/06\/2015"],
+            ["02\/07\/2015", "03\/06\/2015"],
+            ["03\/07\/2015", "03\/13\/2015"],
+            ["03\/14\/2015", "03\/20\/2015"],
+            ["03\/21\/2015", "04\/12\/2015"],
+            ["04\/13\/2015", "05\/08\/2015"]
+        ];
 
-                discountData.from = "";
+        dataTest.rows = [{
+            "rowHeader": "<h5 class=\"bold\"><a href=\"http:\/\/localhost\/ion+\/en\/camere\/details\/singola\">Single room<\/a><\/h5>",
+            "rowDesc": ["1 person bed and breakfast"],
+            "rowVal": [
+                ["42.00", "57.00", "45.00", "48.00", "52.00", "47.00", "39.00", "38.00", "35.00"]
+            ]
+        }, {
+            "rowHeader": "<h5 class=\"bold\"><a href=\"http:\/\/localhost\/ion+\/en\/camere\/details\/doppiaStandard\">Double room Standard<\/a><\/h5>",
+            "rowDesc": ["1 person bed and breakfast", "2 people bed and breakfast"],
+            "rowVal": [
+                ["38.00", "50.00", "39.00", "41.00", "45.00", "40.00", "34.00", "33.00", "29.00"],
+                ["-", "-", "-", "-", "-", "-", "-", "-", "-"]
+            ]
+        }, {
+            "rowHeader": "<h5 class=\"bold\"><a href=\"http:\/\/localhost\/ion+\/en\/camere\/details\/doppiaSuperior\">Double room Superior<\/a><\/h5>",
+            "rowDesc": ["1 person bed and breakfast", "2 people ", "3 people "],
+            "rowVal": [
+                ["38.00", "53.00", "41.00", "44.00", "48.00", "43.00", "37.00", "36.00", "32.00"],
+                ["-", "-", "-", "-", "-", "-", "-", "-", "-"],
+                ["-", "-", "-", "-", "-", "-", "-", "-", "-"]
+            ]
+        }, {
+            "rowHeader": "<h5 class=\"bold\"><a href=\"http:\/\/localhost\/ion+\/en\/camere\/details\/doppiaMansarda\">Attic room<\/a><\/h5>",
+            "rowDesc": ["1 person bed and breakfast", "2 people "],
+            "rowVal": [
+                ["1,000.00", "1,000.00", "1,000.00", "1,000.00", "1,000.00", "1,000.00", "1,000.00", "1,000.00", "1,000.00"],
+                ["-", "-", "-", "-", "-", "-", "-", "-", "-"]
+            ]
+        }, {
+            "rowHeader": "<h5 class=\"bold\"><a href=\"http:\/\/localhost\/ion+\/en\/camere\/details\/tripla\">Triple room<\/a><\/h5>",
+            "rowDesc": ["1 person bed and breakfast"],
+            "rowVal": [
+                ["36.00", "48.00", "37.00", "39.00", "43.00", "38.00", "32.00", "30.00", "26.00"]
+            ]
+        }];
 
-                discountData.tableHeader = [["Adults"],["Kids 0-4 year-old"],["Kids 5-10 years-old"]];
+        dataTest.cellBreakpoints = {
+            default: [0, 1],
+            small: [500, 2],
+            medium: [640, 3],
+            large: [820, 4],
+            xlarge: [1080, 5]
+        };
 
-                discountData.rows = [
-                    {"rowDesc":["Discount per night in May"],"rowVal":[["10%","14%","12%"]]},
-                    {"rowDesc":["Discount per night in June"],"rowVal":[["8%","12%","10%"]]}
-                    ];
+        dataTest.descBreakpoints = {
+            default: [0, 0],
+            medium: [460, 220],
+            large: [900, 270]
+        };
 
-                discountData.cellBreakpoints = { default : [0,1], small : [460,2], medium : [640,3], large : [820,4], xlarge : [1080,5]};
-
-                discountData.descBreakpoints = { default : [0,0], medium : [700, 220], large: [900, 360] };
-
-                var pricelist = new Tabella(document.getElementById('tabella-rooms'), discountData);
+        var tabellaTest = new Tabella(document.getElementById('tabella-test'), dataTest);
 
 
-            })();
-        </script>
-        <script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
+        /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
+        /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
 
-          ga('create', 'UA-58105356-1', 'auto');
-          ga('send', 'pageview');
+        var discountData = {};
 
-        </script>
-    </body>
+        discountData.from = "";
+
+        discountData.tableHeader = [
+            ["Adults"],
+            ["Kids 0-4 year-old"],
+            ["Kids 5-10 years-old"]
+        ];
+
+        discountData.rows = [{
+            "rowDesc": ["Discount per night in May"],
+            "rowVal": [
+                ["10%", "14%", "12%"]
+            ]
+        }, {
+            "rowDesc": ["Discount per night in June"],
+            "rowVal": [
+                ["8%", "12%", "10%"]
+            ]
+        }];
+
+        discountData.cellBreakpoints = {
+            default: [0, 1],
+            small: [460, 2],
+            medium: [640, 3],
+            large: [820, 4],
+            xlarge: [1080, 5]
+        };
+
+        discountData.descBreakpoints = {
+            default: [0, 0],
+            medium: [700, 220],
+            large: [900, 360]
+        };
+
+        var pricelist = new Tabella(document.getElementById('tabella-rooms'), discountData);
+
+        var toggleBtn = document.getElementById('toggle-btn');
+        var showHideCtr = document.getElementById('show-hide-container');
+
+
+        toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            var display = showHideCtr.style.display;
+
+            if (display == 'none') {
+                showHideCtr.style.display = 'block';
+                tabellaTest.refreshSize();
+                tabellaTest.move();
+            } else {
+                showHideCtr.style.display = 'none';
+            }
+
+        });
+
+    })();
+    </script>
+    <script>
+    (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-58105356-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+</body>
+
 </html>

@@ -154,23 +154,14 @@
 			
 			},
 
-		resetRows : function(target, duration, easeing){
+		resetRows : function(target){
 			var self = this;
 
-			if(self.animated) return false;
-			self.animated = true;
-
-			var animationCurve = self.getAnimationCurve(duration, easeing || getEaseing(self.easeing));
-
-			target.forEach(function(el, index, array){
-				self.actualAnimation(el, 0, duration, animationCurve, 0);
-
-				if(index + 1 === array.length){
-					self.actualAnimation(el, 0, duration, animationCurve, 0, true);
-				}else{
-					self.actualAnimation(el, 0, duration, animationCurve, 0);
-				}
+			target.forEach(function(el){
+				self.offset(el, 0);
 			});
+
+			self.animated = false;
 
 			return true;
 			},

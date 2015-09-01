@@ -160,13 +160,20 @@ Available options:
     table.move('left');
 
     /**
-    * Move all the rows by the passed parameter amount.
-    * @param {Number}
+    * Move all the rows by the given amount of pixels.
+    * @param {Number} pixels
     */          
     table.move(x);
 
     /**
+    * Move all the rows to the starting point when no parameters are given.
+    * Useful when showing a table that was previously not displayed.
+    */          
+    table.move();
+
+    /**
     * Reflow the table size.
+    * Useful when showing a table that was previously not displayed.
     */          
     table.refreshSize();
 

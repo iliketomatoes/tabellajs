@@ -1,4 +1,4 @@
-/*! tabella - v0.3.5 - 2015-04-01
+/*! tabella - v0.3.6 - 2015-09-01
 * https://github.com/iliketomatoes/tabellajs
 * Copyright (c) 2015 ; Licensed  */
 ;(function( tabella, window, document) {
@@ -327,23 +327,14 @@ function isElementCompletelyInViewport(el) {
 			
 			},
 
-		resetRows : function(target, duration, easeing){
+		resetRows : function(target){
 			var self = this;
 
-			if(self.animated) return false;
-			self.animated = true;
-
-			var animationCurve = self.getAnimationCurve(duration, easeing || getEaseing(self.easeing));
-
-			target.forEach(function(el, index, array){
-				self.actualAnimation(el, 0, duration, animationCurve, 0);
-
-				if(index + 1 === array.length){
-					self.actualAnimation(el, 0, duration, animationCurve, 0, true);
-				}else{
-					self.actualAnimation(el, 0, duration, animationCurve, 0);
-				}
+			target.forEach(function(el){
+				self.offset(el, 0);
 			});
+
+			self.animated = false;
 
 			return true;
 			},
@@ -1288,7 +1279,7 @@ Tabella.prototype.move = function(x){
 			if(typeof x === 'number'){
 				if(Animator.animate(self.slidingRows, x, getReboundTime(x, self.options.reboundSpeed))) self.pointer = x;
 			}else{
-				Animator.resetRows(self.slidingRows, 200);
+				Animator.resetRows(self.slidingRows);
 				self.pointer = 0;
 			}
 			

@@ -1,5 +1,8 @@
 # Changelog
 
+##v 0.3.6 - September 2015, 1st
+- Fix reset rows behavior for tables inside not displayed containers
+
 ##v 0.3.5 - March 2015, 30th
 - Fix fixed-header behavior for really long tables
 - Fix .t-element class CSS, update to 100% width

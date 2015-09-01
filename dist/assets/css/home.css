@@ -73,10 +73,36 @@ h1, h2, h3, h4, h5, h6 {
 .table-h {
   margin: 0.2em 0; }
 
+.container-40pc, .container-60pc {
+  position: relative;
+  float: left;
+  width: 100%; }
+
+.hide-for-small {
+  display: none; }
+
+.show-for-small {
+  display: inline-block; }
+
+pre {
+  background-color: #F5F5F5;
+  border-radius: 4px;
+  padding: 7px 10px;
+  margin-right: 1.5rem; }
+
 /* ==========================================================================
    Media Queries
    ========================================================================== */
-@media only screen and (min-width: 35em) { }
+@media only screen and (min-width: 35em) {
+  .hide-for-small {
+    display: inline-block; }
+  .show-for-small {
+    display: none; }
+  .container-40pc {
+    width: 40%;
+    padding-right: 1rem; }
+  .container-60pc {
+    width: 60%; } }
 
 @media print, (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) { }
 

@@ -1,6 +1,6 @@
 {
   "name": "tabella",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "Responsive table",
   "main": "index.html",
   "scripts": {

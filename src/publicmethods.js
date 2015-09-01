@@ -205,7 +205,7 @@ Tabella.prototype.move = function(x){
 			if(typeof x === 'number'){
 				if(Animator.animate(self.slidingRows, x, getReboundTime(x, self.options.reboundSpeed))) self.pointer = x;
 			}else{
-				Animator.resetRows(self.slidingRows, 200);
+				Animator.resetRows(self.slidingRows);
 				self.pointer = 0;
 			}
 			
