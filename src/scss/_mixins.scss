@@ -1,9 +1,22 @@
-// @mixins
-//
-// We use this to add transitions to elements
-// $property - Default: all, Options: http://www.w3.org/TR/css3-transitions/#animatable-properties
-// $speed - Default: 300ms
-// $ease - Default:ease-out, Options: http://css-tricks.com/almanac/properties/t/transition-timing-function/
+/*
+ *  Copyright (C) 2014-2016  Interpromotion <info@interpromotion.com>
+ *  Copyright (C) 2014-2016  Giancarlo Soverini <giancarlosoverini@gmail.com>
+ *
+ *  This file is part of Tabellajs.
+ *
+ *  Tabellajs is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *
+ *  Tabellajs is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 @mixin single-transition($property:all, $speed:100ms, $ease:ease-out) {
   transition: $property $speed $ease;
 }
@@ -28,5 +41,5 @@
 		-moz-box-shadow:  $shadow $color;
 		box-shadow: $shadow $color;
 	}
-	
+
 }
