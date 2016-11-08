@@ -1,14 +1,38 @@
+/*jshint esversion: 6 */
+
+const release = `/*
+ *  <%= pkg.title || pkg.name %> - v<%= pkg.version %>
+ *  <%= grunt.template.today("yyyy-mm-dd") %>
+ *
+ *  <%= pkg.homepage %>
+ */\n\n`;
+
+const copyright = `/*
+ *  Copyright (C) 2014-2016  Interpromotion <info@interpromotion.com>
+ *  Copyright (C) 2014-2016  Giancarlo Soverini <giancarlosoverini@gmail.com>
+ *
+ *  This file is part of Tabellajs.
+ *
+ *  Tabellajs is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *
+ *  Tabellajs is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */\n\n`;
+
 module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
     // Metadata.
     pkg: grunt.file.readJSON('package.json'),
-    banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
-      '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-      '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
-      '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-      ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
+    banner: release + copyright,
     // Task configuration.
     clean: {
       files: ['dist/<%= pkg.name %>']
@@ -29,7 +53,7 @@ module.exports = function(grunt) {
               'src/constructor.js',
               'src/events.js',
               'src/publicmethods.js',
-              'src/outro.js'  
+              'src/outro.js'
              ],
         dest: 'dist/<%= pkg.name %>.js'
       },
@@ -44,7 +68,7 @@ module.exports = function(grunt) {
               'src/constructor.js',
               'src/events.js',
               'src/publicmethods.js',
-              'src/testoutro.js'  
+              'src/testoutro.js'
              ],
         dest: 'test/<%= pkg.name %>.js'
       }
@@ -78,7 +102,7 @@ module.exports = function(grunt) {
         files: {
           'dist/assets/css/tabella.css': 'src/scss/app.scss',
           'dist/assets/css/home.css': 'src/scss/home.scss'
-        }        
+        }
       }
     },
     watch: {
