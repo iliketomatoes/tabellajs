@@ -1,5 +1,11 @@
 # Changelog
 
+##v 0.4.0 - November 2016, 8th
+- Fix table columns visibility on Chrom 54 and up
+- Clean some functions and some style
+- Update some dev dependencies
+- Switch to agpl-3.0 license
+
 ##v 0.3.6 - September 2015, 1st
 - Fix reset rows behavior for tables inside not displayed containers
 
@@ -26,4 +32,4 @@
 
 
 ##v 0.2.0 - March 2015, 20th
-- Add different header content capability 
+- Add different header content capability
