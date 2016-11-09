@@ -206,5 +206,8 @@ Not tested yet, but working on all modern browser, IE9+.
 + Better API
 + Better Tests
 
+## AUTHORS
+Giancarlo Soverini <giancarlosoverini@gmail.com>
+
 ##LICENSE
-AGPL-3.0 
+AGPL-3.0
