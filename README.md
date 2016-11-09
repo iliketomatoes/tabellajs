@@ -28,10 +28,10 @@ Include the script into your page:
 Add the markup for your div meant to hold the table:
 <pre lang="html">
 &lt;div id="example" class="tabella-ctr"&gt;&lt;/div&gt;        
-</pre> 
+</pre>
 
 
-Then activate the plugin: 
+Then activate the plugin:
 <pre lang="javascript">
     !(function(){
 
@@ -60,8 +60,8 @@ Then activate the plugin:
                         rowHeader: '<h2 class="table-h"><a href="#">Suite</a></h2>',
                         rowVal: [[190 , 210, 210, 204, 180]],
                         rowDesc : ['1 persona']
-                    } 
-                        
+                    }
+
                 ]
             });
     })();
@@ -77,7 +77,7 @@ Together with *tableHeader* you have to define the table rows with the syntax sh
 ####Everything else is optional  
 i.e. **rowHeader** and **rowDesc** are optional properties for the row.
 
-* * * 
+* * *
 
 ###AMD USAGE
 Since it doesn't have dependencies,if you are using Requirejs just write something like this:
@@ -85,7 +85,7 @@ Since it doesn't have dependencies,if you are using Requirejs just write somethi
 require(['tabella'], function(tabella){
     //Put here the same thing as shown above
 })      
-</pre> 
+</pre>
 
 ##OPTIONS
 
@@ -112,7 +112,7 @@ Available options:
 | fixedHeaderTop | This option will set the CSS *top* rule for the table header when it's in fixed position. | String | '0' |
 
 
-    
+
 
 ###List of predefined easings
 1. easeInSine
@@ -142,9 +142,9 @@ Available options:
 
 ##API
 <pre lang="javascript">
-    var table = new Tabella( document.getElementById('your-tabella'), 
-                { 
-                    //Whatever options 
+    var table = new Tabella( document.getElementById('your-tabella'),
+                {
+                    //Whatever options
                 });
 
     /**
@@ -184,8 +184,8 @@ Available options:
 
     /**
     * @return {Object} The current breakpoint. The first element of this object
-    * is the array picked from the options.cellBreakpoints which fits into the 
-    * current media query. The second element is another array picked among the 
+    * is the array picked from the options.cellBreakpoints which fits into the
+    * current media query. The second element is another array picked among the
     * options.descBreakpoints, which is fit for the current media query as well.
     */          
     table.getCurrentBreakPoint();
@@ -207,4 +207,4 @@ Not tested yet, but working on all modern browser, IE9+.
 + Better Tests
 
 ##LICENSE
-Apache License
+AGPL-3.0 
