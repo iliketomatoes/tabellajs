@@ -36,16 +36,20 @@ module.exports = function(grunt) {
     banner: release + copyright,
     // Task configuration.
     clean: {
-      files: ['dist/<%= pkg.name %>']
+      css: ['./dist/css/home.css', './dist/css/tabella.css'],
+      js: ['./dist/*.js']
     },
     concat: {
       options: {
         banner: '<%= banner %>',
-        stripBanners: true
+        stripBanners: {
+          block: true
+        }
       },
       dist: {
         src: [
               'src/intro.js',
+              'src/classie.js',
               'src/helpers.js',
               'src/exception.js',
               'src/animator.js',
@@ -56,11 +60,12 @@ module.exports = function(grunt) {
               'src/publicmethods.js',
               'src/outro.js'
              ],
-        dest: 'dist/<%= pkg.name %>.js'
+        dest: 'dist/tabella.js'
       },
       dev:{
         src: [
               'src/intro.js',
+              'src/classie.js',
               'src/helpers.js',
               'src/exception.js',
               'src/animator.js',
@@ -71,7 +76,7 @@ module.exports = function(grunt) {
               'src/publicmethods.js',
               'src/testoutro.js'
              ],
-        dest: 'test/<%= pkg.name %>.js'
+        dest: 'test/tabella.js'
       }
     },
     uglify: {
@@ -80,11 +85,11 @@ module.exports = function(grunt) {
       },
       dist: {
         src: '<%= concat.dist.dest %>',
-        dest: 'dist/<%= pkg.name %>.min.js'
+        dest: 'dist/tabella.min.js'
       },
     },
     jshint: {
-       files: ['Gruntfile.js', 'dist/<%= pkg.name %>.js'],
+       files: ['Gruntfile.js', 'dist/tabella.js'],
       // configure JSHint (documented at http://www.jshint.com/docs/)
       options: {
           // more options here if you want to override JSHint defaults
@@ -135,12 +140,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task.
-  grunt.registerTask('default', [ 'clean', 'concat', 'jshint', 'uglify', 'sass' ]);
+  grunt.registerTask('default', [ 'clean:css', 'clean:js','concat', 'jshint', 'uglify', 'sass' ]);
+
+  // Default task.
+  grunt.registerTask('js', [ 'clean:js', 'concat', 'jshint', 'uglify' ]);
 
   // Style task.
-  grunt.registerTask('style', [ 'sass' ]);
-
-  // Minifying despite jshint warnings task.
-  grunt.registerTask('minifyjs', [ 'clean', 'concat', 'uglify' ]);
+  grunt.registerTask('style', [ 'clean:css', 'sass' ]);
 
 };
