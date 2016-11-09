@@ -1,6 +1,6 @@
 /*
- *  tabella - v0.4.0
- *  2016-11-08
+ *  tabellajs - v0.4.1
+ *  2016-11-09
  *
  *  https://github.com/iliketomatoes/tabellajs
  */
