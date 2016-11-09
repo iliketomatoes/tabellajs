@@ -1,4 +1,11 @@
 /*
+ *  tabellajs - v0.4.1
+ *  2016-11-09
+ *
+ *  https://github.com/iliketomatoes/tabellajs
+ */
+
+/*
  *  Copyright (C) 2014-2016  Interpromotion <info@interpromotion.com>
  *  Copyright (C) 2014-2016  Giancarlo Soverini <giancarlosoverini@gmail.com>
  *
@@ -17,7 +24,7 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 .tabella-ctr *,
 .tabella-ctr *:after,
 .tabella-ctr *:before {

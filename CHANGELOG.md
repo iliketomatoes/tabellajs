@@ -1,5 +1,11 @@
 # Changelog
 
+##v 0.4.1 - November 2016, 8th
+- Fix tabellajs name in package.json
+- Split ./src/helpers.js into 2 files to fix some license issue
+- Rearrange some Gruntfile tasks
+- Add *authors* field in README file
+
 ##v 0.4.0 - November 2016, 8th
 - Fix table columns visibility on Chrom 54 and up
 - Clean some functions and some style
