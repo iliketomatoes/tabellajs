@@ -4,7 +4,7 @@ tabellajs
 
 This is a pure javascript table plugin, responsive, AMD ready, touch enabled.
 
-##INSTALL
+## INSTALL
 
 Besides cloning this repo or downloading it, you can either get it through Bower.
 
@@ -13,7 +13,7 @@ bower install tabellajs
 
 ```
 
-##USAGE
+## USAGE
 
 Include the css into your page:
 <pre lang="html">
@@ -70,16 +70,16 @@ Then activate the plugin:
 You **have to** pass to the constructor 2 parameters. The first one is the HTML element where we are going to mount the table.
 The second one is an objects containing the data of the table.
 
-####Data:
+#### Data:
 It's compulsory to define the **tableHeader** property (which is a nested array with the syntax shown above) into the object passed as second argument to the Tabella's constructor.
 Together with *tableHeader* you have to define the table rows with the syntax shown above. The **rows** property is an array of objects. Each object (i.e. row) must contain the **rowVal** field, which is an array of arrays. The length of each array hold by *rowVal* should be equal to the *tableHeader* length.
 
-####Everything else is optional  
+#### Everything else is optional  
 i.e. **rowHeader** and **rowDesc** are optional properties for the row.
 
 * * *
 
-###AMD USAGE
+### AMD USAGE
 Since it doesn't have dependencies,if you are using Requirejs just write something like this:
 <pre lang="javascript">
 require(['tabella'], function(tabella){
@@ -87,7 +87,7 @@ require(['tabella'], function(tabella){
 })      
 </pre>
 
-##OPTIONS
+## OPTIONS
 
 Available options:
 
@@ -114,7 +114,7 @@ Available options:
 
 
 
-###List of predefined easings
+### List of predefined easings
 1. easeInSine
 2. easeOutSine
 3. easeInOutSine
@@ -140,7 +140,7 @@ Available options:
 23. easeOutBack
 24. easeInOutBack
 
-##API
+## API
 <pre lang="javascript">
     var table = new Tabella( document.getElementById('your-tabella'),
                 {
@@ -198,16 +198,16 @@ Available options:
 
 </pre>  
 
-##BROWSER SUPPORT
+## BROWSER SUPPORT
 
 Not tested yet, but working on all modern browser, IE9+.
 
-##ROADMAP
+## ROADMAP
 + Better API
 + Better Tests
 
 ## AUTHORS
 Giancarlo Soverini <giancarlosoverini@gmail.com>
 
-##LICENSE
+## LICENSE
 AGPL-3.0
