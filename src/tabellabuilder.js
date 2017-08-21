@@ -251,25 +251,41 @@
 	        var svgURI = 'http://www.w3.org/2000/svg';
 	        var svgLeft = document.createElementNS(svgURI, 'svg');
 	        // SVG attributes, like viewBox, are camelCased. That threw me for a loop
-	        svgLeft.setAttribute('viewBox', '0 0 100 100');
+	        svgLeft.setAttribute('viewBox', '0 0 38.996 38.996');
+	        var gLeft = document.createElementNS(svgURI, 'g');
+	        //create circle
+	        var circleLeft = document.createElementNS(svgURI, 'path');
+	        circleLeft.setAttribute('d', 'M19.498,1c10.2,0,18.498,8.298,18.498,18.498c0,10.2-8.298,18.498-18.498,18.498 C9.298,37.996,1,29.698,1,19.498C1,9.298,9.298,1,19.498,1 M19.498,0C8.73,0,0,8.73,0,19.498c0,10.77,8.73,19.498,19.498,19.498 c10.77,0,19.498-8.729,19.498-19.498C38.996,8.73,30.268,0,19.498,0L19.498,0z');
+	        // add class so it can be styled with CSS
+	        circleLeft.setAttribute('class', 't-svg-arrow');
 	        // create arrow
 	        var pathLeft = document.createElementNS(svgURI, 'path');
-	        pathLeft.setAttribute('d', 'M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z');
-	        pathLeft.setAttribute('transform', 'translate(15,0)');
+	        pathLeft.setAttribute('d', 'M21.947,12.654c0.169,0,0.34,0.064,0.469,0.193c0.259,0.259,0.259,0.676,0,0.935l-5.991,5.995l5.991,6 c0.255,0.258,0.255,0.676,0,0.934c-0.258,0.26-0.68,0.26-0.938,0l-6.458-6.464c-0.258-0.259-0.258-0.676,0-0.936l6.458-6.464 C21.607,12.719,21.779,12.654,21.947,12.654L21.947,12.654z');
 	        // add class so it can be styled with CSS
 	        pathLeft.setAttribute('class', 't-svg-arrow');
-	        svgLeft.appendChild(pathLeft);
+	        
+	        gLeft.appendChild(pathLeft);
+	        gLeft.appendChild(circleLeft);
+	        svgLeft.appendChild(gLeft);
 	        // add svg to page
 	        var svgRight = document.createElementNS(svgURI, 'svg');
 	        // SVG attributes, like viewBox, are camelCased. That threw me for a loop
-	        svgRight.setAttribute('viewBox', '0 0 100 100');
+	        svgRight.setAttribute('viewBox', '0 0 38.996 38.996');
+	        var gRight = document.createElementNS(svgURI, 'g');
+	        //create circle
+	        var circleRight = document.createElementNS(svgURI, 'path');
+	        circleRight.setAttribute('d', 'M19.498,1c10.2,0,18.498,8.298,18.498,18.498c0,10.2-8.298,18.498-18.498,18.498 C9.298,37.996,1,29.698,1,19.498C1,9.298,9.298,1,19.498,1 M19.498,0C8.73,0,0,8.73,0,19.498c0,10.77,8.73,19.498,19.498,19.498 c10.77,0,19.498-8.729,19.498-19.498C38.996,8.73,30.268,0,19.498,0L19.498,0z');
+	        // add class so it can be styled with CSS
+	        circleRight.setAttribute('class', 't-svg-arrow');
 	        // create arrow
 	        var pathRight = document.createElementNS(svgURI, 'path');
-	        pathRight.setAttribute('d', 'M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z');
+	        pathRight.setAttribute('d', 'M17.049,26.342c-0.169,0-0.34-0.064-0.469-0.193c-0.259-0.258-0.259-0.676,0-0.935l5.99-5.995l-5.99-6 c-0.255-0.258-0.255-0.675,0-0.934c0.257-0.259,0.68-0.259,0.938,0l6.457,6.464c0.258,0.259,0.258,0.676,0,0.936l-6.457,6.463 C17.389,26.277,17.217,26.342,17.049,26.342L17.049,26.342z');
 	        // add class so it can be styled with CSS
 	        pathRight.setAttribute('class', 't-svg-arrow');
-	        pathRight.setAttribute('transform', 'translate(85,100) rotate(180)');
-	        svgRight.appendChild(pathRight);
+	        
+	        gRight.appendChild(pathRight);
+	        gRight.appendChild(circleRight)
+	        svgRight.appendChild(gRight);
 
 	        var arrowRight = createHTMLEl('div', 't-arr-right t-hide', tableHeaderRow);
 
