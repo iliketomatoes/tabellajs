@@ -1,6 +1,6 @@
 /*
- *  Copyright (C) 2014-2016  Interpromotion <info@interpromotion.com>
- *  Copyright (C) 2014-2016  Giancarlo Soverini <giancarlosoverini@gmail.com>
+ *  Copyright (C) 2014-2017  Interpromotion <info@interpromotion.com>
+ *  Copyright (C) 2014-2017  Giancarlo Soverini <giancarlosoverini@gmail.com>
  *
  *  This file is part of Tabellajs.
  *
