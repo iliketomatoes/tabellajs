@@ -284,7 +284,7 @@
 	        pathRight.setAttribute('class', 't-svg-arrow');
 	        
 	        gRight.appendChild(pathRight);
-	        gRight.appendChild(circleRight)
+	        gRight.appendChild(circleRight);
 	        svgRight.appendChild(gRight);
 
 	        var arrowRight = createHTMLEl('div', 't-arr-right t-hide', tableHeaderRow);
