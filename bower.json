@@ -7,7 +7,7 @@
   "authors": [
     "Giancarlo Soverini"
   ],
-  "license": "Apache license",
+  "license": "AGPL-3.0",
   "ignore": [
     "**/.*",
     "node_modules",
