@@ -103,6 +103,10 @@ TABLE HEADER
   z-index: 100;
 }
 
+.t-first-row .t-row-caption.t-bottom, .t-first-row .t-row-desc.t-bottom {
+  display: none;
+}
+
 .t-shadow {
   -moz-transform: translate3d(0, 0, 0);
   -o-transform: translate3d(0, 0, 0);
@@ -212,6 +216,30 @@ MAIN RULES
   font-size: 1rem;
   background-color: #fff;
   text-align: center;
+}
+
+.t-row-caption {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0.4rem 0.1rem;
+  z-index: 100;
+  border-left: 0;
+}
+
+.t-row-caption .t-element {
+  width: 100%;
+  height: 100%;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: .2s;
+}
+
+.t-row-caption.t-bottom {
+  position: static;
+  margin-bottom: 20px;
 }
 
 .t-row-cell {

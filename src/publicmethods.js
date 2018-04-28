@@ -19,240 +19,301 @@
  */
 
 Tabella.prototype.refreshSize = function() {
-    var self = this,
-        oldBreakpoint = self.currentBreakpoint,
-        breakpoint = self.currentBreakpoint = self.getBreakpoint();
+	var self = this,
+		oldBreakpoint = self.currentBreakpoint,
+		breakpoint = self.currentBreakpoint = self.getBreakpoint();
 
-    var oldWindowdWidth = self.currentWindowWidth;
-    self.currentWindowWidth = window.innerWidth;
+	var oldWindowdWidth = self.currentWindowWidth;
+	self.currentWindowWidth = window.innerWidth;
 
-    var oldCellWidth = self.currentCellWidth,
-        cellWidth = self.currentCellWidth = self.getCellWidth(breakpoint),
-        descWidth = breakpoint.descBreakpoint[1],
-        tableHeaderLength = self.options.tableHeader.length;
+	var oldCellWidth = self.currentCellWidth,
+		cellWidth = self.currentCellWidth = self.getCellWidth(breakpoint),
+		descWidth = breakpoint.descBreakpoint[1],
+		captionWidth = breakpoint.captionBreakpoint[1],
+		tableHeaderLength = self.options.tableHeader.length;
 
-    self.refreshArrowPosition(descWidth);
+	self.refreshArrowPosition(descWidth, captionWidth);
 
-    //Unset fixed header before resizing everything
-    if (self.options.fixedHeader && oldWindowdWidth !== self.currentWindowWidth) self.unsetFixedHeader();
+	//Unset fixed header before resizing everything
+	if (self.options.fixedHeader && oldWindowdWidth !== self.currentWindowWidth) self.unsetFixedHeader();
 
-    var rows = getArray(self.el.querySelectorAll('.t-row'));
+	var rows = getArray(self.el.querySelectorAll('.t-row'));
 
-    rows.forEach(function(el) {
+	rows.forEach(function(el) {
 
-        var tContent = getArray(el.querySelectorAll('.t-row-content'));
+		var tContent = getArray(el.querySelectorAll('.t-row-content'));
 
-        if (breakpoint.descBreakpoint[1] > 0) {
+		if (breakpoint.descBreakpoint[1] > 0) {
 
-            tContent.forEach(function(el) {
+			tContent.forEach(function(el) {
 
-                el.style.width = descWidth + (tableHeaderLength * cellWidth) + 'px';
+				el.style.width = descWidth + (tableHeaderLength * cellWidth) + 'px';
 
-                var tDescL = el.querySelector('.t-row-desc');
+				var tDescL = el.querySelector('.t-row-desc');
 
-                tDescL.style.width = descWidth + 'px';
+				tDescL.style.width = descWidth + 'px';
 
-                classie.remove(tDescL, 't-hide');
+				classie.remove(tDescL, 't-hide');
 
-                getArray(el.querySelectorAll('.t-row-cell')).forEach(function(el) {
-                    el.style.width = cellWidth + 'px';
-                });
+				getArray(el.querySelectorAll('.t-row-cell')).forEach(function(el) {
+					el.style.width = cellWidth + 'px';
+				});
 
-                getArray(el.querySelectorAll('.t-cell-desc-s')).forEach(function(innerEl) {
-                    classie.add(innerEl, 't-hide');
-                });
+				getArray(el.querySelectorAll('.t-cell-desc-s')).forEach(function(innerEl) {
+					classie.add(innerEl, 't-hide');
+				});
 
-            });
+			});
 
-        } else {
+		} else {
 
-            tContent.forEach(function(el) {
+			tContent.forEach(function(el) {
 
-                el.style.width = (tableHeaderLength * cellWidth) + 'px';
+				el.style.width = (tableHeaderLength * cellWidth) + 'px';
 
-                classie.add(el.querySelector('.t-row-desc'), 't-hide');
+				classie.add(el.querySelector('.t-row-desc'), 't-hide');
 
-                getArray(el.querySelectorAll('.t-row-cell')).forEach(function(el) {
-                    el.style.width = cellWidth + 'px';
-                });
+				getArray(el.querySelectorAll('.t-row-cell')).forEach(function(el) {
+					el.style.width = cellWidth + 'px';
+				});
 
-                getArray(el.querySelectorAll('.t-cell-desc-s')).forEach(function(innerEl) {
-                    classie.remove(innerEl, 't-hide');
-                });
+				getArray(el.querySelectorAll('.t-cell-desc-s')).forEach(function(innerEl) {
+					classie.remove(innerEl, 't-hide');
+				});
 
-            });
+			});
 
-        }
+		}
 
-    });
+		var tRowContentWrapper = getArray(el.querySelectorAll('.t-row-content-wrapper'));
 
-    if (self.pointer > 0) {
-        if (oldBreakpoint.cellBreakpoint[0] != breakpoint.cellBreakpoint[0] ||
-            oldBreakpoint.descBreakpoint[1] != breakpoint.descBreakpoint[1]) {
-            self.move();
-        } else {
-            if (oldCellWidth != cellWidth) {
-                self.move(parseInt(cellWidth - oldCellWidth) * parseInt(self.pointer));
-            }
-        }
-    }
+		console.log(breakpoint.captionBreakpoint);
 
-    if (typeof self.options.onRefreshSize === 'function') {
-        invokeCallback(self.options.onRefreshSize, self);
-    }
+		if(breakpoint.captionBreakpoint[1] > 0) {
 
-    /**
-     * Vertical centering the arrows
-     */
-    self.arrowsCentering();
+			tRowContentWrapper.forEach(function(el) {
+
+				var tCaptionL = el.querySelector('.t-row-caption');
+
+				if (tCaptionL != 'undefined' && !!tCaptionL) {
+
+					tCaptionL.style.width = captionWidth + 'px';
+
+					classie.remove(tCaptionL, 't-bottom');
+
+				}
+				
+			});
+
+		} else {
+
+			tRowContentWrapper.forEach(function(el) {
+
+				var tCaptionL = el.querySelector('.t-row-caption');
+
+				if (tCaptionL != 'undefined' && !!tCaptionL) {
+
+					classie.add(tCaptionL, 't-bottom');
+					
+				}
+				
+			});
+
+		}
+
+	});
+
+	if (self.pointer > 0) {
+		if (oldBreakpoint.cellBreakpoint[0] != breakpoint.cellBreakpoint[0] ||
+			oldBreakpoint.descBreakpoint[1] != breakpoint.descBreakpoint[1] ||
+			oldBreakpoint.captionBreakpoint[1] != breakpoint.captionBreakpoint[1]) {
+			self.move();
+		} else {
+			if (oldCellWidth != cellWidth) {
+				self.move(parseInt(cellWidth - oldCellWidth) * parseInt(self.pointer));
+			}
+		}
+	}
+
+	if (typeof self.options.onRefreshSize === 'function') {
+		invokeCallback(self.options.onRefreshSize, self);
+	}
+
+	/**
+	 * Vertical centering the arrows
+	 */
+	self.arrowsCentering();
 
 };
 
 Tabella.prototype.getCellWidth = function(breakpoint) {
-    var self = this,
-        numberOfCells = self.options.tableHeader.length,
-        cellBreakpoint = breakpoint.cellBreakpoint,
-        descBreakpoint = breakpoint.descBreakpoint,
-        cellWidth;
+	var self = this,
+		numberOfCells = self.options.tableHeader.length,
+		cellBreakpoint = breakpoint.cellBreakpoint,
+		descBreakpoint = breakpoint.descBreakpoint,
+		captionBreakpoint = breakpoint.captionBreakpoint,
+		cellWidth;
 
-    if (cellBreakpoint[1] > numberOfCells) {
-        cellWidth = (self.el.clientWidth - descBreakpoint[1]) / numberOfCells;
-    } else {
-        cellWidth = (self.el.clientWidth - descBreakpoint[1]) / cellBreakpoint[1];
-    }
+	if (cellBreakpoint[1] > numberOfCells) {
+		cellWidth = (self.el.clientWidth - descBreakpoint[1] - captionBreakpoint[1]) / numberOfCells;
+	} else {
+		cellWidth = (self.el.clientWidth - descBreakpoint[1] - captionBreakpoint[1]) / cellBreakpoint[1];
+	}
 
-    return Math.round(cellWidth);
+	return Math.round(cellWidth);
 };
 
 Tabella.prototype.getBreakpoint = function() {
 
-    var self = this,
-        minWidth = 0,
-        containerWidth = self.el.clientWidth,
-        cellBreakpoints = self.options.cellBreakpoints,
-        descBreakpoints = self.options.descBreakpoints;
+	var self = this,
+		minWidth = 0,
+		containerWidth = self.el.clientWidth,
+		cellBreakpoints = self.options.cellBreakpoints,
+		descBreakpoints = self.options.descBreakpoints,
+        captionBreakpoints = self.options.captionBreakpoints;
 
-    var cellBreakpoint = [0, 1],
-        descBreakpoint = [0, 0];
+	var cellBreakpoint = [0, 1],
+		descBreakpoint = [0, 0],
+        captionBreakpoint = [0, 0];
 
-    for (var cbp in cellBreakpoints) {
+	for (var cbp in cellBreakpoints) {
 
-        var cbpWidth = cellBreakpoints[cbp][0];
+		var cbpWidth = cellBreakpoints[cbp][0];
 
-        if (typeof cbpWidth === 'number' && cbpWidth > 0 && cbpWidth <= containerWidth) {
+		if (typeof cbpWidth === 'number' && cbpWidth > 0 && cbpWidth <= containerWidth) {
 
-            if (Math.abs(containerWidth - cbpWidth) < Math.abs(containerWidth - minWidth)) {
-                minWidth = cbpWidth;
-                cellBreakpoint = cellBreakpoints[cbp];
-            }
+			if (Math.abs(containerWidth - cbpWidth) < Math.abs(containerWidth - minWidth)) {
+				minWidth = cbpWidth;
+				cellBreakpoint = cellBreakpoints[cbp];
+			}
 
-        }
+		}
 
-    }
+	}
+
+	minWidth = 0;
+
+	for (var dbp in descBreakpoints) {
+
+		var dbpWidth = descBreakpoints[dbp][0];
+
+		if (typeof dbpWidth === 'number' && dbpWidth > 0 && dbpWidth <= containerWidth) {
+
+			if (Math.abs(containerWidth - dbpWidth) < Math.abs(containerWidth - minWidth)) {
+				minWidth = dbpWidth;
+				descBreakpoint = descBreakpoints[dbp];
+			}
+
+		}
+
+	}
 
     minWidth = 0;
 
-    for (var dbp in descBreakpoints) {
+    for (var cpbp in captionBreakpoints) {
 
-        var dbpWidth = descBreakpoints[dbp][0];
+        var cpbpWidth = captionBreakpoints[cpbp][0];
 
-        if (typeof dbpWidth === 'number' && dbpWidth > 0 && dbpWidth <= containerWidth) {
+        if (typeof cpbpWidth === 'number' && cpbpWidth > 0 && cpbpWidth <= containerWidth) {
 
-            if (Math.abs(containerWidth - dbpWidth) < Math.abs(containerWidth - minWidth)) {
-                minWidth = dbpWidth;
-                descBreakpoint = descBreakpoints[dbp];
+            if (Math.abs(containerWidth - cpbpWidth) < Math.abs(containerWidth - minWidth)) {
+                minWidth = cpbpWidth;
+                captionBreakpoint = captionBreakpoints[cpbp];
             }
 
         }
 
     }
 
-    return {
-        cellBreakpoint: cellBreakpoint,
-        descBreakpoint: descBreakpoint
-    };
+	return {
+		cellBreakpoint: cellBreakpoint,
+		descBreakpoint: descBreakpoint,
+        captionBreakpoint: captionBreakpoint
+	};
 };
 
-Tabella.prototype.refreshArrowPosition = function(descriptionWidth) {
+Tabella.prototype.refreshArrowPosition = function(descriptionWidth, captionWidth) {
 
-    var self = this,
-        descWidth = descriptionWidth || self.currentBreakpoint.descBreakpoint[1];
+	var self = this,
+		descWidth = descriptionWidth || self.currentBreakpoint.descBreakpoint[1],
+        captWidth = captionWidth || self.currentBreakpoint.captionBreakpoint[1];
 
-    self.arrows.arrowLeft.style.left = descWidth + 'px';
-    self.updateArrows();
+	self.arrows.arrowLeft.style.left = descWidth + 'px';
+    self.arrows.arrowRight.style.right = captWidth + 'px';
+	self.updateArrows();
 };
 
 Tabella.prototype.updateArrows = function() {
 
-    var self = this,
-        breakpoint = self.currentBreakpoint || self.getBreakpoint(),
-        tableHeaderLength = self.options.tableHeader.length;
+	var self = this,
+		breakpoint = self.currentBreakpoint || self.getBreakpoint(),
+		tableHeaderLength = self.options.tableHeader.length;
 
-    if (tableHeaderLength > breakpoint.cellBreakpoint[1]) {
+	if (tableHeaderLength > breakpoint.cellBreakpoint[1]) {
 
-        if (self.pointer === 0) {
-            classie.add(self.arrows.arrowLeft, 't-hide');
-            classie.remove(self.arrows.arrowRight, 't-hide');
-        } else {
-            if (self.pointer === tableHeaderLength - breakpoint.cellBreakpoint[1]) {
-                classie.remove(self.arrows.arrowLeft, 't-hide');
-                classie.add(self.arrows.arrowRight, 't-hide');
-            } else {
-                classie.remove(self.arrows.arrowLeft, 't-hide');
-                classie.remove(self.arrows.arrowRight, 't-hide');
-            }
-        }
+		if (self.pointer === 0) {
+			classie.add(self.arrows.arrowLeft, 't-hide');
+			classie.remove(self.arrows.arrowRight, 't-hide');
+		} else {
+			if (self.pointer === tableHeaderLength - breakpoint.cellBreakpoint[1]) {
+				classie.remove(self.arrows.arrowLeft, 't-hide');
+				classie.add(self.arrows.arrowRight, 't-hide');
+			} else {
+				classie.remove(self.arrows.arrowLeft, 't-hide');
+				classie.remove(self.arrows.arrowRight, 't-hide');
+			}
+		}
 
-    } else {
-        classie.add(self.arrows.arrowLeft, 't-hide');
-        classie.add(self.arrows.arrowRight, 't-hide');
-    }
+	} else {
+		classie.add(self.arrows.arrowLeft, 't-hide');
+		classie.add(self.arrows.arrowRight, 't-hide');
+	}
 };
 
 Tabella.prototype.move = function(x) {
 
-    var self = this,
-        cellWidth = self.getCellWidth(self.currentBreakpoint);
-    if (x === 'right') {
-        if (Animator.animate(self.slidingRows, cellWidth, self.options.duration)) self.pointer++;
-    } else {
-        if (x === 'left') {
-            if (Animator.animate(self.slidingRows, -cellWidth, self.options.duration)) self.pointer--;
-        } else {
+	var self = this,
+		cellWidth = self.getCellWidth(self.currentBreakpoint);
+	if (x === 'right') {
+		if (Animator.animate(self.slidingRows, cellWidth, self.options.duration)) self.pointer++;
+	} else {
+		if (x === 'left') {
+			if (Animator.animate(self.slidingRows, -cellWidth, self.options.duration)) self.pointer--;
+		} else {
 
-            if (typeof x === 'number') {
-                if (Animator.animate(self.slidingRows, x, getReboundTime(x, self.options.reboundSpeed))) self.pointer = x;
-            } else {
-                Animator.resetRows(self.slidingRows);
-                self.pointer = 0;
-            }
+			if (typeof x === 'number') {
+				if (Animator.animate(self.slidingRows, x, getReboundTime(x, self.options.reboundSpeed))) self.pointer = x;
+			} else {
+				Animator.resetRows(self.slidingRows);
+				self.pointer = 0;
+			}
 
-        }
-    }
+		}
+	}
 
-    self.updateArrows();
+	self.updateArrows();
 };
 
 
 Tabella.prototype.setSingleTick = function(trueOrFalse) {
-    this.options.swipeSingleTick = !!trueOrFalse;
+	this.options.swipeSingleTick = !!trueOrFalse;
 };
 
 Tabella.prototype.getCurrentBreakPoint = function() {
-    return this.currentBreakpoint;
+	return this.currentBreakpoint;
 };
 
 Tabella.prototype.arrowsCentering = function() {
-    var self = this,
-        parentHeight = self.tableHeaderRow.offsetHeight,
-        arrowsHeight = self.arrows.arrowRight.offsetHeight;
+	var self = this,
+		parentHeight = self.tableHeaderRow.offsetHeight,
+		arrowsHeight = self.arrows.arrowRight.offsetHeight;
 
-    if (arrowsHeight && parentHeight > arrowsHeight) {
+	if (arrowsHeight && parentHeight > arrowsHeight) {
 
-        // -1 because of the box-shadow
-        var verticalMargin = parseInt(((parentHeight - arrowsHeight) / 2) - 1);
+		// -1 because of the box-shadow
+		var verticalMargin = parseInt(((parentHeight - arrowsHeight) / 2) - 1);
 
-        self.arrows.arrowRight.style.marginTop = verticalMargin + 'px';
-        self.arrows.arrowLeft.style.marginTop = verticalMargin + 'px';
-    }
+		self.arrows.arrowRight.style.marginTop = verticalMargin + 'px';
+		self.arrows.arrowLeft.style.marginTop = verticalMargin + 'px';
+	}
 };

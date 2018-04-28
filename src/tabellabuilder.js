@@ -56,251 +56,248 @@
 
 	var TabellaBuilder = {
 
-	    setUpTableHeader: function(el, options) {
+		setUpTableHeader: function(el, options) {
 
-	        var tableHeader = options.tableHeader,
-	            docfrag = document.createDocumentFragment(),
-	            tRow,
+			var tableHeader = options.tableHeader,
+				docfrag = document.createDocumentFragment(),
+				tRow,
 							tRowDesc,
+							tRowCaption,
 							tEl;
 
-	        try {
+			try {
 
-	            if (tableHeader instanceof Array && tableHeader.length) {
+				if (tableHeader instanceof Array && tableHeader.length) {
 
-	                //Table header row's container
-	                var fixedHeader = createHTMLEl('div', 't-fixed-header', docfrag);
+					//Table header row's container
+					var fixedHeader = createHTMLEl('div', 't-fixed-header', docfrag);
 
-	                tRow = createHTMLEl('div', 't-row t-first-row', fixedHeader);
+					tRow = createHTMLEl('div', 't-row t-first-row', fixedHeader);
 
-	                var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
+					var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
 
-	                var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);
+					var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);
 
-	                var tRowDescHTML = '<div class="t-element">';
-	                tRowDescHTML += '<div class="t-cell-desc-l">';
-	                tRowDescHTML += options.from;
+					tRowCaption = createHTMLEl('div', 't-row-caption', tRowContentWrapper);
 
-	                if (typeof tableHeader[0][1] !== 'undefined') {
-	                    tRowDescHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
-	                    tRowDescHTML += options.to;
-	                }
+					var tRowDescHTML = '<div class="t-element">';
+					tRowDescHTML += '<div class="t-cell-desc-l">';
+					tRowDescHTML += options.from;
 
-	                tRowDescHTML += '</div>';
-	                tRowDescHTML += '</div>';
+					if (typeof tableHeader[0][1] !== 'undefined') {
+						tRowDescHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
+						tRowDescHTML += options.to;
+					}
 
-	                tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
+					tRowDescHTML += '</div>';
+					tRowDescHTML += '</div>';
 
-	                var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
+					tRowDesc = createHTMLEl('div', 't-row-desc', tRowContent, tRowDescHTML);
 
-	                var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
+					var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
 
-	                for (var i = 0; i < tableHeader.length; i++) {
+					var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
 
-	                    var tRowCell = document.createElement('div');
-	                    tRowCell.className = 't-row-cell';
+					for (var i = 0; i < tableHeader.length; i++) {
 
-	                    //From - to Div
-	                    var tableHeaderCellHTML = '<div class="t-cell-desc-s">';
-	                    tableHeaderCellHTML += options.from;
-	                    if (typeof tableHeader[i][1] !== 'undefined') {
-	                        tableHeaderCellHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
-	                        tableHeaderCellHTML += options.to;
-	                    }
-	                    tableHeaderCellHTML += '</div>';
+						var tRowCell = document.createElement('div');
+						tRowCell.className = 't-row-cell';
 
-	                    //Table headr cell actual value
-	                    tableHeaderCellHTML += '<div class="t-cell-value t-bold">';
-	                    tableHeaderCellHTML += typeof tableHeader[i][0] !== 'undefined' ? tableHeader[i][0] : 'not set';
-	                    if (typeof tableHeader[i][1] !== 'undefined') {
-	                        tableHeaderCellHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
-	                        tableHeaderCellHTML += tableHeader[i][1];
-	                    }
-	                    tableHeaderCellHTML += '</div>';
+						//From - to Div
+						var tableHeaderCellHTML = '<div class="t-cell-desc-s">';
+						tableHeaderCellHTML += options.from;
+						if (typeof tableHeader[i][1] !== 'undefined') {
+							tableHeaderCellHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
+							tableHeaderCellHTML += options.to;
+						}
+						tableHeaderCellHTML += '</div>';
 
-	                    tEl = createHTMLEl('div', 't-element', tRowCell, tableHeaderCellHTML);
+						//Table headr cell actual value
+						tableHeaderCellHTML += '<div class="t-cell-value t-bold">';
+						tableHeaderCellHTML += typeof tableHeader[i][0] !== 'undefined' ? tableHeader[i][0] : 'not set';
+						if (typeof tableHeader[i][1] !== 'undefined') {
+							tableHeaderCellHTML += '<span class="t-header-devider">' + options.headerRowDevider + '</span>';
+							tableHeaderCellHTML += tableHeader[i][1];
+						}
+						tableHeaderCellHTML += '</div>';
 
-	                    tSlidingRow.appendChild(tRowCell);
+						tEl = createHTMLEl('div', 't-element', tRowCell, tableHeaderCellHTML);
 
-	                }
+						tSlidingRow.appendChild(tRowCell);
 
-	                el.appendChild(docfrag);
+					}
+
+					el.appendChild(docfrag);
 
 
-	            } else {
-	                throw new TabellaException('tableHeader is not an Array');
-	            }
+				} else {
+					throw new TabellaException('tableHeader is not an Array');
+				}
 
-	        } catch (err) {
+			} catch (err) {
 
-	            tRow = false;
-	            console.error(err.toString());
+				tRow = false;
+				console.error(err.toString());
 
-	        } finally {
-	            return tRow;
-	        }
-	    },
+			} finally {
+				return tRow;
+			}
+		},
 
-	    setUpRows: function(el, options) {
+		setUpRows: function(el, options) {
 
-	        var tableHeader = options.tableHeader,
-	            rows = options.rows,
-	            numberOfRows = rows.length,
+			var tableHeader = options.tableHeader,
+				rows = options.rows,
+				numberOfRows = rows.length,
 							tHeader,
 							tRowDesc,
+							tRowCaption,
 							tEl;
 
-	        var docfrag = document.createDocumentFragment();
+			var docfrag = document.createDocumentFragment();
 
-	        if (numberOfRows > 0) {
+			if (numberOfRows > 0) {
 
-	            for (var i = 0; i < numberOfRows; i++) {
+				for (var i = 0; i < numberOfRows; i++) {
 
-	                var tRow = createHTMLEl('div', 't-row', docfrag);
+					var tRow = createHTMLEl('div', 't-row', docfrag);
 
-	                if (!!rows[i].rowHeader) {
-	                    tHeader = createHTMLEl('section', 't-row-header', tRow, rows[i].rowHeader);
-	                }
+					if (!!rows[i].rowHeader) {
+						tHeader = createHTMLEl('section', 't-row-header', tRow, rows[i].rowHeader);
+					}
 
-	                if (!!rows[i].rowVal) {
+					if (!!rows[i].rowVal) {
 
-	                    for (var j = 0; j < rows[i].rowVal.length; j++) {
+						for (var j = 0; j < rows[i].rowVal.length; j++) {
 
-	                        var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
+							var tRowContentWrapper = createHTMLEl('div', 't-row-content-wrapper', tRow);
 
-	                        var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);
+							var tRowContent = createHTMLEl('div', 't-row-content', tRowContentWrapper);
 
-	                        var tRowDescHTML = '<div class="t-element">';
-	                        tRowDescHTML += '<div class="t-cell-desc-l">';
-	                        tRowDescHTML += (typeof rows[i].rowDesc !== 'undefined' && !!rows[i].rowDesc[j]) ? rows[i].rowDesc[j] : '';
-	                        tRowDescHTML += '</div>';
-	                        tRowDescHTML += '</div>';
+							if (typeof rows[i].rowCaption !== 'undefined' && !!rows[i].rowCaption) {
 
-	                        var descClass = 't-row-desc';
-	                        if (j >= 1) descClass += ' t-cell-border-top';
+								var tRowCaptionHTML = '<div class="t-element">';
+								tRowCaptionHTML +=  rows[i].rowCaption;
+								tRowCaptionHTML += '</div>';
 
-	                        tRowDesc = createHTMLEl('div', descClass, tRowContent, tRowDescHTML);
+								tRowCaption = createHTMLEl('div', 't-row-caption', tRowContentWrapper, tRowCaptionHTML);
+							}
 
+							var tRowDescHTML = '<div class="t-element">';
+							tRowDescHTML += '<div class="t-cell-desc-l">';
+							tRowDescHTML += (typeof rows[i].rowDesc !== 'undefined' && !!rows[i].rowDesc[j]) ? rows[i].rowDesc[j] : '';
+							tRowDescHTML += '</div>';
+							tRowDescHTML += '</div>';
 
-	                        var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
+							var descClass = 't-row-desc';
+							if (j >= 1) descClass += ' t-cell-border-top';
 
-	                        var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
-
-	                        for (var k = 0; k < tableHeader.length; k++) {
-
-	                            var tRowCell = document.createElement('div');
-
-	                            var cellClass = 't-row-cell';
-	                            if (j >= 1) cellClass += ' t-cell-border-top';
-
-	                            tRowCell.className = cellClass;
-
-	                            var cellHTML = '';
-
-	                            //Cell description
-	                            if (typeof rows[i].rowDesc !== 'undefined' && !!rows[i].rowDesc[j]) {
-
-	                                cellHTML += '<div class="t-cell-desc-s">';
-
-	                                cellHTML += rows[i].rowDesc[j];
-
-	                                cellHTML += '</div>';
-	                            }
-
-	                            //Item current value
-	                            cellHTML += '<div class="t-cell-value">';
-
-	                            if (typeof rows[i].rowVal[j][k] !== 'undefined') {
-
-	                                cellHTML += rows[i].rowVal[j][k];
-
-	                                //If it's a number we add the currency
-	                                if (!isNaN(rows[i].rowVal[j][k])) {
-	                                    cellHTML += ' ' + options.currency;
-	                                }
-
-	                            } else {
-	                                cellHTML += options.emptyCell;
-	                            }
-	                            cellHTML += '</div>';
+							tRowDesc = createHTMLEl('div', descClass, tRowContent, tRowDescHTML);
 
 
-	                            tEl = createHTMLEl('div', 't-element', tRowCell, cellHTML);
+							var tRowValues = createHTMLEl('div', 't-row-values', tRowContent);
 
-	                            tSlidingRow.appendChild(tRowCell);
-	                        }
-	                    }
-	                }
-	            }
+							var tSlidingRow = createHTMLEl('div', 't-sliding-row', tRowValues);
 
-	            el.appendChild(docfrag);
+							for (var k = 0; k < tableHeader.length; k++) {
 
-	            return numberOfRows;
+								var tRowCell = document.createElement('div');
 
-	        } else {
+								var cellClass = 't-row-cell';
+								if (j >= 1) cellClass += ' t-cell-border-top';
 
-	            return false;
+								tRowCell.className = cellClass;
 
-	        }
+								var cellHTML = '';
 
-	    },
+								//Cell description
+								if (typeof rows[i].rowDesc !== 'undefined' && !!rows[i].rowDesc[j]) {
 
-	    setUpArrows: function(tableHeaderRow) {
+									cellHTML += '<div class="t-cell-desc-s">';
 
-	        // create svg
-	        var svgURI = 'http://www.w3.org/2000/svg';
-	        var svgLeft = document.createElementNS(svgURI, 'svg');
-	        // SVG attributes, like viewBox, are camelCased. That threw me for a loop
-	        svgLeft.setAttribute('viewBox', '0 0 38.996 38.996');
-	        var gLeft = document.createElementNS(svgURI, 'g');
-	        //create circle
-	        var circleLeft = document.createElementNS(svgURI, 'path');
-	        circleLeft.setAttribute('d', 'M19.498,1c10.2,0,18.498,8.298,18.498,18.498c0,10.2-8.298,18.498-18.498,18.498 C9.298,37.996,1,29.698,1,19.498C1,9.298,9.298,1,19.498,1 M19.498,0C8.73,0,0,8.73,0,19.498c0,10.77,8.73,19.498,19.498,19.498 c10.77,0,19.498-8.729,19.498-19.498C38.996,8.73,30.268,0,19.498,0L19.498,0z');
-	        // add class so it can be styled with CSS
-	        circleLeft.setAttribute('class', 't-svg-arrow');
-	        // create arrow
-	        var pathLeft = document.createElementNS(svgURI, 'path');
-	        pathLeft.setAttribute('d', 'M21.947,12.654c0.169,0,0.34,0.064,0.469,0.193c0.259,0.259,0.259,0.676,0,0.935l-5.991,5.995l5.991,6 c0.255,0.258,0.255,0.676,0,0.934c-0.258,0.26-0.68,0.26-0.938,0l-6.458-6.464c-0.258-0.259-0.258-0.676,0-0.936l6.458-6.464 C21.607,12.719,21.779,12.654,21.947,12.654L21.947,12.654z');
-	        // add class so it can be styled with CSS
-	        pathLeft.setAttribute('class', 't-svg-arrow');
-	        
-	        gLeft.appendChild(pathLeft);
-	        gLeft.appendChild(circleLeft);
-	        svgLeft.appendChild(gLeft);
-	        // add svg to page
-	        var svgRight = document.createElementNS(svgURI, 'svg');
-	        // SVG attributes, like viewBox, are camelCased. That threw me for a loop
-	        svgRight.setAttribute('viewBox', '0 0 38.996 38.996');
-	        var gRight = document.createElementNS(svgURI, 'g');
-	        //create circle
-	        var circleRight = document.createElementNS(svgURI, 'path');
-	        circleRight.setAttribute('d', 'M19.498,1c10.2,0,18.498,8.298,18.498,18.498c0,10.2-8.298,18.498-18.498,18.498 C9.298,37.996,1,29.698,1,19.498C1,9.298,9.298,1,19.498,1 M19.498,0C8.73,0,0,8.73,0,19.498c0,10.77,8.73,19.498,19.498,19.498 c10.77,0,19.498-8.729,19.498-19.498C38.996,8.73,30.268,0,19.498,0L19.498,0z');
-	        // add class so it can be styled with CSS
-	        circleRight.setAttribute('class', 't-svg-arrow');
-	        // create arrow
-	        var pathRight = document.createElementNS(svgURI, 'path');
-	        pathRight.setAttribute('d', 'M17.049,26.342c-0.169,0-0.34-0.064-0.469-0.193c-0.259-0.258-0.259-0.676,0-0.935l5.99-5.995l-5.99-6 c-0.255-0.258-0.255-0.675,0-0.934c0.257-0.259,0.68-0.259,0.938,0l6.457,6.464c0.258,0.259,0.258,0.676,0,0.936l-6.457,6.463 C17.389,26.277,17.217,26.342,17.049,26.342L17.049,26.342z');
-	        // add class so it can be styled with CSS
-	        pathRight.setAttribute('class', 't-svg-arrow');
-	        
-	        gRight.appendChild(pathRight);
-	        gRight.appendChild(circleRight);
-	        svgRight.appendChild(gRight);
+									cellHTML += rows[i].rowDesc[j];
 
-	        var arrowRight = createHTMLEl('div', 't-arr-right t-hide', tableHeaderRow);
+									cellHTML += '</div>';
+								}
 
-	        var arrowLeft = createHTMLEl('div', 't-arr-left t-hide', tableHeaderRow);
+								//Item current value
+								cellHTML += '<div class="t-cell-value">';
 
-	        arrowRight.appendChild(svgRight);
+								if (typeof rows[i].rowVal[j][k] !== 'undefined') {
 
-	        arrowLeft.appendChild(svgLeft);
+									cellHTML += rows[i].rowVal[j][k];
 
-	        return {
-	            arrowRight: arrowRight,
+									//If it's a number we add the currency
+									if (!isNaN(rows[i].rowVal[j][k])) {
+										cellHTML += ' ' + options.currency;
+									}
 
-	            arrowLeft: arrowLeft
-	        };
+								} else {
+									cellHTML += options.emptyCell;
+								}
+								cellHTML += '</div>';
 
-	    }
+
+								tEl = createHTMLEl('div', 't-element', tRowCell, cellHTML);
+
+								tSlidingRow.appendChild(tRowCell);
+							}
+						}
+					}
+				}
+
+				el.appendChild(docfrag);
+
+				return numberOfRows;
+
+			} else {
+
+				return false;
+
+			}
+
+		},
+
+		setUpArrows: function(tableHeaderRow) {
+
+			// create svg
+			var svgURI = 'http://www.w3.org/2000/svg';
+			var svgLeft = document.createElementNS(svgURI, 'svg');
+			// SVG attributes, like viewBox, are camelCased. That threw me for a loop
+			svgLeft.setAttribute('viewBox', '0 0 100 100');
+			// create arrow
+			var pathLeft = document.createElementNS(svgURI, 'path');
+			pathLeft.setAttribute('d', 'M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z');
+			pathLeft.setAttribute('transform', 'translate(15,0)');
+			// add class so it can be styled with CSS
+			pathLeft.setAttribute('class', 't-svg-arrow');
+			svgLeft.appendChild(pathLeft);
+			// add svg to page
+			var svgRight = document.createElementNS(svgURI, 'svg');
+			// SVG attributes, like viewBox, are camelCased. That threw me for a loop
+			svgRight.setAttribute('viewBox', '0 0 100 100');
+			// create arrow
+			var pathRight = document.createElementNS(svgURI, 'path');
+			pathRight.setAttribute('d', 'M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z');
+			// add class so it can be styled with CSS
+			pathRight.setAttribute('class', 't-svg-arrow');
+			pathRight.setAttribute('transform', 'translate(85,100) rotate(180)');
+			svgRight.appendChild(pathRight);
+
+			var arrowRight = createHTMLEl('div', 't-arr-right t-hide', tableHeaderRow);
+
+			var arrowLeft = createHTMLEl('div', 't-arr-left t-hide', tableHeaderRow);
+
+			arrowRight.appendChild(svgRight);
+
+			arrowLeft.appendChild(svgLeft);
+
+			return {
+				arrowRight: arrowRight,
+
+				arrowLeft: arrowLeft
+			};
+
+		}
 
 	};
