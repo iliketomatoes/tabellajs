@@ -110,7 +110,7 @@ function Tabella(el, options) {
 
             if (TabellaBuilder.setUpRows(self.el, self.options)) {
 
-                self.arrows = TabellaBuilder.setUpArrows(self.tableHeaderRow);
+                self.arrows = TabellaBuilder.setUpArrows(self.tableHeaderRow, self.options);
                 self.slidingRows = getArray(self.el.querySelectorAll('.t-sliding-row'));
                 // Returns a function, that, as long as it continues to be invoked, will not
                 // be triggered. The function will be called after it stops being called for
