@@ -110,6 +110,8 @@ Available options:
 | fixedHeader | Enable or disable the table header fixed position when scrolling down the page (i.e. when the top of the table isn't visible anymore but the rest of the table is still in the viewport). | Boolean | true |
 | fixedHeaderBottomThreshold  | The distance between the fixed table header and the bottom of the table ( expressed in px ) below which the fixed table header will disappear.  | Number | 80 |
 | fixedHeaderTop | This option will set the CSS *top* rule for the table header when it's in fixed position. | String | '0' |
+| leftArrow | Using a custom svg arrow for the left scroll button. It has to be created with `document.createElementNS('http://www.w3.org/2000/svg', 'svg')`. | Element | SVG icon |
+| rightArrow | Using a custom svg arrow for the right scroll button. It has to be created with `document.createElementNS('http://www.w3.org/2000/svg', 'svg')`. | Element | SVG icon |
 
 
 
