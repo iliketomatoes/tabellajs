@@ -1,10 +1,22 @@
 /*
- *  tabellajs - v0.4.1
- *  2016-11-09
+ *  Copyright (C) 2014-2017  Interpromotion <info@interpromotion.com>
+ *  Copyright (C) 2014-2017  Giancarlo Soverini <giancarlosoverini@gmail.com>
  *
- *  https://github.com/iliketomatoes/tabellajs
+ *  This file is part of Tabellajs.
+ *
+ *  Tabellajs is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *
+ *  Tabellajs is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-
 /*
  *  Copyright (C) 2014-2017  Interpromotion <info@interpromotion.com>
  *  Copyright (C) 2014-2017  Giancarlo Soverini <giancarlosoverini@gmail.com>
@@ -24,7 +36,44 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-
+/*
+ *  Copyright (C) 2014-2017  Interpromotion <info@interpromotion.com>
+ *  Copyright (C) 2014-2017  Giancarlo Soverini <giancarlosoverini@gmail.com>
+ *
+ *  This file is part of Tabellajs.
+ *
+ *  Tabellajs is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *
+ *  Tabellajs is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
+/*
+ *  Copyright (C) 2014-2017  Interpromotion <info@interpromotion.com>
+ *  Copyright (C) 2014-2017  Giancarlo Soverini <giancarlosoverini@gmail.com>
+ *
+ *  This file is part of Tabellajs.
+ *
+ *  Tabellajs is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *
+ *  Tabellajs is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
 .tabella-ctr *,
 .tabella-ctr *:after,
 .tabella-ctr *:before {
